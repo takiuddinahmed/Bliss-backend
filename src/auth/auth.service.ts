@@ -1,10 +1,6 @@
-import {
-  Injectable,
-  NotAcceptableException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/user';
 import { comparePassword } from 'src/utils/bcrypt.util';
 import { LoginDto } from './dto/login.dto';
 import { JwtPayload, JwtPayloadWithToken } from './jwt-payload.interface';
@@ -15,8 +11,8 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
-  async verify() {
-    return 'verified';
+  async verify(id: string) {
+    return await this.userService.getOne(id);
   }
 
   async login(loginDto: LoginDto): Promise<JwtPayloadWithToken> {

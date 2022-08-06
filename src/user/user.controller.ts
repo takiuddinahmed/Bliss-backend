@@ -10,10 +10,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { AuthUser } from 'src/auth/get-user.decorator';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { IAuthUser } from 'src/auth/jwt-payload.interface';
+import { AuthUser, IAuthUser, JwtAuthGuard } from 'src/auth';
 import { EditPassDto } from './dto/editPassword.dto';
 import { EditUserDto } from './dto/editUser.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -25,7 +22,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   async getAll(): Promise<User[]> {
     return await this.userService.getAll();
   }
