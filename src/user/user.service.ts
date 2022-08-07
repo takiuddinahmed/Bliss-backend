@@ -25,11 +25,23 @@ export class UserService {
   async register(registerDto: RegisterDto): Promise<User> {
     if (registerDto.password !== registerDto.confirmPassword)
       throw new HttpException('Confirm Password not match', 400);
+
+    const existUser = await this.userModel.findOne({
+      email: registerDto.email,
+    });
+
+    if (existUser) {
+      console.log({ existUser });
+      throw new HttpException('The email is registered already', 400);
+    }
+
     const hashedPassword = hashPassword(registerDto.password);
     registerDto.password = hashedPassword;
     const registeredUser = new this.userModel(registerDto);
     const savedUser = await registeredUser.save();
-    return savedUser;
+    return this.userModel
+      .findById(savedUser._id)
+      .select('firstName lastName email phoneNumber role');
   }
 
   async getUserByEmail(email: string) {

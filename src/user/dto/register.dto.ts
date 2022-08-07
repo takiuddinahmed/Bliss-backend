@@ -1,4 +1,10 @@
-import { IsString, MinLength, IsEnum, ValidateIf } from 'class-validator';
+import {
+  IsString,
+  MinLength,
+  IsEnum,
+  ValidateIf,
+  IsEmail,
+} from 'class-validator';
 import { ROLE } from '../user.model';
 
 export class RegisterDto {
@@ -9,6 +15,7 @@ export class RegisterDto {
   lastName: string;
 
   @IsString()
+  @IsEmail()
   email: string;
 
   @IsString()

@@ -1,4 +1,4 @@
-import { IsString, IsEnum, ValidateIf } from 'class-validator';
+import { IsString, IsEnum, ValidateIf, IsEmail } from 'class-validator';
 import { ROLE } from '../user.model';
 
 export class EditUserDto {
@@ -11,6 +11,7 @@ export class EditUserDto {
   lastName: string;
 
   @IsString()
+  @IsEmail()
   @ValidateIf((obj, value) => value != null)
   email: string;
 
