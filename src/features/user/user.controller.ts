@@ -10,7 +10,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthUser, IAuthUser, JwtAuthGuard } from 'src/security';
+import { AuthUser, IAuthUser, JwtAuthGuard } from 'src/features/security';
 import { EditPassDto } from './dto/editPassword.dto';
 import { EditUserDto } from './dto/editUser.dto';
 import { RegisterDto } from './dto/register.dto';

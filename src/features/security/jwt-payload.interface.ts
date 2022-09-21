@@ -1,4 +1,4 @@
-import { ROLE } from 'src/user/user.model';
+import { ROLE } from 'src/features/user/user.model';
 
 export interface JwtPayload {
   firstName: string;

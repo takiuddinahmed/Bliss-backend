@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { comparePassword, hashPassword } from 'src/utils/bcrypt.util';
+import { comparePassword, hashPassword } from 'src/features/utils/bcrypt.util';
 import { EditPassDto } from './dto/editPassword.dto';
 import { EditUserDto } from './dto/editUser.dto';
 import { RegisterDto } from './dto/register.dto';

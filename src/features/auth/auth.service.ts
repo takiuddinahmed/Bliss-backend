@@ -1,8 +1,8 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload, JwtPayloadWithToken } from 'src/security';
-import { UserService } from 'src/user';
-import { comparePassword } from 'src/utils/bcrypt.util';
+import { JwtPayload, JwtPayloadWithToken } from 'src/features/security';
+import { UserService } from 'src/features/user';
+import { comparePassword } from 'src/features/utils/bcrypt.util';
 import { LoginDto } from './dto/login.dto';
 
 @Injectable()
