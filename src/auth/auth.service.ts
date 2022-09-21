@@ -1,9 +1,9 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload, JwtPayloadWithToken } from 'src/security';
 import { UserService } from 'src/user';
 import { comparePassword } from 'src/utils/bcrypt.util';
 import { LoginDto } from './dto/login.dto';
-import { JwtPayload, JwtPayloadWithToken } from './jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
