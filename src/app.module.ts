@@ -7,6 +7,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { CategoryModule } from './features/category/category.module';
+import { ContentModule } from './features/content/content.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CategoryModule } from './features/category/category.module';
       sortSchema: true,
     }),
     CategoryModule,
+    ContentModule,
   ],
   controllers: [],
   providers: [],
