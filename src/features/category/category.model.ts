@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Types } from 'mongoose';
 import { SexualityEnum } from '../common';
 
 export type CategoryDocument = Category & Document;
@@ -7,15 +8,15 @@ export type CategoryDocument = Category & Document;
 @Schema()
 @ObjectType({ description: 'category' })
 export class Category {
-  @Field((type) => ID)
-  _id: string;
+  @Field(() => ID)
+  _id: Types.ObjectId;
 
   @Prop({ type: String, required: true })
-  @Field((type) => String)
+  @Field(() => String)
   name: string;
 
   @Prop({ type: String, enum: SexualityEnum, required: true })
-  @Field((type) => String)
+  @Field(() => String)
   sexuality: SexualityEnum;
 }
 
