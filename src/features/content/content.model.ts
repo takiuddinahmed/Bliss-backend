@@ -42,7 +42,7 @@ export class Content extends Document {
 
   @Field(() => String)
   @Prop({ type: String, default: '' })
-  url: string;
+  fileUrl: string;
 
   @Field(() => [String], { nullable: true })
   @Prop({ type: [String], default: [] })
@@ -57,5 +57,5 @@ export class Content extends Document {
   })
   visualiTy: VisualityEnum;
 }
-
-export const COntentSchema = SchemaFactory.createForClass(Content);
+const ContentSchema = SchemaFactory.createForClass(Content);
+export default ContentSchema;

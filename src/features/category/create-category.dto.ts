@@ -5,10 +5,10 @@ import { SexualityEnum } from '../common';
 @InputType()
 export class CreateCategoryDto {
   @IsString()
-  @Field((type) => String)
+  @Field(() => String)
   name: string;
 
   @IsEnum(SexualityEnum)
-  @Field((type) => String)
+  @Field(() => String)
   sexuality: SexualityEnum;
 }
