@@ -6,7 +6,6 @@
 type Category {
   _id: ID!
   name: String!
-  sexuality: String!
 }
 
 """content"""
@@ -23,9 +22,14 @@ type Content {
   visualiTy: String!
 }
 
+type ContentType {
+  _id: ID!
+  icon: String!
+  name: String!
+}
+
 input CreateCategoryDto {
   name: String!
-  sexuality: String!
 }
 
 input CreateContentDto {
@@ -39,35 +43,50 @@ input CreateContentDto {
   visualiTy: String!
 }
 
+input CreateContentTypeInput {
+  icon: String!
+  name: String!
+}
+
 type Mutation {
   createCategory(input: CreateCategoryDto!): Category!
   createContent(input: CreateContentDto!): Content!
+  createContentType(createContentTypeInput: CreateContentTypeInput!): ContentType!
   deleteCategory(id: ID!): Category!
   deleteContent(id: ID!): Content!
+  deleteContentType(id: ID!): ContentType!
   updateCategory(id: ID!, input: UpdateCategoryDto!): Category!
   updateContent(id: ID!, input: UpdateContentDto!): Content!
+  updateContentType(id: ID!, updateContentTypeInput: UpdateContentTypeInput!): ContentType!
 }
 
 type Query {
   categories: [Category!]!
   category(id: ID!): Category!
   content(id: ID!): Content!
+  contentType(id: ID!): ContentType!
+  contentTypes: [ContentType!]!
   contents: [Content!]!
 }
 
 input UpdateCategoryDto {
   name: String
-  sexuality: String
 }
 
 input UpdateContentDto {
-  categoryId: ID!
-  contentType: String!
-  description: String!
+  categoryId: ID
+  contentType: String
+  description: String
   file: Upload
-  sexuality: String!
-  title: String!
-  visualiTy: String!
+  sexuality: String
+  title: String
+  userId: ID
+  visualiTy: String
+}
+
+input UpdateContentTypeInput {
+  icon: String
+  name: String
 }
 
 """The `Upload` scalar type represents a file upload."""

@@ -26,7 +26,6 @@ export class CategoryService {
   async createCategory(createCategoryDto: CreateCategoryDto) {
     const found = await this.categoryModel.findOne({
       name: createCategoryDto.name,
-      sexuality: createCategoryDto.sexuality,
     });
     if (found) throw new Error('Category already exist!');
     const newCategory = await this.categoryModel.create(createCategoryDto);

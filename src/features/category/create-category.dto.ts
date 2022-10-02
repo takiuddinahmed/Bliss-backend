@@ -7,8 +7,4 @@ export class CreateCategoryDto {
   @IsString()
   @Field(() => String)
   name: string;
-
-  @IsEnum(SexualityEnum)
-  @Field(() => String)
-  sexuality: SexualityEnum;
 }

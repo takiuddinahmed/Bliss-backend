@@ -8,9 +8,4 @@ export class UpdateCategoryDto {
   @IsString()
   @Field(() => String, { nullable: true })
   name: string;
-
-  @IsOptional()
-  @IsEnum(SexualityEnum)
-  @Field(() => String, { nullable: true })
-  sexuality: SexualityEnum;
 }

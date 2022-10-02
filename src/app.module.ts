@@ -8,6 +8,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { CategoryModule } from './features/category';
 import { ContentModule } from './features/content';
+import { ContentTypeModule } from './features/content-type/content-type.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ContentModule } from './features/content';
     }),
     CategoryModule,
     ContentModule,
+    ContentTypeModule,
   ],
   controllers: [],
   providers: [],

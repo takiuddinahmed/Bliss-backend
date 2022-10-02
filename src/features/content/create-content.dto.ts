@@ -1,9 +1,9 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
 import { IsEnum, IsMongoId, IsOptional, IsString } from 'class-validator';
 import { FileUpload } from 'graphql-upload';
-import { Types } from 'mongoose';
-import { ContentTypeEnum, SexualityEnum, VisualityEnum } from '../common';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import { Types } from 'mongoose';
+import { SexualityEnum, VisualityEnum } from '../common';
 
 @InputType()
 export class CreateContentDto {
@@ -32,9 +32,9 @@ export class CreateContentDto {
   @Field(() => String)
   visualiTy: VisualityEnum;
 
-  @IsEnum(ContentTypeEnum)
+  @IsMongoId()
   @Field(() => String)
-  contentType: ContentTypeEnum;
+  contentType: string;
 
   @IsOptional()
   @Field(() => GraphQLUpload, { nullable: true })
