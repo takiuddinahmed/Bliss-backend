@@ -51,13 +51,13 @@ input CreateContentTypeInput {
 type Mutation {
   createCategory(input: CreateCategoryDto!): Category!
   createContent(input: CreateContentDto!): Content!
-  createContentType(createContentTypeInput: CreateContentTypeInput!): ContentType!
+  createContentType(input: CreateContentTypeInput!): ContentType!
   deleteCategory(id: ID!): Category!
   deleteContent(id: ID!): Content!
   deleteContentType(id: ID!): ContentType!
   updateCategory(id: ID!, input: UpdateCategoryDto!): Category!
   updateContent(id: ID!, input: UpdateContentDto!): Content!
-  updateContentType(id: ID!, updateContentTypeInput: UpdateContentTypeInput!): ContentType!
+  updateContentType(id: ID!, input: UpdateContentTypeInput!): ContentType!
 }
 
 type Query {

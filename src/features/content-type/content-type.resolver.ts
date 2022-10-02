@@ -10,7 +10,7 @@ export class ContentTypeResolver {
 
   @Mutation(() => ContentType)
   createContentType(
-    @Args('createContentTypeInput')
+    @Args('input')
     createContentTypeInput: CreateContentTypeInput,
   ) {
     return this.contentTypeService.create(createContentTypeInput);
@@ -29,7 +29,7 @@ export class ContentTypeResolver {
   @Mutation(() => ContentType)
   updateContentType(
     @Args('id', { type: () => ID }) id: string,
-    @Args('updateContentTypeInput')
+    @Args('input')
     updateContentTypeInput: UpdateContentTypeInput,
   ) {
     return this.contentTypeService.update(id, updateContentTypeInput);
