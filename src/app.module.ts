@@ -11,7 +11,6 @@ import { ContentModule } from './features/content';
 import { ContentTypeModule } from './features/content-type/content-type.module';
 import { ChannelModule } from './features/channel/channel.module';
 import { SpaceModule } from './features/space/space.module';
-import { SpaceProviderService } from './features/space-provider/space-provider.service';
 
 @Module({
   imports: [
@@ -30,7 +29,5 @@ import { SpaceProviderService } from './features/space-provider/space-provider.s
     ChannelModule,
     SpaceModule,
   ],
-  controllers: [],
-  providers: [SpaceProviderService],
 })
 export class AppModule {}
