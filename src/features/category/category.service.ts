@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { generatePermalink } from '../utils';
 import { Category, CategoryDocument } from './category.model';
 import { CreateCategoryDto } from './create-category.dto';
 import { UpdateCategoryDto } from './update-category.dto';
@@ -28,6 +29,11 @@ export class CategoryService {
       name: createCategoryDto.name,
     });
     if (found) throw new Error('Category already exist!');
+    const permalink = await generatePermalink(
+      createCategoryDto.name,
+      this.categoryModel,
+    );
+    createCategoryDto.permalink = permalink;
     const newCategory = await this.categoryModel.create(createCategoryDto);
     return newCategory;
   }

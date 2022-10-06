@@ -13,6 +13,10 @@ export class Category {
   @Prop({ type: String, required: true })
   @Field(() => String)
   name: string;
+
+  @Prop({ type: String, required: true, unique: true })
+  @Field(() => String)
+  permalink: string;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);

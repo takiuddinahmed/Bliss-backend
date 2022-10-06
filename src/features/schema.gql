@@ -6,6 +6,7 @@
 type Category {
   _id: ID!
   name: String!
+  permalink: String!
 }
 
 """content"""
