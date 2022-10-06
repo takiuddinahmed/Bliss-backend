@@ -9,6 +9,7 @@ import { join } from 'path';
 import { CategoryModule } from './features/category';
 import { ContentModule } from './features/content';
 import { ContentTypeModule } from './features/content-type/content-type.module';
+import { ChannelModule } from './features/channel/channel.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ContentTypeModule } from './features/content-type/content-type.module';
     CategoryModule,
     ContentModule,
     ContentTypeModule,
+    ChannelModule,
   ],
   controllers: [],
   providers: [],
