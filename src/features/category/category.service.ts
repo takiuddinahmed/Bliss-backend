@@ -10,7 +10,9 @@ import { UpdateCategoryDto } from './update-category.dto';
 export class CategoryService {
   constructor(
     @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
-  ) {}
+  ) {
+    // this.migrate();
+  }
 
   async getCategories() {
     return await this.categoryModel.find();
@@ -52,5 +54,19 @@ export class CategoryService {
       throw new Error('Category not found!');
     }
     return await this.categoryModel.findByIdAndDelete(id);
+  }
+
+  async migrate() {
+    const categories = await this.categoryModel.find();
+    for (let i = 0; i < categories.length; i++) {
+      const category = categories[i];
+      if (!category.permalink) {
+        const permalink = await generatePermalink(
+          category.name,
+          this.categoryModel,
+        );
+        await this.categoryModel.findByIdAndUpdate(category._id, { permalink });
+      }
+    }
   }
 }
