@@ -10,6 +10,8 @@ import { CategoryModule } from './features/category';
 import { ContentModule } from './features/content';
 import { ContentTypeModule } from './features/content-type/content-type.module';
 import { ChannelModule } from './features/channel/channel.module';
+import { SpaceModule } from './features/space/space.module';
+import { SpaceProviderService } from './features/space-provider/space-provider.service';
 
 @Module({
   imports: [
@@ -26,8 +28,9 @@ import { ChannelModule } from './features/channel/channel.module';
     ContentModule,
     ContentTypeModule,
     ChannelModule,
+    SpaceModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [SpaceProviderService],
 })
 export class AppModule {}
