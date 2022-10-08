@@ -1,5 +1,6 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsString } from 'class-validator';
+import { IsEnum, IsString } from 'class-validator';
+import { ContentTypeEnum } from '../common';
 
 @InputType()
 export class CreateContentTypeInput {
@@ -10,4 +11,8 @@ export class CreateContentTypeInput {
   @IsString()
   @Field(() => String)
   icon: string;
+
+  @IsEnum(ContentTypeEnum)
+  @Field(() => String)
+  contentType: ContentTypeEnum;
 }

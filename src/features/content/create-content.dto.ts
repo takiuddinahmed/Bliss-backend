@@ -3,7 +3,7 @@ import { IsEnum, IsMongoId, IsOptional, IsString } from 'class-validator';
 import { FileUpload } from 'graphql-upload';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { Types } from 'mongoose';
-import { SexualityEnum, VisualityEnum } from '../common';
+import { ContentTypeEnum, SexualityEnum, VisualityEnum } from '../common';
 
 @InputType()
 export class CreateContentDto {
@@ -32,7 +32,7 @@ export class CreateContentDto {
   @Field(() => String)
   visualiTy: VisualityEnum;
 
-  @IsMongoId()
+  @IsEnum(ContentTypeEnum)
   @Field(() => String)
   contentType: string;
 

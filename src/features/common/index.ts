@@ -1,3 +1,5 @@
+export { ContentTypeEnum } from './contentType.enum';
+
 export { FileData } from './fileData.model';
 
 export { FileUpload } from './fileUpload.interface';

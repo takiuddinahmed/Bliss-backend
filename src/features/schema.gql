@@ -33,6 +33,7 @@ type Content {
 
 type ContentType {
   _id: ID!
+  contentType: String!
   icon: String!
   name: String!
 }
@@ -58,6 +59,7 @@ input CreateContentDto {
 }
 
 input CreateContentTypeInput {
+  contentType: String!
   icon: String!
   name: String!
 }
@@ -115,6 +117,7 @@ input UpdateContentDto {
 }
 
 input UpdateContentTypeInput {
+  contentType: String
   icon: String
   name: String
 }

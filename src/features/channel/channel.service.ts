@@ -10,7 +10,7 @@ import { UpdateChannelInput } from './dto/update-channel.input';
 @Injectable()
 export class ChannelService {
   constructor(
-    @InjectModel(collectionNames.content) private channelModel: Model<Channel>,
+    @InjectModel(collectionNames.channel) private channelModel: Model<Channel>,
   ) {}
   async create(input: CreateChannelInput) {
     input.permalink = await generatePermalink(input.name, this.channelModel);

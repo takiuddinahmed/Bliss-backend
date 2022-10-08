@@ -2,7 +2,12 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Category } from '../category';
-import { collectionNames, SexualityEnum, VisualityEnum } from '../common';
+import {
+  collectionNames,
+  ContentTypeEnum,
+  SexualityEnum,
+  VisualityEnum,
+} from '../common';
 import { ContentType } from '../content-type';
 import { User } from '../user';
 
@@ -30,8 +35,8 @@ export class Content extends Document {
   sexuality: SexualityEnum;
 
   @Field(() => String)
-  @Prop({ type: Types.ObjectId, required: true, ref: ContentType.name })
-  contentType: Types.ObjectId;
+  @Prop({ type: String, required: true, enum: ContentTypeEnum })
+  contentType: ContentTypeEnum;
 
   @Field(() => String)
   @Prop({ type: String, default: '' })

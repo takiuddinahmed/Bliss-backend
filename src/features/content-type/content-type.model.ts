@@ -1,7 +1,8 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsString } from 'class-validator';
+import { IsEnum, IsString } from 'class-validator';
 import { Types } from 'mongoose';
+import { ContentTypeEnum } from '../common';
 
 export type ContentTypeDocument = ContentType & Document;
 
@@ -21,7 +22,10 @@ export class ContentType {
   @Field(() => String)
   icon: string;
 
-  
+  @IsEnum(ContentTypeEnum)
+  @Prop({ type: String, enum: ContentTypeEnum })
+  @Field(() => String)
+  contentType: ContentTypeEnum;
 }
 
 export const ContentTypeSchema = SchemaFactory.createForClass(ContentType);
