@@ -20,6 +20,8 @@ export class ContentType {
   @Prop({ type: String })
   @Field(() => String)
   icon: string;
+
+  
 }
 
 export const ContentTypeSchema = SchemaFactory.createForClass(ContentType);

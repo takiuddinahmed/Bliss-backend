@@ -3,12 +3,13 @@ import { ChannelService } from './channel.service';
 import { ChannelResolver } from './channel.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Channel, ChannelSchema } from './channel.model';
+import { collectionNames } from '../common';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
-        name: Channel.name,
+        name: collectionNames.channel,
         schema: ChannelSchema,
       },
     ]),

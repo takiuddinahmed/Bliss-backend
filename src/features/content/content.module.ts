@@ -3,10 +3,13 @@ import { ContentService } from './content.service';
 import { ContentResolver } from './content.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import ContentSchema, { Content } from './content.model';
+import { collectionNames } from '../common';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Content.name, schema: ContentSchema }]),
+    MongooseModule.forFeature([
+      { name: collectionNames.content, schema: ContentSchema },
+    ]),
   ],
   providers: [ContentService, ContentResolver],
 })

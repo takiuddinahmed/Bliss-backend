@@ -1,4 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Types } from 'mongoose';
+import { collectionNames } from '../common';
 
 export enum ROLE {
   USER = 'USER',
@@ -26,6 +28,12 @@ export class User {
 
   @Prop({ type: String, default: ROLE.USER })
   role: ROLE;
+
+  @Prop({ type: String })
+  country: string;
+
+  @Prop({ type: Types.ObjectId, ref: collectionNames.channel })
+  channelId: string | Types.ObjectId;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

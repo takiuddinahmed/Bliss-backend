@@ -4,6 +4,7 @@ import { createWriteStream } from 'fs';
 import { Model } from 'mongoose';
 import { join } from 'path';
 import { UpdateCategoryDto } from '../category/update-category.dto';
+import { collectionNames } from '../common';
 import { Content } from './content.model';
 import { CreateContentDto } from './create-content.dto';
 import { UpdateContentDto } from './update-content.dto';
@@ -11,7 +12,7 @@ import { UpdateContentDto } from './update-content.dto';
 @Injectable()
 export class ContentService {
   constructor(
-    @InjectModel(Content.name) private contentModel: Model<Content>,
+    @InjectModel(collectionNames.content) private contentModel: Model<Content>,
   ) {}
 
   async getContents() {

@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { collectionNames } from '../common';
 import { generatePermalink } from '../utils';
-import { Category, CategoryDocument } from './category.model';
+import { CategoryDocument } from './category.model';
 import { CreateCategoryDto } from './create-category.dto';
 import { UpdateCategoryDto } from './update-category.dto';
 
 @Injectable()
 export class CategoryService {
   constructor(
-    @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
+    @InjectModel(collectionNames.category)
+    private categoryModel: Model<CategoryDocument>,
   ) {
     // this.migrate();
   }

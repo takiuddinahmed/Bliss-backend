@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { collectionNames } from '../common';
 import { generatePermalink } from '../utils';
 import { Channel } from './channel.model';
 import { CreateChannelInput } from './dto/create-channel.input';
@@ -9,7 +10,7 @@ import { UpdateChannelInput } from './dto/update-channel.input';
 @Injectable()
 export class ChannelService {
   constructor(
-    @InjectModel(Channel.name) private channelModel: Model<Channel>,
+    @InjectModel(collectionNames.content) private channelModel: Model<Channel>,
   ) {}
   async create(input: CreateChannelInput) {
     input.permalink = await generatePermalink(input.name, this.channelModel);
