@@ -11,6 +11,7 @@ import { ContentModule } from './features/content';
 import { ContentTypeModule } from './features/content-type/content-type.module';
 import { ChannelModule } from './features/channel/channel.module';
 import { SpaceModule } from './features/space/space.module';
+import { SubCategoryModule } from './features/sub-category/sub-category.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { SpaceModule } from './features/space/space.module';
     ContentTypeModule,
     ChannelModule,
     SpaceModule,
+    SubCategoryModule,
   ],
 })
 export class AppModule {}

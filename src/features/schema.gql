@@ -6,10 +6,11 @@
 type Category {
   _id: ID!
   name: String!
-  permalink: String!
+  permalink: String
 }
 
 type Channel {
+  _id: ID!
   banner: FileData
   description: String!
   logo: FileData
@@ -64,6 +65,11 @@ input CreateContentTypeInput {
   name: String!
 }
 
+input CreateSubCategoryInput {
+  categoryId: String!
+  name: String!
+}
+
 type FileData {
   name: String!
   size: Int!
@@ -76,14 +82,17 @@ type Mutation {
   createChannel(createChannelInput: CreateChannelInput!): Channel!
   createContent(input: CreateContentDto!): Content!
   createContentType(input: CreateContentTypeInput!): ContentType!
+  createSubCategory(input: CreateSubCategoryInput!): SubCategory!
   deleteCategory(id: ID!): Category!
   deleteContent(id: ID!): Content!
   deleteContentType(id: ID!): ContentType!
   removeChannel(id: String!): Channel!
+  removeSubCategory(id: String!): SubCategory!
   updateCategory(id: ID!, input: UpdateCategoryDto!): Category!
   updateChannel(id: String!, updateChannelInput: UpdateChannelInput!): Channel!
   updateContent(id: ID!, input: UpdateContentDto!): Content!
   updateContentType(id: ID!, input: UpdateContentTypeInput!): ContentType!
+  updateSubCategory(id: ID!, input: UpdateSubCategoryInput!): SubCategory!
 }
 
 type Query {
@@ -94,6 +103,16 @@ type Query {
   contentType(id: ID!): ContentType!
   contentTypes: [ContentType!]!
   contents: [Content!]!
+  subCategories: [SubCategory!]!
+  subCategoriesByCateogory(categoryId: ID!): [SubCategory!]!
+  subCategory(id: ID!): SubCategory!
+}
+
+type SubCategory {
+  _id: ID!
+  categoryId: String!
+  name: String!
+  permalink: String!
 }
 
 input UpdateCategoryDto {
@@ -119,6 +138,11 @@ input UpdateContentDto {
 input UpdateContentTypeInput {
   contentType: String
   icon: String
+  name: String
+}
+
+input UpdateSubCategoryInput {
+  categoryId: String
   name: String
 }
 

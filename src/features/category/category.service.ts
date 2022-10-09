@@ -13,7 +13,7 @@ export class CategoryService {
     @InjectModel(collectionNames.category)
     private categoryModel: Model<CategoryDocument>,
   ) {
-    // this.migrate();
+    this.migrate();
   }
 
   async getCategories() {
@@ -67,7 +67,13 @@ export class CategoryService {
           category.name,
           this.categoryModel,
         );
-        await this.categoryModel.findByIdAndUpdate(category._id, { permalink });
+
+        const updated = await this.categoryModel.findByIdAndUpdate(
+          category._id,
+          { permalink },
+          { new: true },
+        );
+        console.log(updated);
       }
     }
   }

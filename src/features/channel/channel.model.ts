@@ -1,10 +1,14 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Types } from 'mongoose';
 import { FileData } from '../common';
 
 @ObjectType()
 @Schema()
 export class Channel {
+  @Field(() => ID)
+  _id: string | Types.ObjectId;
+
   @Prop({ type: String, required: true })
   @Field(() => String)
   name: string;

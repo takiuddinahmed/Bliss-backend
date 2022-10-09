@@ -15,7 +15,7 @@ export class Category {
   name: string;
 
   @Prop({ type: String, required: true, unique: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   permalink: string;
 }
 
