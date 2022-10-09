@@ -4,6 +4,7 @@ import { ChannelResolver } from './channel.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ChannelSchema } from './channel.model';
 import { collectionNames } from '../common';
+import { UserModule } from '../user';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { collectionNames } from '../common';
         schema: ChannelSchema,
       },
     ]),
+    UserModule,
   ],
   providers: [ChannelResolver, ChannelService],
 })

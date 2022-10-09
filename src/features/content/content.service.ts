@@ -16,11 +16,12 @@ export class ContentService {
   ) {}
 
   async getContents() {
-    return await this.contentModel.find();
+    return await this.contentModel.find().populate('user');
   }
 
   async getContent(id: string) {
-    const content = await this.contentModel.findById(id);
+    const content = await this.contentModel.findById(id).populate('user');
+    console.log(content);
     if (!content) throw new Error('Content not found');
     return content;
   }

@@ -11,7 +11,9 @@ import {
 import { ContentType } from '../content-type';
 import { User } from '../user';
 
-@Schema()
+@Schema({
+  virtuals: [{}],
+})
 @ObjectType({ description: 'content' })
 export class Content extends Document {
   @Field(() => ID)
@@ -62,6 +64,16 @@ export class Content extends Document {
     default: VisualityEnum.PRIVATE,
   })
   visualiTy: VisualityEnum;
+
+  @Field(() => User, { nullable: true })
+  user: User;
 }
 const ContentSchema = SchemaFactory.createForClass(Content);
+
+ContentSchema.virtual('user', {
+  ref: collectionNames.user,
+  localField: 'userId',
+  foreignField: '_id',
+});
+
 export default ContentSchema;

@@ -47,6 +47,16 @@ export class UserService {
       .select('firstName lastName email phoneNumber role');
   }
 
+  async addChannelToUser(userId: string, channelId: string) {
+    const user = await this.userModel.findById(userId);
+    if (!user) throw new Error('User not found');
+    return await this.userModel.findByIdAndUpdate(
+      userId,
+      { channelId },
+      { new: true },
+    );
+  }
+
   async getUserByEmail(email: string) {
     const user = await this.userModel.findOne({ email });
     if (!user) throw new NotAcceptableException('Invalid credential');

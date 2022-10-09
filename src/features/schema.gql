@@ -16,6 +16,8 @@ type Channel {
   logo: FileData
   name: String!
   permalink: String!
+  user: User
+  userId: ID!
 }
 
 """content"""
@@ -28,6 +30,7 @@ type Content {
   sexuality: String!
   thumbnailUrl: [String!]
   title: String!
+  user: User
   userId: ID!
   visualiTy: String!
 }
@@ -46,6 +49,7 @@ input CreateCategoryDto {
 input CreateChannelInput {
   description: String!
   name: String!
+  userId: ID!
 }
 
 input CreateContentDto {
@@ -79,7 +83,7 @@ type FileData {
 
 type Mutation {
   createCategory(input: CreateCategoryDto!): Category!
-  createChannel(createChannelInput: CreateChannelInput!): Channel!
+  createChannel(input: CreateChannelInput!): Channel!
   createContent(input: CreateContentDto!): Content!
   createContentType(input: CreateContentTypeInput!): ContentType!
   createSubCategory(input: CreateSubCategoryInput!): SubCategory!
@@ -89,7 +93,7 @@ type Mutation {
   removeChannel(id: String!): Channel!
   removeSubCategory(id: String!): SubCategory!
   updateCategory(id: ID!, input: UpdateCategoryDto!): Category!
-  updateChannel(id: String!, updateChannelInput: UpdateChannelInput!): Channel!
+  updateChannel(id: String!, input: UpdateChannelInput!): Channel!
   updateContent(id: ID!, input: UpdateContentDto!): Content!
   updateContentType(id: ID!, input: UpdateContentTypeInput!): ContentType!
   updateSubCategory(id: ID!, input: UpdateSubCategoryInput!): SubCategory!
@@ -99,6 +103,7 @@ type Query {
   categories: [Category!]!
   category(id: ID!): Category!
   channel(permalink: String!): Channel!
+  channels: [Channel!]!
   content(id: ID!): Content!
   contentType(id: ID!): ContentType!
   contentTypes: [ContentType!]!
@@ -122,6 +127,7 @@ input UpdateCategoryDto {
 input UpdateChannelInput {
   description: String
   name: String
+  userId: ID
 }
 
 input UpdateContentDto {
@@ -148,3 +154,14 @@ input UpdateSubCategoryInput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+type User {
+  _id: ID!
+  channelId: ID
+  country: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  phoneNumber: String!
+  role: String!
+}

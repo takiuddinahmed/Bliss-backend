@@ -9,13 +9,11 @@ export class ChannelResolver {
   constructor(private readonly channelService: ChannelService) {}
 
   @Mutation(() => Channel)
-  createChannel(
-    @Args('createChannelInput') createChannelInput: CreateChannelInput,
-  ) {
+  createChannel(@Args('input') createChannelInput: CreateChannelInput) {
     return this.channelService.create(createChannelInput);
   }
 
-  @Query(() => [Channel], { name: 'channel' })
+  @Query(() => [Channel], { name: 'channels' })
   findAll() {
     return this.channelService.findAll();
   }
@@ -28,7 +26,7 @@ export class ChannelResolver {
   @Mutation(() => Channel)
   updateChannel(
     @Args('id', { type: () => String }) id: string,
-    @Args('updateChannelInput') updateChannelInput: UpdateChannelInput,
+    @Args('input') updateChannelInput: UpdateChannelInput,
   ) {
     return this.channelService.update(id, updateChannelInput);
   }
