@@ -3,6 +3,7 @@ import { ContentTypeService } from './content-type.service';
 import { ContentTypeResolver } from './content-type.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ContentType, ContentTypeSchema } from './content-type.model';
+import { ContentTypeController } from './content-type.controller';
 
 @Module({
   imports: [
@@ -11,5 +12,6 @@ import { ContentType, ContentTypeSchema } from './content-type.model';
     ]),
   ],
   providers: [ContentTypeResolver, ContentTypeService],
+  controllers: [ContentTypeController],
 })
 export class ContentTypeModule {}
