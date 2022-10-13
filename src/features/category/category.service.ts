@@ -13,7 +13,7 @@ export class CategoryService {
     @InjectModel(collectionNames.category)
     private categoryModel: Model<CategoryDocument>,
   ) {
-    this.migrate();
+    // this.migrate();
   }
 
   async getCategories() {

@@ -36,6 +36,9 @@ export class Channel {
 
   @Field(() => User, { nullable: true })
   user: User;
+
+  // @Field(()=> [ID], {defaultValue: []})
+  // @Prop({type: })
 }
 
 export type ChannelDocument = Channel & Document;
