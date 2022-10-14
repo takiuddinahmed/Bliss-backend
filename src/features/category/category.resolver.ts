@@ -1,8 +1,7 @@
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CreateCategoryDto, UpdateCategoryDto } from './category.dto';
 import { Category } from './category.model';
 import { CategoryService } from './category.service';
-import { CreateCategoryDto } from './create-category.dto';
-import { UpdateCategoryDto } from './update-category.dto';
 
 @Resolver()
 export class CategoryResolver {

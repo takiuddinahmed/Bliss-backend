@@ -1,4 +1,3 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import {
@@ -6,7 +5,7 @@ import {
   ContentTypeEnum,
   FileData,
   SexualityEnum,
-  VisualityEnum,
+  VisualityEnum
 } from '../common';
 
 @Schema()

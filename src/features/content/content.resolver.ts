@@ -1,6 +1,4 @@
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { createWriteStream } from 'fs';
-import { join } from 'path';
 import { Content } from './content.model';
 import { ContentService } from './content.service';
 import { CreateContentDto } from './create-content.dto';

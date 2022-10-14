@@ -1,11 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { collectionNames } from '../common';
 import { generatePermalink } from '../utils';
+import { CreateCategoryDto, UpdateCategoryDto } from './category.dto';
 import { CategoryDocument } from './category.model';
-import { CreateCategoryDto } from './create-category.dto';
-import { UpdateCategoryDto } from './update-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -23,7 +22,7 @@ export class CategoryService {
   async getCategory(id: string) {
     const category = await this.categoryModel.findById(id);
     if (!category) {
-      throw new Error('Catergory not found');
+      throw new NotFoundException('Catergory not found');
     }
     return category;
   }
@@ -32,7 +31,7 @@ export class CategoryService {
     const found = await this.categoryModel.findOne({
       name: createCategoryDto.name,
     });
-    if (found) throw new Error('Category already exist!');
+    if (found) throw new BadRequestException('Category already exist!');
     const permalink = await generatePermalink(
       createCategoryDto.name,
       this.categoryModel,
@@ -44,7 +43,7 @@ export class CategoryService {
 
   async updateCategory(id: string, updateCategoryDto: UpdateCategoryDto) {
     const found = await this.categoryModel.findById(id);
-    if (!found) throw new Error('Category not found!');
+    if (!found) throw new NotFoundException('Category not found!');
     return await this.categoryModel.findByIdAndUpdate(id, updateCategoryDto, {
       new: true,
     });
@@ -53,7 +52,7 @@ export class CategoryService {
   async deleteCategory(id: string) {
     const found = await this.categoryModel.findById(id);
     if (!found) {
-      throw new Error('Category not found!');
+      throw new NotFoundException('Category not found!');
     }
     return await this.categoryModel.findByIdAndDelete(id);
   }

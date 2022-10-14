@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { createWriteStream } from 'fs';
 import { Model } from 'mongoose';
 import { join } from 'path';
-import { UpdateCategoryDto } from '../category/update-category.dto';
 import { collectionNames } from '../common';
 import { Content } from './content.model';
 import { CreateContentDto } from './create-content.dto';
