@@ -1,11 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { createWriteStream } from 'fs';
 import { Model } from 'mongoose';
-import { join } from 'path';
-import { UpdateCategoryDto } from '../category/update-category.dto';
 import { collectionNames } from '../common';
-import { Content } from './content.model';
+import { generatePermalink } from '../utils';
+import { Content, ContentFiles } from './content.model';
 import { CreateContentDto } from './create-content.dto';
 import { UpdateContentDto } from './update-content.dto';
 
@@ -19,50 +21,37 @@ export class ContentService {
     return await this.contentModel.find().populate('user');
   }
 
-  async getContent(id: string) {
-    const content = await this.contentModel.findById(id).populate('user');
+  async getContent(permalink: string) {
+    const content = await this.contentModel.findOne({ permalink });
     console.log(content);
-    if (!content) throw new Error('Content not found');
+    if (!content) throw new NotFoundException('Content not found');
     return content;
   }
 
-  async createContent(createContentDto: CreateContentDto) {
-    if (createContentDto.file) {
-      const { createReadStream, filename, mimetype } =
-        await createContentDto.file;
-      console.log({ filename, mimetype });
-      const stream = createReadStream();
-      const out = createWriteStream(join(__dirname, 'files', filename));
-      stream.pipe(out);
-      createContentDto.fileUrl = `http://localhost:5000/file/${filename}`;
-    }
-    console.log({ createContentDto });
-
+  async createContent(createContentDto: CreateContentDto, files: ContentFiles) {
+    createContentDto.permalink = await generatePermalink(
+      createContentDto.title,
+      this.contentModel,
+    );
+    await this.uploadFiles(files);
     return await this.contentModel.create(createContentDto);
   }
-  async updateContent(id: string, updateContentDto: UpdateContentDto) {
-    const found = await this.contentModel.findById(id);
-    if (!found) throw new Error('Content not found');
+  async updateContent(permalink: string, updateContentDto: UpdateContentDto) {
+    const found = await this.contentModel.findOne({ permalink });
+    if (!found) throw new BadRequestException('Content not found');
 
-    if (updateContentDto.file) {
-      const { createReadStream, filename, mimetype } =
-        await updateContentDto.file;
-      console.log({ filename, mimetype });
-      const stream = createReadStream();
-      const out = createWriteStream(join(__dirname, 'files', filename));
-      stream.pipe(out);
-      updateContentDto.fileUrl = `http://localhost:5000/file/${filename}`;
-    }
-    console.log({ updateContentDto });
-
-    return await this.contentModel.findByIdAndUpdate(id, updateContentDto, {
+    return await this.contentModel.findOne({ permalink }, updateContentDto, {
       new: true,
     });
   }
 
-  async deleteContent(id: string) {
-    const found = await this.contentModel.findById(id);
-    if (!found) throw new Error('Content not found');
-    return await this.contentModel.findByIdAndDelete(id);
+  async deleteContent(permalink: string) {
+    const found = await this.contentModel.findOne({ permalink });
+    if (!found) throw new NotFoundException('Content not found');
+    return await this.contentModel.findOneAndDelete({ permalink });
+  }
+
+  async uploadFiles(files: ContentFiles) {
+    console.log(files);
   }
 }
