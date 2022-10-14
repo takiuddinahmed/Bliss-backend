@@ -9,6 +9,9 @@ export class FileData {
   name: string;
 
   @Prop({ type: String })
+  spaceKey: string;
+
+  @Prop({ type: String })
   spaceUrl: string;
 
   @Prop({ type: String })

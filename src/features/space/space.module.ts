@@ -3,6 +3,7 @@ import { SpaceProviderService } from './space-provider.service';
 import { SpaceService } from './space.service';
 
 @Module({
-  providers: [SpaceService, SpaceProviderService],
+  providers: [SpaceService],
+  exports: [SpaceService],
 })
 export class SpaceModule {}

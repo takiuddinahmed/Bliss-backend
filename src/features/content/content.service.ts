@@ -6,6 +6,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { collectionNames } from '../common';
+import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
 import { Content, ContentFiles } from './content.model';
 import { CreateContentDto } from './create-content.dto';
@@ -15,6 +16,7 @@ import { UpdateContentDto } from './update-content.dto';
 export class ContentService {
   constructor(
     @InjectModel(collectionNames.content) private contentModel: Model<Content>,
+    private spaceService: SpaceService,
   ) {}
 
   async getContents() {
@@ -52,6 +54,8 @@ export class ContentService {
   }
 
   async uploadFiles(files: ContentFiles) {
-    console.log(files);
+    const file = files.file[0];
+    const res = await this.spaceService.uploadFile(file, 'file');
+    console.log({ res });
   }
 }

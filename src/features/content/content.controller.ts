@@ -48,7 +48,6 @@ export class ContentController {
     files: ContentFiles,
   ) {
     createContentDto.userId = user._id.toString();
-    console.log({ createContentDto, files });
     return await this.contentService.createContent(createContentDto, files);
   }
 
