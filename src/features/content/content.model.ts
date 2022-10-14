@@ -10,28 +10,20 @@ import {
 } from '../common';
 
 @Schema()
-@ObjectType({ description: 'content' })
 export class Content extends Document {
-  @Field(() => ID)
-  _id: Types.ObjectId;
-
-  @Field(() => ID)
   @Prop({ type: Types.ObjectId, required: true, ref: collectionNames.user })
   userId: Types.ObjectId;
 
-  @Field(() => ID)
   @Prop([
     { type: Types.ObjectId, required: true, ref: collectionNames.category },
   ])
   categoryId: Types.ObjectId;
 
-  @Field(() => ID)
   @Prop([
     { type: Types.ObjectId, required: true, ref: collectionNames.category },
   ])
   subCategoryId: Types.ObjectId;
 
-  @Field(() => ID)
   @Prop({ type: Types.ObjectId, required: true, ref: collectionNames.channel })
   channelId: Types.ObjectId;
 
@@ -41,30 +33,26 @@ export class Content extends Document {
     required: true,
     default: SexualityEnum.STRIGHT,
   })
-  @Field(() => String)
   sexuality: SexualityEnum;
 
-  @Field(() => String)
   @Prop({ type: String, required: true, enum: ContentTypeEnum })
   contentType: ContentTypeEnum;
 
-  @Field(() => String)
   @Prop({ type: String, default: '' })
   title: string;
 
-  @Field(() => String)
   @Prop({ type: String, default: '' })
   description: string;
 
-  @Field(() => FileData, { nullable: true })
   @Prop({ type: FileData, default: '' })
-  file: string;
+  file: FileData;
 
-  @Field(() => [FileData], { nullable: true })
-  @Prop({ type: [FileData], default: [] })
+  @Prop({ type: Array<FileData>, default: [] })
   thumbnail: FileData[];
 
-  @Field(() => String)
+  @Prop({ type: Number })
+  duration: number;
+
   @Prop({
     type: String,
     enum: VisualityEnum,

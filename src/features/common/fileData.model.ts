@@ -23,3 +23,4 @@ export class FileData {
   @Field(() => Int)
   size: number;
 }
+
