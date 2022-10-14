@@ -1,4 +1,3 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import {
   IsArray,
@@ -61,7 +60,7 @@ export class Content {
   @Prop({ type: String, default: '' })
   description: string;
 
-  @Prop({ type: FileData, default: '' })
+  @Prop({ type: FileData })
   file: FileData;
 
   @Prop({ type: Array<FileData>, default: [] })
@@ -72,6 +71,7 @@ export class Content {
   @Prop({ type: Number })
   duration: number;
 
+  @IsOptional()
   @IsEnum(VisualityEnum)
   @Prop({
     type: String,

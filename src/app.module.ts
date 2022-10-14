@@ -19,11 +19,11 @@ import { SubCategoryModule } from './features/sub-category/sub-category.module';
     MongooseModule.forRoot(process.env.MONGODB_URL || ''),
     UserModule,
     AuthModule,
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/features/schema.gql'),
-      sortSchema: true,
-    }),
+    // GraphQLModule.forRoot<ApolloDriverConfig>({
+    //   driver: ApolloDriver,
+    //   autoSchemaFile: join(process.cwd(), 'src/features/schema.gql'),
+    //   sortSchema: true,
+    // }),
     CategoryModule,
     ContentModule,
     ContentTypeModule,
