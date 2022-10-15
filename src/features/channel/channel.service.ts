@@ -1,61 +1,104 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { collectionNames } from '../common';
+import { SpaceService } from '../space/space.service';
 import { UserService } from '../user';
 import { generatePermalink } from '../utils';
-import { Channel } from './channel.model';
-import { CreateChannelInput } from './dto/create-channel.input';
-import { UpdateChannelInput } from './dto/update-channel.input';
+import { Channel, ChannelFiles } from './channel.model';
+import { CreateChannelDto } from './dto/create-channel.dto';
+import { UpdateChannelDto } from './dto/update-channel.dto';
 
 @Injectable()
 export class ChannelService {
   constructor(
     @InjectModel(collectionNames.channel) private channelModel: Model<Channel>,
     private userService: UserService,
+    private spaceService: SpaceService,
   ) {
     // this.migrate();
   }
-  async create(input: CreateChannelInput) {
+  async create(form: CreateChannelDto, files: ChannelFiles) {
     const channelFound = await this.channelModel.findOne({
-      userId: input.userId,
+      userId: form.userId.toString(),
     });
     if (channelFound) {
-      throw new Error('Channel already exist for this user');
+      throw new BadRequestException('Channel already exist for this user');
     }
-    input.permalink = await generatePermalink(input.name, this.channelModel);
-    const channel = await this.channelModel.create(input);
-    this.userService.addChannelToUser(input.userId, channel._id.toString());
+    if (files?.logo?.length) {
+      const logo = await this.spaceService.uploadFile(files.logo[0]);
+      if (logo) {
+        form.logo = logo;
+      } else throw new InternalServerErrorException('Logo upload failed');
+    }
+    if (files?.banner?.length) {
+      const banner = await this.spaceService.uploadFile(files.banner[0]);
+      if (banner) {
+        form.banner = banner;
+      } else throw new InternalServerErrorException('Banner upload failed');
+    }
+    form.permalink = await generatePermalink(form.name, this.channelModel);
+    const channel = await this.channelModel.create(form);
+    this.userService.addChannelToUser(
+      form.userId.toString(),
+      channel._id.toString(),
+    );
   }
 
   findAll() {
-    return this.channelModel.find().populate('user');
+    return this.channelModel.find();
   }
 
   async findOne(permalink: string) {
-    const channel = await this.channelModel
-      .findOne({ permalink })
-      .populate('user');
+    const channel = await this.channelModel.findOne({ permalink });
     if (!channel) {
-      throw new Error('Channel not found');
+      throw new NotFoundException('Channel not found');
     }
     return channel;
   }
 
-  async update(id: string, input: UpdateChannelInput) {
-    const channel = await this.channelModel.findById(id);
+  async update(
+    permalik: string,
+    form: UpdateChannelDto,
+    userId: string,
+    files: ChannelFiles,
+  ) {
+    const channel = await this.channelModel.findOne({ permalik, userId });
     if (!channel) {
-      throw new Error('Channel not found');
+      throw new NotFoundException('Channel not found');
     }
-    return await this.channelModel.findByIdAndUpdate(id, input, { new: true });
+    if (files?.logo?.length) {
+      const logo = await this.spaceService.uploadFile(files.logo[0]);
+      if (logo) {
+        form.logo = logo;
+      } else throw new InternalServerErrorException('Logo upload failed');
+    }
+    if (files?.banner?.length) {
+      const banner = await this.spaceService.uploadFile(files.banner[0]);
+      if (banner) {
+        form.banner = banner;
+      } else throw new InternalServerErrorException('Banner upload failed');
+    }
+    return await this.channelModel.findOneAndUpdate(
+      { permalik, userId },
+      form,
+      {
+        new: true,
+      },
+    );
   }
 
-  async remove(id: string) {
-    const channel = await this.channelModel.findById(id);
+  async remove(permalink: string, userId: string) {
+    const channel = await this.channelModel.findOne({ permalink, userId });
     if (!channel) {
-      throw new Error('Channel not found');
+      throw new NotFoundException('Channel not found');
     }
-    return this.channelModel.findByIdAndDelete(id);
+    return this.channelModel.findOneAndDelete({ permalink, userId });
   }
 
   async migrate() {
