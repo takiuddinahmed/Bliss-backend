@@ -13,7 +13,7 @@ import {
   ContentTypeEnum,
   FileData,
   SexualityEnum,
-  VisualityEnum,
+  VisualityEnum
 } from '../common';
 
 @Schema()

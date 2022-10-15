@@ -2,10 +2,9 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
-  NotFoundException,
+  NotFoundException
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { plainToClass } from 'class-transformer';
 import { Model } from 'mongoose';
 import { collectionNames, FileData } from '../common';
 import { SpaceService } from '../space/space.service';

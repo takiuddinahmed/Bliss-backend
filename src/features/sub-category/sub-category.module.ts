@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { SubCategoryService } from './sub-category.service';
-import { SubCategoryResolver } from './sub-category.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { collectionNames } from '../common';
 import { SubCategorySchema } from './sub-category.model';
+import { SubCategoryResolver } from './sub-category.resolver';
+import { SubCategoryService } from './sub-category.service';
 
 @Module({
   imports: [
