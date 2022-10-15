@@ -14,7 +14,6 @@ export class CategoryController {
         private readonly categoryServicec: CategoryService
     ){}
 
-
     @Get()
     @UseGuards(JwtAuthGuard)
     async getAll() {
@@ -49,7 +48,5 @@ export class CategoryController {
     ) {
         return await this.categoryServicec.deleteCategory(id);
     }
-
-    
 
 }

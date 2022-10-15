@@ -3,8 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { collectionNames } from '../common';
 import { generatePermalink } from '../utils';
-import { CreateSubCategoryInput } from './dto/create-sub-category.input';
-import { UpdateSubCategoryInput } from './dto/update-sub-category.input';
+import { CreateSubCategoryDto, UpdateSubCategoryDto } from './sub-category.dto';
 import { SubCategoryDocument } from './sub-category.model';
 
 @Injectable()
@@ -14,7 +13,7 @@ export class SubCategoryService {
     private subCategoryModel: Model<SubCategoryDocument>,
   ) {}
 
-  async create(input: CreateSubCategoryInput) {
+  async create(input: CreateSubCategoryDto) {
     const found = await this.subCategoryModel.findOne({
       name: input.name,
       categoryId: input.categoryId,
@@ -46,7 +45,7 @@ export class SubCategoryService {
     return subCategory;
   }
 
-  async update(id: string, updateSubCategoryInput: UpdateSubCategoryInput) {
+  async update(id: string, updateSubCategoryInput: UpdateSubCategoryDto) {
     const subCategory = await this.subCategoryModel.findById(id);
     if (!subCategory) {
       throw new Error('Sub category not found');

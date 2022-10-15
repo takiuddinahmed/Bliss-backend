@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { collectionNames } from '../common';
 import { SubCategorySchema } from './sub-category.model';
-import { SubCategoryResolver } from './sub-category.resolver';
 import { SubCategoryService } from './sub-category.service';
 
 @Module({
@@ -14,6 +13,6 @@ import { SubCategoryService } from './sub-category.service';
       },
     ]),
   ],
-  providers: [SubCategoryResolver, SubCategoryService],
+  providers: [SubCategoryService],
 })
 export class SubCategoryModule {}

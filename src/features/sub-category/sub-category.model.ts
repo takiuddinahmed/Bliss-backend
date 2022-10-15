@@ -1,5 +1,5 @@
-import { Field } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsOptional } from 'class-validator';
 import { Types } from 'mongoose';
 import { collectionNames } from '../common';
 
@@ -9,15 +9,13 @@ export type SubCategoryDocument = SubCategory & Document;
 export class SubCategory {
 
   @Prop({ type: String, required: true })
-  @Field(() => String)
   name: string;
 
-  @Prop({ type: String, required: true, unique: true })
-  @Field(() => String)
+  @IsOptional()
+  @Prop({ type: String, required: true, unique: true,default: '' })
   permalink: string;
 
   @Prop({ type: Types.ObjectId, ref: collectionNames.category })
-  @Field(() => String)
   categoryId: string;
 }
 
