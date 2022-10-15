@@ -5,7 +5,7 @@ import {
   IsMongoId,
   IsNumber,
   IsOptional,
-  IsString,
+  IsString
 } from 'class-validator';
 import { Types } from 'mongoose';
 import {
