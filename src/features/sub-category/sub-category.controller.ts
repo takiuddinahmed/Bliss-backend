@@ -2,7 +2,9 @@ import {
     Body,
     Controller, Delete, Get, Param, Patch, Post, UseGuards
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../security';
+import { ROLE } from '../common/user-role.enum';
+import { JwtAuthGuard, Roles } from '../security';
+import { RolesGuard } from '../security/roles.guard';
 import { CreateSubCategoryDto, UpdateSubCategoryDto } from './sub-category.dto';
 import { SubCategoryService } from './sub-category.service';
 
@@ -13,7 +15,8 @@ export class SubCategoryController {
     ){}
 
     @Get()
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(ROLE.ADMIN)
     async findAll() {
         return await this.subcategoryService.findAll();
     }
@@ -25,19 +28,22 @@ export class SubCategoryController {
     }
 
     @Get('find-by-category:id')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(ROLE.ADMIN)
     async findByCategory(@Param('id') id: string) {
         return await this.subcategoryService.findByCategory(id);
     }
 
     @Get(':id')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(ROLE.ADMIN)
     async findOne(@Param('id') id: string) {
         return await this.subcategoryService.findOne(id);
     }
 
     @Patch(':id')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(ROLE.ADMIN)
     async update(
         @Param('id') id: string,
         @Body() updateSubcategoryDto: UpdateSubCategoryDto,
@@ -46,7 +52,8 @@ export class SubCategoryController {
     }
 
     @Delete(':id')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(ROLE.ADMIN)
     async deleteCategory(
         @Param('id') id: string
     ) {

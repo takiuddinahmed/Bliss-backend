@@ -2,7 +2,8 @@ import {
     Body,
     Controller, Delete, Get, Param, Patch, Post, UseGuards
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../security';
+import { JwtAuthGuard, Roles, RolesGuard } from '../security';
+import { ROLE } from '../user/user.model';
 import { CreateCategoryDto, UpdateCategoryDto } from './category.dto';
 
 import { CategoryService } from './category.service';
@@ -15,13 +16,15 @@ export class CategoryController {
     ){}
 
     @Get()
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(ROLE.ADMIN)
     async getAll() {
         return await this.categoryServicec.getCategories();
     }
 
     @Get(':id')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(ROLE.ADMIN)
     async getCategory(@Param('id') id: string) {
         return await this.categoryServicec.getCategory(id);
     }
@@ -33,7 +36,8 @@ export class CategoryController {
     }
 
     @Patch(':id')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(ROLE.ADMIN)
     async update(
         @Param('id') id: string,
         @Body() updateCategoryDto: UpdateCategoryDto,
@@ -42,7 +46,8 @@ export class CategoryController {
     }
 
     @Delete(':id')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(ROLE.ADMIN)
     async deleteCategory(
         @Param('id') id: string
     ) {
