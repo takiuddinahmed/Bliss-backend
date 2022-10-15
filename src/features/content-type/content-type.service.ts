@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CreateContentTypeDto, UpdateContentTypeDto } from './content-type.dto';
 import { ContentType, ContentTypeDocument } from './content-type.model';
-import { CreateContentTypeInput } from './create-content-type.input';
-import { UpdateContentTypeInput } from './update-content-type.input';
+
 
 @Injectable()
 export class ContentTypeService {
@@ -11,7 +11,7 @@ export class ContentTypeService {
     @InjectModel(ContentType.name)
     private contentTypeModel: Model<ContentTypeDocument>,
   ) {}
-  async create(input: CreateContentTypeInput) {
+  async create(input: CreateContentTypeDto) {
     const found = await this.contentTypeModel.findOne({ name: input.name });
     if (found) throw new Error('Content type already exist');
     return await this.contentTypeModel.create(input);
@@ -27,7 +27,7 @@ export class ContentTypeService {
     return contentType;
   }
 
-  async update(id: string, updateContentTypeInput: UpdateContentTypeInput) {
+  async update(id: string, updateContentTypeInput: UpdateContentTypeDto) {
     const existContentType = await this.contentTypeModel.findById(id);
     if (!existContentType) throw new Error('Content type not found');
     return this.contentTypeModel.findByIdAndUpdate(id, updateContentTypeInput, {

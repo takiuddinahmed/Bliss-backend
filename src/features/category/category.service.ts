@@ -57,23 +57,23 @@ export class CategoryService {
     return await this.categoryModel.findByIdAndDelete(id);
   }
 
-  async migrate() {
-    const categories = await this.categoryModel.find();
-    for (let i = 0; i < categories.length; i++) {
-      const category = categories[i];
-      if (!category.permalink) {
-        const permalink = await generatePermalink(
-          category.name,
-          this.categoryModel,
-        );
+  // async migrate() {
+  //   const categories = await this.categoryModel.find();
+  //   for (let i = 0; i < categories.length; i++) {
+  //     const category = categories[i];
+  //     if (!category.permalink) {
+  //       const permalink = await generatePermalink(
+  //         category.name,
+  //         this.categoryModel,
+  //       );
 
-        const updated = await this.categoryModel.findByIdAndUpdate(
-          category._id,
-          { permalink },
-          { new: true },
-        );
-        console.log(updated);
-      }
-    }
-  }
+  //       const updated = await this.categoryModel.findByIdAndUpdate(
+  //         category._id,
+  //         { permalink },
+  //         { new: true },
+  //       );
+  //       console.log(updated);
+  //     }
+  //   }
+  // }
 }
