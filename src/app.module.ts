@@ -1,15 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserModule } from 'src/features/user/user.module';
 import { AuthModule } from 'src/features/auth/auth.module';
-import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { join } from 'path';
+import { UserModule } from 'src/features/user/user.module';
 import { CategoryModule } from './features/category';
+import { ChannelModule } from './features/channel/channel.module';
 import { ContentModule } from './features/content';
 import { ContentTypeModule } from './features/content-type/content-type.module';
-import { ChannelModule } from './features/channel/channel.module';
 import { SpaceModule } from './features/space/space.module';
 import { SubCategoryModule } from './features/sub-category/sub-category.module';
 
