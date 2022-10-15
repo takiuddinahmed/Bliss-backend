@@ -10,7 +10,7 @@ import { ContentTypeService } from './content-type.service';
       { name: ContentType.name, schema: ContentTypeSchema },
     ]),
   ],
-  providers: [ContentTypeService],
   controllers: [ContentTypeController],
+  providers: [ContentTypeService],
 })
 export class ContentTypeModule {}
