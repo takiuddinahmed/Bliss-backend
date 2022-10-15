@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ChannelService } from './channel.service';
-import { ChannelResolver } from './channel.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ChannelSchema } from './channel.model';
 import { collectionNames } from '../common';
 import { UserModule } from '../user';
+import { ChannelSchema } from './channel.model';
+import { ChannelService } from './channel.service';
+import { ChannelController } from './channel.controller';
+import { SpaceModule } from '../space';
 
 @Module({
   imports: [
@@ -15,7 +16,9 @@ import { UserModule } from '../user';
       },
     ]),
     UserModule,
+    SpaceModule,
   ],
-  providers: [ChannelResolver, ChannelService],
+  providers: [ChannelService],
+  controllers: [ChannelController],
 })
 export class ChannelModule {}

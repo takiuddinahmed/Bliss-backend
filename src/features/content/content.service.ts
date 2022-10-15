@@ -37,7 +37,7 @@ export class ContentService {
       this.contentModel,
     );
     if (files?.file?.length) {
-      const fileData = await this.uploadFile(files?.file[0]);
+      const fileData = await this.spaceService.uploadFile(files?.file[0]);
       if (!fileData)
         throw new InternalServerErrorException('File upload failed');
       createContentDto.file = fileData;
@@ -45,7 +45,7 @@ export class ContentService {
     if (files?.thumbnails?.length) {
       const thumbnailsFileData: FileData[] = [];
       for await (const file of files.thumbnails) {
-        const fileData = await this.uploadFile(file);
+        const fileData = await this.spaceService.uploadFile(file);
         if (fileData) thumbnailsFileData.push(fileData);
       }
       createContentDto.thumbnails = thumbnailsFileData;
@@ -65,22 +65,5 @@ export class ContentService {
     const found = await this.contentModel.findOne({ permalink });
     if (!found) throw new NotFoundException('Content not found');
     return await this.contentModel.findOneAndDelete({ permalink });
-  }
-
-  async uploadFile(file: Express.Multer.File) {
-    const fileName = file.originalname.replace(' ', '-');
-    const res = await this.spaceService.uploadFile(file, fileName);
-    if (res) {
-      const fileData: FileData = {
-        name: fileName,
-        spaceKey: res.spaceKey,
-        spaceUrl: res.spaceUrl,
-        url: res.spaceUrl,
-        // type: file.mimetype.toString(),
-        size: file.size,
-      };
-      return fileData;
-    }
-    return null;
   }
 }

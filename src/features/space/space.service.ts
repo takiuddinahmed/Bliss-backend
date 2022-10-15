@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Endpoint, S3 } from 'aws-sdk';
+import { FileData } from '../common';
 
 @Injectable()
 export class SpaceService {
@@ -11,7 +12,24 @@ export class SpaceService {
     this.bucket = process.env.DO_SPACE_BUCKET;
   }
 
-  async uploadFile(file: Express.Multer.File, name?: string) {
+  async uploadFile(file: Express.Multer.File) {
+    const fileName = file.originalname.replace(' ', '-');
+    const res = await this.uploadToS3(file, fileName);
+    if (res) {
+      const fileData: FileData = {
+        name: fileName,
+        spaceKey: res.spaceKey,
+        spaceUrl: res.spaceUrl,
+        url: res.spaceUrl,
+        // type: file.mimetype.toString(),
+        size: file.size,
+      };
+      return fileData;
+    }
+    return null;
+  }
+
+  async uploadToS3(file: Express.Multer.File, name?: string) {
     try {
       const fileName =
         this.genUniqeId() +

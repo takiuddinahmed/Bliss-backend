@@ -1,44 +1,36 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { collectionNames, FileData } from '../common';
-import { User } from '../user';
 
 @ObjectType()
 @Schema()
 export class Channel {
-  @Field(() => ID)
-  _id: string | Types.ObjectId;
-
   @Prop({ type: Types.ObjectId, ref: collectionNames.user })
-  @Field(() => ID)
   userId: Types.ObjectId | string;
 
+  @IsString()
   @Prop({ type: String, required: true })
-  @Field(() => String)
   name: string;
 
+  @IsString()
   @Prop({ type: String, required: true })
-  @Field(() => String)
   description: string;
 
   @Prop({ type: String, required: true })
-  @Field(() => String)
   permalink: string;
 
   @Prop({ type: FileData })
-  @Field(() => FileData, { nullable: true })
   logo: FileData;
 
   @Prop({ type: FileData })
-  @Field(() => FileData, { nullable: true })
   banner: FileData;
+}
 
-  @Field(() => User, { nullable: true })
-  user: User;
-
-  // @Field(()=> [ID], {defaultValue: []})
-  // @Prop({type: })
+export interface ChannelFiles {
+  logo?: Express.Multer.File[];
+  banner?: Express.Multer.File[];
 }
 
 export type ChannelDocument = Channel & Document;
