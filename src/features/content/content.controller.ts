@@ -6,9 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../security';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
+import { ContentFiles } from './content.model';
 import { ContentService } from './content.service';
 import { CreateContentDto } from './create-content.dto';
 import { UpdateContentDto } from './update-content.dto';
@@ -29,10 +33,22 @@ export class ContentController {
     return await this.contentService.getContent(permalink);
   }
 
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'file', maxCount: 1 },
+      { name: 'thumbnails', maxCount: 5 },
+    ]),
+  )
   @Post()
   @UseGuards(JwtAuthGuard)
-  async create(@Body() createContentDto: CreateContentDto) {
-    return await this.contentService.createContent(createContentDto);
+  async create(
+    @Body() createContentDto: CreateContentDto,
+    @AuthUser() user: IAuthUser,
+    @UploadedFiles()
+    files: ContentFiles,
+  ) {
+    createContentDto.userId = user._id.toString();
+    return await this.contentService.createContent(createContentDto, files);
   }
 
   @Patch(':permalink')

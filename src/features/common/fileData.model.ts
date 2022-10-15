@@ -9,6 +9,9 @@ export class FileData {
   name: string;
 
   @Prop({ type: String })
+  spaceKey: string;
+
+  @Prop({ type: String })
   spaceUrl: string;
 
   @Prop({ type: String })
@@ -17,10 +20,9 @@ export class FileData {
 
   @Prop({ type: String })
   @Field(() => String)
-  type: string;
+  type?: string;
 
   @Prop({ type: Number })
   @Field(() => Int)
   size: number;
 }
-

@@ -20,21 +20,6 @@ type Channel {
   userId: ID!
 }
 
-"""content"""
-type Content {
-  _id: ID!
-  categoryId: ID!
-  contentType: String!
-  description: String!
-  fileUrl: String!
-  sexuality: String!
-  thumbnailUrl: [String!]
-  title: String!
-  user: User
-  userId: ID!
-  visualiTy: String!
-}
-
 type ContentType {
   _id: ID!
   contentType: String!
@@ -50,17 +35,6 @@ input CreateChannelInput {
   description: String!
   name: String!
   userId: ID!
-}
-
-input CreateContentDto {
-  categoryId: ID!
-  contentType: String!
-  description: String!
-  file: Upload
-  sexuality: String!
-  title: String!
-  userId: ID!
-  visualiTy: String!
 }
 
 input CreateContentTypeInput {
@@ -84,17 +58,14 @@ type FileData {
 type Mutation {
   createCategory(input: CreateCategoryDto!): Category!
   createChannel(input: CreateChannelInput!): Channel!
-  createContent(input: CreateContentDto!): Content!
   createContentType(input: CreateContentTypeInput!): ContentType!
   createSubCategory(input: CreateSubCategoryInput!): SubCategory!
   deleteCategory(id: ID!): Category!
-  deleteContent(id: ID!): Content!
   deleteContentType(id: ID!): ContentType!
   removeChannel(id: String!): Channel!
   removeSubCategory(id: String!): SubCategory!
   updateCategory(id: ID!, input: UpdateCategoryDto!): Category!
   updateChannel(id: String!, input: UpdateChannelInput!): Channel!
-  updateContent(id: ID!, input: UpdateContentDto!): Content!
   updateContentType(id: ID!, input: UpdateContentTypeInput!): ContentType!
   updateSubCategory(id: ID!, input: UpdateSubCategoryInput!): SubCategory!
 }
@@ -104,10 +75,8 @@ type Query {
   category(id: ID!): Category!
   channel(permalink: String!): Channel!
   channels: [Channel!]!
-  content(id: ID!): Content!
   contentType(id: ID!): ContentType!
   contentTypes: [ContentType!]!
-  contents: [Content!]!
   subCategories: [SubCategory!]!
   subCategoriesByCateogory(categoryId: ID!): [SubCategory!]!
   subCategory(id: ID!): SubCategory!
@@ -130,17 +99,6 @@ input UpdateChannelInput {
   userId: ID
 }
 
-input UpdateContentDto {
-  categoryId: ID
-  contentType: String
-  description: String
-  file: Upload
-  sexuality: String
-  title: String
-  userId: ID
-  visualiTy: String
-}
-
 input UpdateContentTypeInput {
   contentType: String
   icon: String
@@ -151,9 +109,6 @@ input UpdateSubCategoryInput {
   categoryId: String
   name: String
 }
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
 
 type User {
   _id: ID!
