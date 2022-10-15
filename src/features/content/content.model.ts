@@ -6,6 +6,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  IsUrl,
 } from 'class-validator';
 import { Types } from 'mongoose';
 import {
@@ -13,7 +14,7 @@ import {
   ContentTypeEnum,
   FileData,
   SexualityEnum,
-  VisualityEnum
+  VisualityEnum,
 } from '../common';
 
 @Schema()
@@ -21,18 +22,19 @@ export class Content {
   @Prop({ type: Types.ObjectId, required: true, ref: collectionNames.user })
   userId: Types.ObjectId | string;
 
-  @IsArray()
+  // @IsArray()
+  @IsMongoId()
   @Prop([
     { type: Types.ObjectId, required: true, ref: collectionNames.category },
   ])
-  categoryId: Types.ObjectId;
+  categoryId: Types.ObjectId[];
 
   @IsOptional()
   @IsArray()
   @Prop([
     { type: Types.ObjectId, required: true, ref: collectionNames.category },
   ])
-  subCategoryId: Types.ObjectId;
+  subCategoryId: Types.ObjectId[];
 
   @IsMongoId()
   @Prop({ type: Types.ObjectId, required: true, ref: collectionNames.channel })
@@ -65,6 +67,11 @@ export class Content {
 
   @Prop({ type: Array<FileData>, default: [] })
   thumbnails: FileData[];
+
+  @IsOptional()
+  @IsUrl()
+  @Prop({ type: String })
+  url?: string;
 
   @IsOptional()
   @IsNumber()

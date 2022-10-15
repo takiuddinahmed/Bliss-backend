@@ -2,7 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
-  NotFoundException
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -26,7 +26,6 @@ export class ContentService {
 
   async getContent(permalink: string) {
     const content = await this.contentModel.findOne({ permalink });
-    console.log(content);
     if (!content) throw new NotFoundException('Content not found');
     return content;
   }
@@ -50,6 +49,7 @@ export class ContentService {
       }
       createContentDto.thumbnails = thumbnailsFileData;
     }
+    console.log(createContentDto);
     return await this.contentModel.create(createContentDto);
   }
   async updateContent(permalink: string, updateContentDto: UpdateContentDto) {
