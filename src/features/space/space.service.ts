@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Credentials, Endpoint, S3 } from 'aws-sdk';
+import { Endpoint, S3 } from 'aws-sdk';
 
 @Injectable()
 export class SpaceService {
@@ -9,16 +9,19 @@ export class SpaceService {
   constructor() {
     this.s3 = this.getS3();
     this.bucket = process.env.DO_SPACE_BUCKET;
-    console.log(this.s3.listBuckets());
   }
 
   async uploadFile(file: Express.Multer.File, name?: string) {
     try {
-      const fileName = (name ? name : file.filename) + '-' + this.genUniqeId();
+      const fileName =
+        this.genUniqeId() +
+        '-' +
+        (name ? name : file.originalname.replace(' ', '-'));
+
       const stored = await this.s3
         .upload({
-          Bucket: this.bucket,
-          ACL: 'public',
+          Bucket: this.bucket + '/files',
+          ACL: 'public-read',
           Key: fileName,
           Body: file.buffer,
         })
@@ -29,20 +32,23 @@ export class SpaceService {
       };
     } catch (err) {
       this.logger.error(err);
-      console.log(err);
       return null;
     }
   }
 
   getS3() {
-    const spaceEndPoint = new Endpoint(process.env.DO_SPACE_ENDPOINT);
+    const endpoint = process.env.DO_SPACE_ENDPOINT;
+    const region = process.env.DO_SPACE_REGION;
+    const accessKeyId = process.env.DO_SPACE_ACCESS_KEY_ID;
+    const secretAccessKey = process.env.DO_SPACE_SECRET_ACCESS_KEY;
+    const spaceEndPoint = new Endpoint(endpoint);
     const s3 = new S3({
-      endpoint: spaceEndPoint,
-      region: process.env.DO_SPACE_REGION,
-      credentials: new Credentials({
-        accessKeyId: process.env.DO_SPACE_SECRET_ACCESS_KEY,
-        secretAccessKey: process.env.DO_SPACE_SECRET_ACCESS_KEY,
-      }),
+      endpoint: spaceEndPoint.href,
+      region,
+      credentials: {
+        accessKeyId,
+        secretAccessKey,
+      },
     });
 
     return s3;

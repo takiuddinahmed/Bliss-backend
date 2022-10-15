@@ -20,7 +20,7 @@ export class FileData {
 
   @Prop({ type: String })
   @Field(() => String)
-  type: string;
+  type?: string;
 
   @Prop({ type: Number })
   @Field(() => Int)

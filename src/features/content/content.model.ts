@@ -21,7 +21,7 @@ export class Content {
   @Prop({ type: Types.ObjectId, required: true, ref: collectionNames.user })
   userId: Types.ObjectId | string;
 
-  @IsMongoId()
+  @IsArray()
   @Prop([
     { type: Types.ObjectId, required: true, ref: collectionNames.category },
   ])
@@ -92,6 +92,10 @@ export class Content {
 export interface ContentFiles {
   file?: Express.Multer.File[];
   thumbnails?: Express.Multer.File[];
+}
+export interface ContentFilesData {
+  file?: FileData;
+  thumbnails?: FileData[];
 }
 
 export type ContentDocument = Content & Document;

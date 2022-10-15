@@ -1,11 +1,13 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { plainToClass } from 'class-transformer';
 import { Model } from 'mongoose';
-import { collectionNames } from '../common';
+import { collectionNames, FileData } from '../common';
 import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
 import { Content, ContentFiles } from './content.model';
@@ -20,7 +22,7 @@ export class ContentService {
   ) {}
 
   async getContents() {
-    return await this.contentModel.find().populate('user');
+    return await this.contentModel.find();
   }
 
   async getContent(permalink: string) {
@@ -35,7 +37,20 @@ export class ContentService {
       createContentDto.title,
       this.contentModel,
     );
-    await this.uploadFiles(files);
+    if (files?.file?.length) {
+      const fileData = await this.uploadFile(files?.file[0]);
+      if (!fileData)
+        throw new InternalServerErrorException('File upload failed');
+      createContentDto.file = fileData;
+    }
+    if (files?.thumbnails?.length) {
+      const thumbnailsFileData: FileData[] = [];
+      for await (const file of files.thumbnails) {
+        const fileData = await this.uploadFile(file);
+        if (fileData) thumbnailsFileData.push(fileData);
+      }
+      createContentDto.thumbnails = thumbnailsFileData;
+    }
     return await this.contentModel.create(createContentDto);
   }
   async updateContent(permalink: string, updateContentDto: UpdateContentDto) {
@@ -53,9 +68,20 @@ export class ContentService {
     return await this.contentModel.findOneAndDelete({ permalink });
   }
 
-  async uploadFiles(files: ContentFiles) {
-    const file = files.file[0];
-    const res = await this.spaceService.uploadFile(file, 'file');
-    console.log({ res });
+  async uploadFile(file: Express.Multer.File) {
+    const fileName = file.originalname.replace(' ', '-');
+    const res = await this.spaceService.uploadFile(file, fileName);
+    if (res) {
+      const fileData: FileData = {
+        name: fileName,
+        spaceKey: res.spaceKey,
+        spaceUrl: res.spaceUrl,
+        url: res.spaceUrl,
+        // type: file.mimetype.toString(),
+        size: file.size,
+      };
+      return fileData;
+    }
+    return null;
   }
 }
