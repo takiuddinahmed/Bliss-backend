@@ -8,7 +8,7 @@ import {
   Post,
   UploadedFiles,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
