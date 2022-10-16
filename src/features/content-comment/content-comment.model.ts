@@ -1,4 +1,4 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import {
   IsEnum,
   IsMongoId,
@@ -60,3 +60,7 @@ export class ContentComment {
   @Prop({ type: [LikeDislikeSchema], default: [] })
   likeDislike: LikeDislike[];
 }
+
+export type ContentCommentDocument = ContentComment & Document;
+export const ContentCommnetSchema =
+  SchemaFactory.createForClass(ContentComment);

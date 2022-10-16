@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { collectionNames } from '../common';
@@ -17,7 +21,13 @@ export class ContentCommentService {
     private spaceService: SpaceService,
   ) {}
 
-  async create(form: CreateContentCommentDto) {
+  async create(form: CreateContentCommentDto, file?: Express.Multer.File) {
+    if (file) {
+      const fileData = await this.spaceService.uploadFile(file);
+      if (!fileData)
+        throw new InternalServerErrorException('Unable to upload file');
+      form.file = fileData;
+    }
     return await this.contentCommentModel.create(form);
   }
 
@@ -31,15 +41,23 @@ export class ContentCommentService {
 
   async findOne(id: string) {
     const contentComment = await this.contentCommentModel.findById(id);
-    if (!contentComment) throw new NotFoundException('Commnet not fount');
+    if (!contentComment) throw new NotFoundException('Comment not found');
     return contentComment;
   }
 
-  update(id: string, updateContentCommentDto: UpdateContnetCommentDto) {
-    return `This action updates a #${id} contentComment`;
+  async update(id: string, updateContentCommentDto: UpdateContnetCommentDto) {
+    const contentComment = await this.contentCommentModel.findById(id);
+    if (!contentComment) throw new NotFoundException('Comment not found');
+    return this.contentCommentModel.findByIdAndUpdate(
+      id,
+      updateContentCommentDto,
+      { new: true },
+    );
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} contentComment`;
+  async remove(id: string) {
+    const contentComment = await this.contentCommentModel.findById(id);
+    if (!contentComment) throw new NotFoundException('Comment not found');
+    return this.contentCommentModel.findByIdAndDelete(id);
   }
 }

@@ -6,9 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { IAuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Multer } from 'multer';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import {
   CreateContentCommentDto,
@@ -21,10 +24,15 @@ import { ContentCommentService } from './content-comment.service';
 export class ContentCommentController {
   constructor(private readonly contentCommentService: ContentCommentService) {}
 
+  @UseInterceptors(FileInterceptor('file'))
   @Post()
-  create(@Body() form: CreateContentCommentDto, @AuthUser() user: IAuthUser) {
+  create(
+    @Body() form: CreateContentCommentDto,
+    @AuthUser() user: IAuthUser,
+    @UploadedFile('file') file?: Express.Multer.File,
+  ) {
     form.userId = user._id.toString();
-    return this.contentCommentService.create(form);
+    return this.contentCommentService.create(form, file);
   }
 
   @Get()
@@ -38,7 +46,7 @@ export class ContentCommentController {
   }
 
   @Get('content/:contentId')
-  findByContent(@Param('contentId') contentId: stirng) {
+  findByContent(@Param('contentId') contentId: string) {
     return this.contentCommentService.findByContent(contentId);
   }
 

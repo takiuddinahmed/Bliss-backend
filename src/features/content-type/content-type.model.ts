@@ -11,7 +11,7 @@ export class ContentType {
   name: string;
 
   @IsString()
-  @Prop({ type: String , required: true })
+  @Prop({ type: String, required: true })
   icon: string;
 
   @IsEnum(ContentTypeEnum)
