@@ -6,7 +6,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUrl
+  IsUrl,
 } from 'class-validator';
 import { Types } from 'mongoose';
 import {
@@ -15,7 +15,7 @@ import {
   FileData,
   FileDataSchema,
   SexualityEnum,
-  VisualityEnum
+  VisualityEnum,
 } from '../common';
 
 @Schema()
