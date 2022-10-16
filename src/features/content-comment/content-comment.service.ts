@@ -45,14 +45,28 @@ export class ContentCommentService {
     return contentComment;
   }
 
-  async update(id: string, updateContentCommentDto: UpdateContnetCommentDto) {
+  async update(
+    id: string,
+    updateContentCommentDto: UpdateContnetCommentDto,
+    file?: Express.Multer.File,
+  ) {
     const contentComment = await this.contentCommentModel.findById(id);
     if (!contentComment) throw new NotFoundException('Comment not found');
-    return this.contentCommentModel.findByIdAndUpdate(
+    const prevFIle = contentComment.file;
+    if (file) {
+      const fileData = await this.spaceService.uploadFile(file);
+      if (!fileData)
+        throw new InternalServerErrorException('Unable to upload file');
+      updateContentCommentDto.file = fileData;
+    }
+    const updated = await this.contentCommentModel.findByIdAndUpdate(
       id,
       updateContentCommentDto,
       { new: true },
     );
+    if (updated) {
+      this.spaceService.deleteFile(prevFIle);
+    }
   }
 
   async remove(id: string) {
