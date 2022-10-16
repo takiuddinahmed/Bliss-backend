@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsOptional } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { collectionNames } from '../common';
 
@@ -8,6 +8,7 @@ export type SubCategoryDocument = SubCategory & Document;
 @Schema({ timestamps: true })
 export class SubCategory {
 
+  @IsString()
   @Prop({ type: String, required: true })
   name: string;
 

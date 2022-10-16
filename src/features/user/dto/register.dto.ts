@@ -1,9 +1,6 @@
 import {
-  IsString,
-  MinLength,
-  IsEnum,
-  ValidateIf,
-  IsEmail,
+  IsEmail, IsEnum, IsString,
+  MinLength, ValidateIf
 } from 'class-validator';
 import { ROLE } from '../user.model';
 
