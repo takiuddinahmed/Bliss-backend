@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import { ROLE } from '../common/user-role.enum';
+import { ROLE } from '../common/enum/user-role.enum';
 import { JwtAuthGuard, Roles, RolesGuard } from '../security';
 import { CreateContentTypeDto, UpdateContentTypeDto } from './content-type.dto';
 import { ContentTypeService } from './content-type.service';
