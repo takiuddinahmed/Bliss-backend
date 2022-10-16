@@ -55,7 +55,7 @@ export class ContentCommentController {
   @Get('/like-dislike/:id/:likeDislike')
   async likeComment(
     @Param('id') id: string,
-    @Param('likeDislike') likeDislike: LikeDislikeEnum,
+    @Param('likeDislike') likeDislike: LikeDislikeEnum | 'cancel',
     @AuthUser() user: IAuthUser,
   ) {
     return this.contentCommentService.likeDislikeCommnet(
