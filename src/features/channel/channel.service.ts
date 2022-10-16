@@ -48,6 +48,7 @@ export class ChannelService {
       form.userId.toString(),
       channel._id.toString(),
     );
+    return channel;
   }
 
   findAll() {
