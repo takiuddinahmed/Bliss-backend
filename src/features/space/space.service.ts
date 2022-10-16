@@ -9,7 +9,7 @@ export class SpaceService {
   private bucket: string;
   constructor() {
     this.s3 = this.getS3();
-    this.bucket = process.env.DO_SPACE_BUCKET;
+    this.bucket = process.env.DO_SPACE_BUCKET + '/files';
   }
 
   async uploadFile(file: Express.Multer.File) {
@@ -38,7 +38,7 @@ export class SpaceService {
 
       const stored = await this.s3
         .upload({
-          Bucket: this.bucket + '/files',
+          Bucket: this.bucket,
           ACL: 'public-read',
           Key: fileName,
           Body: file.buffer,
@@ -51,6 +51,19 @@ export class SpaceService {
     } catch (err) {
       this.logger.error(err);
       return null;
+    }
+  }
+
+  async deleteFile(file: FileData) {
+    try {
+      await this.s3
+        .deleteObject({
+          Bucket: this.bucket,
+          Key: file.spaceKey,
+        })
+        .promise();
+    } catch (err) {
+      console.log(err);
     }
   }
 

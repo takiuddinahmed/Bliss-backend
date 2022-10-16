@@ -58,7 +58,7 @@ export class ContentComment {
   duration: number;
 
   @Prop({ type: [LikeDislikeSchema], default: [] })
-  likeDislike: LikeDislike[];
+  likeDislikes: LikeDislike[];
 }
 
 export type ContentCommentDocument = ContentComment & Document;

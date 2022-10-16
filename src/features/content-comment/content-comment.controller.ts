@@ -11,6 +11,7 @@ import {
   UseInterceptors
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import {
   CreateContentCommentDto,
@@ -47,6 +48,19 @@ export class ContentCommentController {
   @Get('content/:contentId')
   findByContent(@Param('contentId') contentId: string) {
     return this.contentCommentService.findByContent(contentId);
+  }
+
+  @Get('/like-dislike/:id/:likeDislike')
+  async likeComment(
+    @Param('id') id: string,
+    @Param('likeDislike') likeDislike: LikeDislikeEnum,
+    @AuthUser() user: IAuthUser,
+  ) {
+    return this.contentCommentService.likeDislikeCommnet(
+      id,
+      user._id.toString(),
+      likeDislike,
+    );
   }
 
   @Patch(':id')
