@@ -1,7 +1,12 @@
 import { Prop, Schema } from '@nestjs/mongoose';
-import { IsEnum, IsMongoId, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsMongoId, IsNumber, IsOptional, IsPositive, IsString } from 'class-validator';
 import { Types } from 'mongoose';
-import { collectionNames, CommentContentTypeEnum, FileData } from '../common';
+import {
+  collectionNames,
+  CommentContentTypeEnum,
+  FileData,
+  FileDataSchema,
+} from '../common';
 
 @Schema()
 export class ContentComment {
@@ -33,9 +38,14 @@ export class ContentComment {
   @Prop({ type: String })
   text?: string;
 
+  @Prop({ type: FileDataSchema })
   file: FileData;
 
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
   duration: number;
 
+  
   likeDislike: object;
 }

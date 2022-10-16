@@ -2,7 +2,7 @@ import {
     Body,
     Controller, Delete, Get, Param, Patch, Post, UseGuards
 } from '@nestjs/common';
-import { ROLE } from '../common/user-role.enum';
+import { ROLE } from '../common/enum/user-role.enum';
 import { JwtAuthGuard, Roles } from '../security';
 import { RolesGuard } from '../security/roles.guard';
 import { CreateSubCategoryDto, UpdateSubCategoryDto } from './sub-category.dto';
