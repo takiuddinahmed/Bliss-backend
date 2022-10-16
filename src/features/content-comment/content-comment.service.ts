@@ -48,12 +48,13 @@ export class ContentCommentService {
   async likeDislikeCommnet(
     id: string,
     userId: string,
-    likeDislike: LikeDislikeEnum,
+    likeDislike: LikeDislikeEnum | 'cancel',
   ) {
     if (
       !(
         likeDislike === LikeDislikeEnum.LIKE ||
-        likeDislike === LikeDislikeEnum.DISLIKE
+        likeDislike === LikeDislikeEnum.DISLIKE ||
+        likeDislike === 'cancel'
       )
     )
       throw new BadRequestException(
@@ -61,7 +62,19 @@ export class ContentCommentService {
       );
 
     // TODO check comment and content is available
+
     const comment = await this.findOne(id);
+    if (likeDislike === 'cancel') {
+      return await this.contentCommentModel.findByIdAndUpdate(
+        id,
+        {
+          $pull: {
+            likeDislikes: { userId },
+          },
+        },
+        { new: true },
+      );
+    }
     if (comment.likeDislikes.some((ld) => ld.userId.toString() === userId)) {
       return await this.contentCommentModel.findOneAndUpdate(
         {
@@ -88,6 +101,12 @@ export class ContentCommentService {
     }
   }
 
+  async getDocument(id: string) {
+    const contentComment = await this.contentCommentModel.findById(id);
+    if (!contentComment) throw new NotFoundException('Comment not found');
+    return contentComment;
+  }
+
   async findOne(id: string) {
     const contentComment = await this.contentCommentModel.findById(id);
     if (!contentComment) throw new NotFoundException('Comment not found');
@@ -99,7 +118,7 @@ export class ContentCommentService {
     updateContentCommentDto: UpdateContnetCommentDto,
     file?: Express.Multer.File,
   ) {
-    const contentComment = await this.contentCommentModel.findById(id);
+    const contentComment = await this.getDocument(id);
     if (!contentComment) throw new NotFoundException('Comment not found');
     const prevFIle = contentComment.file;
     if (file) {
@@ -119,8 +138,11 @@ export class ContentCommentService {
   }
 
   async remove(id: string) {
-    const contentComment = await this.contentCommentModel.findById(id);
+    const contentComment = await this.getDocument(id);
     if (!contentComment) throw new NotFoundException('Comment not found');
+    if (contentComment.file && contentComment?.file?.spaceKey) {
+      await this.spaceService.deleteFile(contentComment.file);
+    }
     return this.contentCommentModel.findByIdAndDelete(id);
   }
 }
