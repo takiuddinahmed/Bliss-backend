@@ -6,7 +6,7 @@ import {
   Param,
   Patch,
   Post,
-  UseGuards,
+  UseGuards
 } from '@nestjs/common';
 import { ROLE } from '../common/enum/user-role.enum';
 import { JwtAuthGuard, Roles, RolesGuard } from '../security';
@@ -22,6 +22,13 @@ export class ContentTypeController {
   @Roles(ROLE.ADMIN)
   async create(@Body() createContentTypeDto: CreateContentTypeDto) {
     return await this.contentTypeService.create(createContentTypeDto);
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ROLE.ADMIN)
+  async findAll() {
+    return await this.contentTypeService.findAll();
   }
 
   @Get(':id')

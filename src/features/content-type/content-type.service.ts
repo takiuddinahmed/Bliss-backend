@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateContentTypeDto, UpdateContentTypeDto } from './content-type.dto';
@@ -13,7 +13,9 @@ export class ContentTypeService {
   ) {}
   async create(input: CreateContentTypeDto) {
     const found = await this.contentTypeModel.findOne({ name: input.name });
-    if (found) throw new Error('Content type already exist');
+    if (found) {
+      throw new BadRequestException('Content type already exist')
+    }
     return await this.contentTypeModel.create(input);
   }
 
