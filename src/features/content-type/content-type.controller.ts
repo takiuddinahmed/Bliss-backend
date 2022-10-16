@@ -6,7 +6,7 @@ import {
   Param,
   Patch,
   Post,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { ROLE } from '../common/enum/user-role.enum';
 import { JwtAuthGuard, Roles, RolesGuard } from '../security';
