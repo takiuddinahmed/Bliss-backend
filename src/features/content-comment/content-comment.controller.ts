@@ -1,15 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { IAuthGuard } from '@nestjs/passport';
+import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
+import {
+  CreateContentCommentDto,
+  UpdateContnetCommentDto,
+} from './content-comment.dto';
 import { ContentCommentService } from './content-comment.service';
-import { CreateContentCommentDto } from './dto/create-content-comment.dto';
-import { UpdateContentCommentDto } from './dto/update-content-comment.dto';
 
 @Controller('content-comment')
+@UseGuards(JwtAuthGuard)
 export class ContentCommentController {
   constructor(private readonly contentCommentService: ContentCommentService) {}
 
   @Post()
-  create(@Body() createContentCommentDto: CreateContentCommentDto) {
-    return this.contentCommentService.create(createContentCommentDto);
+  create(@Body() form: CreateContentCommentDto, @AuthUser() user: IAuthUser) {
+    form.userId = user._id.toString();
+    return this.contentCommentService.create(form);
   }
 
   @Get()
@@ -19,16 +34,21 @@ export class ContentCommentController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.contentCommentService.findOne(+id);
+    return this.contentCommentService.findOne(id);
+  }
+
+  @Get('content/:contentId')
+  findByContent(@Param('contentId') contentId: stirng) {
+    return this.contentCommentService.findByContent(contentId);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateContentCommentDto: UpdateContentCommentDto) {
-    return this.contentCommentService.update(+id, updateContentCommentDto);
+  update(@Param('id') id: string, @Body() form: UpdateContnetCommentDto) {
+    return this.contentCommentService.update(id, form);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.contentCommentService.remove(+id);
+    return this.contentCommentService.remove(id);
   }
 }
