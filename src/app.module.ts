@@ -9,6 +9,7 @@ import { ContentModule } from './features/content';
 import { ContentTypeModule } from './features/content-type/content-type.module';
 import { SpaceModule } from './features/space/space.module';
 import { SubCategoryModule } from './features/sub-category/sub-category.module';
+import { ContentCommentModule } from './features/content-comment/content-comment.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { SubCategoryModule } from './features/sub-category/sub-category.module';
     ChannelModule,
     SpaceModule,
     SubCategoryModule,
+    ContentCommentModule,
   ],
 })
 export class AppModule {}

@@ -13,6 +13,7 @@ import {
   collectionNames,
   ContentTypeEnum,
   FileData,
+  FileDataSchema,
   SexualityEnum,
   VisualityEnum,
 } from '../common';
@@ -62,10 +63,10 @@ export class Content {
   @Prop({ type: String, default: '' })
   description: string;
 
-  @Prop({ type: FileData })
+  @Prop({ type: FileDataSchema })
   file: FileData;
 
-  @Prop({ type: Array<FileData>, default: [] })
+  @Prop({ type: [FileDataSchema], default: [] })
   thumbnails: FileData[];
 
   @IsOptional()

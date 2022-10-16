@@ -1,11 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema()
-@ObjectType()
 export class FileData {
   @Prop({ type: String })
-  @Field(() => String)
   name: string;
 
   @Prop({ type: String })
@@ -15,14 +13,14 @@ export class FileData {
   spaceUrl: string;
 
   @Prop({ type: String })
-  @Field(() => String)
   url: string;
 
   @Prop({ type: String })
-  @Field(() => String)
   type?: string;
 
   @Prop({ type: Number })
-  @Field(() => Int)
   size: number;
 }
+
+export type FileDataDocument = FileData & Document;
+export const FileDataSchema = SchemaFactory.createForClass(FileData);

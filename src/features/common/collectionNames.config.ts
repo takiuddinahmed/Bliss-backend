@@ -5,4 +5,5 @@ export const collectionNames = {
   channel: 'channels',
   content: 'contents',
   contenType: 'contenttypes',
+  contentComment: 'content-comments',
 };

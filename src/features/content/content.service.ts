@@ -49,7 +49,6 @@ export class ContentService {
       }
       createContentDto.thumbnails = thumbnailsFileData;
     }
-    console.log(createContentDto);
     return await this.contentModel.create(createContentDto);
   }
   async updateContent(permalink: string, updateContentDto: UpdateContentDto) {
