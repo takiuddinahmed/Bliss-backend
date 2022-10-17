@@ -27,6 +27,11 @@ export class ChannelController {
     return await this.channelService.findAll();
   }
 
+  @Get('permalink/:permalink')
+  async findByPermalink(@Param('permalink') permalink: string) {
+    return await this.channelService.findByPermalink(permalink);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.channelService.findOne(id);

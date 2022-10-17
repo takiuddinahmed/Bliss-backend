@@ -66,6 +66,14 @@ export class ChannelService {
     }
     return channel;
   }
+  async findByPermalink(permalink: string) {
+    console.log('permalink is', permalink);
+    const channel = await this.channelModel.findOne({ permalink });
+    if (!channel) {
+      throw new NotFoundException('Channel not found');
+    }
+    return channel;
+  }
 
   async update(
     permalik: string,
