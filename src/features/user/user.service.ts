@@ -66,7 +66,7 @@ export class UserService {
   async getOne(id: string) {
     const user = await this.userModel
       .findById(id)
-      .select('firstName lastName email phoneNumber role');
+      .select('firstName lastName email phoneNumber role channelId');
     if (!user) throw new NotFoundException();
     return user;
   }

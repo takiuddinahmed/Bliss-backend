@@ -46,7 +46,7 @@ export class ChannelController {
     files: ChannelFiles,
   ) {
     form.userId = user._id.toString();
-    return await this.channelService.create(form, files);
+    return await this.channelService.create(form, files, user);
   }
 
   @UseInterceptors(
