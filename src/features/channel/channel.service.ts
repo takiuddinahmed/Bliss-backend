@@ -111,7 +111,14 @@ export class ChannelService {
     if (!channel) {
       throw new NotFoundException('Channel not found');
     }
-    return this.channelModel.findOneAndDelete({ _id: id, userId });
+    const deleteChanel = await this.channelModel.findOneAndDelete({
+      _id: id,
+      userId,
+    });
+    if (deleteChanel) {
+      await this.userService.findAndUpdate(userId);
+    }
+    return deleteChanel;
   }
 
   async migrate() {

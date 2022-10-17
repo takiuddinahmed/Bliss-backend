@@ -6,4 +6,5 @@ export enum ContentTypeEnum {
   TEXT = 'text',
   ARTICLE = 'article',
   QOUTES = 'qoutes',
+  LINK = 'link',
 }

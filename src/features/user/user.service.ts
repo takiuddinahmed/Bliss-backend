@@ -81,6 +81,16 @@ export class UserService {
       .select('firstName lastName email phoneNumber role');
   }
 
+  async findAndUpdate(id: string) {
+    await this.userModel.findByIdAndUpdate(
+      id,
+      {
+        channelId: '',
+      },
+      { new: true },
+    );
+  }
+
   async editPassword(id: string, editPassDto: EditPassDto) {
     if (editPassDto.password !== editPassDto.confirmPassword)
       throw new HttpException('Confirm password not match', 400);

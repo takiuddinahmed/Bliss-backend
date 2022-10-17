@@ -8,14 +8,14 @@ import {
   Post,
   UploadedFile,
   UseGuards,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import {
   CreateContentCommentDto,
-  UpdateContnetCommentDto
+  UpdateContnetCommentDto,
 } from './content-comment.dto';
 import { ContentCommentService } from './content-comment.service';
 
