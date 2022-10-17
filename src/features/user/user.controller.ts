@@ -3,11 +3,9 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
   Patch,
   Post,
   Put,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthUser, IAuthUser, JwtAuthGuard } from 'src/features/security';

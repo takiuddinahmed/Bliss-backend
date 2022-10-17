@@ -58,8 +58,9 @@ export class ChannelService {
     return this.channelModel.find();
   }
 
-  async findOne(permalink: string) {
-    const channel = await this.channelModel.findOne({ permalink });
+  async findOne(id: string) {
+    console.log('id is', id);
+    const channel = await this.channelModel.findById(id);
     if (!channel) {
       throw new NotFoundException('Channel not found');
     }
@@ -97,12 +98,12 @@ export class ChannelService {
     );
   }
 
-  async remove(permalink: string, userId: string) {
-    const channel = await this.channelModel.findOne({ permalink, userId });
+  async remove(id: string, userId: string) {
+    const channel = await this.channelModel.findOne({ _id: id, userId });
     if (!channel) {
       throw new NotFoundException('Channel not found');
     }
-    return this.channelModel.findOneAndDelete({ permalink, userId });
+    return this.channelModel.findOneAndDelete({ _id: id, userId });
   }
 
   async migrate() {
