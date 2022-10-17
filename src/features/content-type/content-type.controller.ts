@@ -26,7 +26,6 @@ export class ContentTypeController {
 
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(ROLE.ADMIN)
   async findAll() {
     return await this.contentTypeService.findAll();
   }
