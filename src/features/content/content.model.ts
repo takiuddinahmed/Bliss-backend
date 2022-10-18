@@ -28,8 +28,9 @@ export class Content {
   //@IsMongoId()
   @Prop([
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: collectionNames.category,
+      type: [
+        { type: mongoose.Schema.Types.ObjectId, ref: collectionNames.category },
+      ],
       required: true,
     },
   ])
