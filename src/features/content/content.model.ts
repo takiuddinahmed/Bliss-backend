@@ -23,7 +23,7 @@ export class Content {
   @Prop({ type: Types.ObjectId, required: true, ref: collectionNames.user })
   userId: Types.ObjectId | string;
 
-  // @IsArray()
+  @IsArray()
   @IsMongoId()
   @Prop([
     { type: Types.ObjectId, required: true, ref: collectionNames.category },
