@@ -11,9 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Multer } from 'multer';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
-import { LikeDislike } from '../common/models/likeDislike.model';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import {
   CreateContentCommentDto,

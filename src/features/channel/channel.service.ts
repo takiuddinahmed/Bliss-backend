@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { IAuthUser } from 'src/features/security';
 import { collectionNames } from '../common';
 import { SpaceService } from '../space/space.service';
 import { UserService } from '../user';
@@ -23,10 +24,12 @@ export class ChannelService {
   ) {
     // this.migrate();
   }
-  async create(form: CreateChannelDto, files: ChannelFiles) {
+  async create(form: CreateChannelDto, files: ChannelFiles, user: IAuthUser) {
     const channelFound = await this.channelModel.findOne({
-      userId: form.userId.toString(),
+      userId: user._id.toString(),
     });
+    console.log('channelFound', channelFound);
+    console.log('user', user);
     if (channelFound) {
       throw new BadRequestException('Channel already exist for this user');
     }
@@ -48,13 +51,23 @@ export class ChannelService {
       form.userId.toString(),
       channel._id.toString(),
     );
+    return channel;
   }
 
   findAll() {
     return this.channelModel.find();
   }
 
-  async findOne(permalink: string) {
+  async findOne(id: string) {
+    console.log('id is', id);
+    const channel = await this.channelModel.findById(id);
+    if (!channel) {
+      throw new NotFoundException('Channel not found');
+    }
+    return channel;
+  }
+  async findByPermalink(permalink: string) {
+    console.log('permalink is', permalink);
     const channel = await this.channelModel.findOne({ permalink });
     if (!channel) {
       throw new NotFoundException('Channel not found');
@@ -93,12 +106,19 @@ export class ChannelService {
     );
   }
 
-  async remove(permalink: string, userId: string) {
-    const channel = await this.channelModel.findOne({ permalink, userId });
+  async remove(id: string, userId: string) {
+    const channel = await this.channelModel.findOne({ _id: id, userId });
     if (!channel) {
       throw new NotFoundException('Channel not found');
     }
-    return this.channelModel.findOneAndDelete({ permalink, userId });
+    const deleteChanel = await this.channelModel.findOneAndDelete({
+      _id: id,
+      userId,
+    });
+    if (deleteChanel) {
+      await this.userService.findAndUpdate(userId);
+    }
+    return deleteChanel;
   }
 
   async migrate() {

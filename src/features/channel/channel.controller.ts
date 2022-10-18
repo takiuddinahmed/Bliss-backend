@@ -27,9 +27,14 @@ export class ChannelController {
     return await this.channelService.findAll();
   }
 
-  @Get(':permalink')
-  async findOne(@Param('permalink') permalink: string) {
-    return await this.channelService.findOne(permalink);
+  @Get('permalink/:permalink')
+  async findByPermalink(@Param('permalink') permalink: string) {
+    return await this.channelService.findByPermalink(permalink);
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return await this.channelService.findOne(id);
   }
 
   @UseInterceptors(
@@ -46,7 +51,7 @@ export class ChannelController {
     files: ChannelFiles,
   ) {
     form.userId = user._id.toString();
-    return await this.channelService.create(form, files);
+    return await this.channelService.create(form, files, user);
   }
 
   @UseInterceptors(
@@ -55,27 +60,24 @@ export class ChannelController {
       { name: 'thumbnails', maxCount: 5 },
     ]),
   )
-  @Patch(':permalink')
+  @Patch(':id')
   async update(
-    @Param('permalink') permalink: string,
+    @Param('id') id: string,
     @Body() form: UpdateChannelDto,
     @AuthUser() user: IAuthUser,
     @UploadedFiles()
     files: ChannelFiles,
   ) {
     return await this.channelService.update(
-      permalink,
+      id,
       form,
       user._id.toString(),
       files,
     );
   }
 
-  @Delete(':permalink')
-  async remove(
-    @Param('permalink') permalink: string,
-    @AuthUser() user: IAuthUser,
-  ) {
-    return await this.channelService.remove(permalink, user._id.toString());
+  @Delete(':id')
+  async remove(@Param('id') id: string, @AuthUser() user: IAuthUser) {
+    return await this.channelService.remove(id, user._id.toString());
   }
 }

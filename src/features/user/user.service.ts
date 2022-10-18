@@ -66,7 +66,7 @@ export class UserService {
   async getOne(id: string) {
     const user = await this.userModel
       .findById(id)
-      .select('firstName lastName email phoneNumber role');
+      .select('firstName lastName email phoneNumber role channelId');
     if (!user) throw new NotFoundException();
     return user;
   }
@@ -79,6 +79,16 @@ export class UserService {
     return await this.userModel
       .findByIdAndUpdate(id, editUserDto, { new: true })
       .select('firstName lastName email phoneNumber role');
+  }
+
+  async findAndUpdate(id: string) {
+    await this.userModel.findByIdAndUpdate(
+      id,
+      {
+        channelId: '',
+      },
+      { new: true },
+    );
   }
 
   async editPassword(id: string, editPassDto: EditPassDto) {

@@ -24,6 +24,13 @@ export class ContentTypeController {
     return await this.contentTypeService.create(createContentTypeDto);
   }
 
+  @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ROLE.ADMIN)
+  async findAll() {
+    return await this.contentTypeService.findAll();
+  }
+
   @Get(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(ROLE.ADMIN)
