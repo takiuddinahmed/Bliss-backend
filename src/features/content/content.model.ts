@@ -8,6 +8,7 @@ import {
   IsString,
   IsUrl,
 } from 'class-validator';
+import * as mongoose from 'mongoose';
 import { Types } from 'mongoose';
 import {
   collectionNames,
@@ -23,10 +24,15 @@ export class Content {
   @Prop({ type: Types.ObjectId, required: true, ref: collectionNames.user })
   userId: Types.ObjectId | string;
 
-  // @IsArray()
-  @IsMongoId()
+  @IsArray()
+  //@IsMongoId()
   @Prop([
-    { type: Types.ObjectId, required: true, ref: collectionNames.category },
+    {
+      type: [
+        { type: mongoose.Schema.Types.ObjectId, ref: collectionNames.category },
+      ],
+      required: true,
+    },
   ])
   categoryId: Types.ObjectId[];
 
