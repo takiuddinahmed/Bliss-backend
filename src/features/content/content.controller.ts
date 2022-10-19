@@ -22,7 +22,6 @@ export class ContentController {
   constructor(private readonly contentService: ContentService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   async getAll() {
     return await this.contentService.getContents();
   }
@@ -54,6 +53,11 @@ export class ContentController {
       categoryId,
       contentType,
     );
+  }
+
+  @Get('by-category/:categoryId')
+  async getContentByCategory(@Param('categoryId') categoryId: string) {
+    return await this.contentService.getContentByCategory(categoryId);
   }
 
   @Get(':permalink')
