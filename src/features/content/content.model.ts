@@ -23,9 +23,9 @@ import {
 } from '../common/models/likeDislike.model';
 
 export class ContentView {
-  // @Prop({ type: Types.ObjectId, ref: collectionNames.user })
+  @Prop({ type: Types.ObjectId, ref: collectionNames.user })
   userId: Types.ObjectId | string;
-  // @Prop({ type: Number, default: 0 })
+  @Prop({ type: Number, default: 0 })
   viewCount: number;
 }
 
@@ -110,7 +110,7 @@ export class Content {
   @Prop({ type: [LikeDislikeSchema], default: [] })
   likeDislikes: LikeDislike[];
 
-  // @Prop([{ Type: Types.ObjectId, ref: collectionNames.user }])
+  @Prop({ Type: [Types.ObjectId], ref: collectionNames.user })
   favorites: Types.ObjectId[] | string[];
 
   @Prop({ type: Array<ContentView>, default: [] })
