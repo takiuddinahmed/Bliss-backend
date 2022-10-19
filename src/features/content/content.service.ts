@@ -7,6 +7,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { collectionNames, FileData } from '../common';
+import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
 import { Content, ContentFiles } from './content.model';
@@ -58,6 +59,106 @@ export class ContentService {
     return await this.contentModel.findOne({ permalink }, updateContentDto, {
       new: true,
     });
+  }
+
+  async likeDislikeContent(
+    id: string,
+    userId: string,
+    likeDislike: LikeDislikeEnum | 'cancel',
+  ) {
+    if (
+      !(
+        likeDislike === LikeDislikeEnum.LIKE ||
+        likeDislike === LikeDislikeEnum.DISLIKE ||
+        likeDislike === 'cancel'
+      )
+    )
+      throw new BadRequestException(
+        `You have to select ${LikeDislikeEnum.LIKE} or ${LikeDislikeEnum.DISLIKE}`,
+      );
+
+    // TODO check comment and content is available
+
+    const comment = await this.getContent(id);
+    if (likeDislike === 'cancel') {
+      return await this.contentModel.findByIdAndUpdate(
+        id,
+        {
+          $pull: {
+            likeDislikes: { userId },
+          },
+        },
+        { new: true },
+      );
+    }
+    if (comment.likeDislikes.some((ld) => ld.userId.toString() === userId)) {
+      return await this.contentModel.findOneAndUpdate(
+        {
+          '_id': id,
+          'likeDislikes.userId': userId,
+        },
+        {
+          $set: { 'likeDislikes.$.likeDislike': likeDislike },
+        },
+        {
+          new: true,
+        },
+      );
+    } else {
+      return await this.contentModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            likeDislikes: { userId, likeDislike },
+          },
+        },
+        { new: true },
+      );
+    }
+  }
+
+  async addUserToFavorite(id: string, userId: string) {
+    const content = await this.getContent(id);
+    if (content?.favorites?.some((uId) => uId === userId)) {
+      return content;
+    } else {
+      return await this.contentModel.findByIdAndUpdate(
+        id,
+        {
+          $push: { favorites: userId },
+        },
+        { new: true },
+      );
+    }
+  }
+  async removeUserFromFavorite(id: string, userId: string) {
+    const content = await this.getContent(id);
+    if (content?.favorites?.some((uId) => uId === userId)) {
+      return await this.contentModel.findByIdAndUpdate(
+        id,
+        {
+          $pull: { favorites: userId },
+        },
+        { new: true },
+      );
+    } else {
+      return content;
+    }
+  }
+
+  async addUserView(id: string, userId: string) {
+    const content = await this.getContent(id);
+    if (content?.views?.some((view) => view.userId === userId)) {
+      return await this.contentModel.findByIdAndUpdate(
+        { '_id': id, 'views.userId': userId },
+        {
+          $inc: { 'views.$.viewCount': 1 },
+        },
+        { new: true },
+      );
+    } else {
+      return content;
+    }
   }
 
   async deleteContent(permalink: string) {

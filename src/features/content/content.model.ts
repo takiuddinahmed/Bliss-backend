@@ -18,6 +18,17 @@ import {
   SexualityEnum,
   VisualityEnum,
 } from '../common';
+import {
+  LikeDislike,
+  LikeDislikeSchema,
+} from '../common/models/likeDislike.model';
+
+export class ContentView {
+  // @Prop({ type: Types.ObjectId, ref: collectionNames.user })
+  userId: Types.ObjectId | string;
+  // @Prop({ type: Number, default: 0 })
+  viewCount: number;
+}
 
 @Schema()
 export class Content {
@@ -39,7 +50,7 @@ export class Content {
   @IsOptional()
   @IsArray()
   @Prop([
-    { type: Types.ObjectId, required: true, ref: collectionNames.category },
+    { type: Types.ObjectId, required: true, ref: collectionNames.subCategory },
   ])
   subCategoryId: Types.ObjectId[];
 
@@ -101,6 +112,15 @@ export class Content {
     unique: true,
   })
   permalink: string;
+
+  @Prop({ type: [LikeDislikeSchema], default: [] })
+  likeDislikes: LikeDislike[];
+
+  // @Prop([{ Type: Types.ObjectId, ref: collectionNames.user }])
+  favorites: Types.ObjectId[] | string[];
+
+  @Prop({ type: Array<ContentView>, default: [] })
+  views: ContentView[];
 }
 
 export interface ContentFiles {
