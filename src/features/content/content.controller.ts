@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -25,6 +26,14 @@ export class ContentController {
   @Get()
   async getAll() {
     return await this.contentService.getContents();
+  }
+
+  @Get('favorites')
+  @UseGuards(JwtAuthGuard)
+  async getUsersFavorites(@AuthUser() user: IAuthUser) {
+    return await this.contentService.getUserFavoriteContents(
+      user._id.toString(),
+    );
   }
 
   @UseInterceptors(
@@ -78,6 +87,32 @@ export class ContentController {
       user._id.toString(),
       likeDislike,
     );
+  }
+  @Put('favorite/:id/:state')
+  @UseGuards(JwtAuthGuard)
+  async userFavorite(
+    @Param('id') id: string,
+    @Param('state') state: string,
+    @AuthUser() user: IAuthUser,
+  ) {
+    if (state === 'add') {
+      return await this.contentService.addUserToFavorite(
+        id,
+        user._id.toString(),
+      );
+    } else if (state === 'remove') {
+      return await this.contentService.removeUserFromFavorite(
+        id,
+        user._id.toString(),
+      );
+    }
+    return await this.contentService.getById(id);
+  }
+
+  @Put('views/:id')
+  @UseGuards(JwtAuthGuard)
+  async addViews(@Param('id') id: string, @AuthUser() user: IAuthUser) {
+    return this.contentService.addUserView(id, user._id.toString());
   }
 
   @Patch(':permalink')

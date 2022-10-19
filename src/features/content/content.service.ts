@@ -134,7 +134,7 @@ export class ContentService {
   }
 
   async addUserToFavorite(id: string, userId: string) {
-    const content = await this.getContent(id);
+    const content = await this.getById(id);
     if (content?.favorites?.some((uId) => uId === userId)) {
       return content;
     } else {
@@ -148,7 +148,7 @@ export class ContentService {
     }
   }
   async removeUserFromFavorite(id: string, userId: string) {
-    const content = await this.getContent(id);
+    const content = await this.getById(id);
     if (content?.favorites?.some((uId) => uId === userId)) {
       return await this.contentModel.findByIdAndUpdate(
         id,
@@ -162,10 +162,20 @@ export class ContentService {
     }
   }
 
+  async getById(id: string) {
+    const content = await this.contentModel.findById(id);
+    if (!content) throw new NotFoundException('Content not found');
+    return content;
+  }
+
+  async getUserFavoriteContents(userId: string) {
+    return await this.contentModel.find({ favorites: userId });
+  }
+
   async addUserView(id: string, userId: string) {
-    const content = await this.getContent(id);
+    const content = await this.getById(id);
     if (content?.views?.some((view) => view.userId === userId)) {
-      return await this.contentModel.findByIdAndUpdate(
+      return await this.contentModel.findOneAndUpdate(
         { '_id': id, 'views.userId': userId },
         {
           $inc: { 'views.$.viewCount': 1 },
@@ -173,7 +183,18 @@ export class ContentService {
         { new: true },
       );
     } else {
-      return content;
+      return await this.contentModel.findOneAndUpdate(
+        { _id: id },
+        {
+          $push: {
+            views: {
+              userId,
+              viewCount: 1,
+            },
+          },
+        },
+        { new: true },
+      );
     }
   }
 
