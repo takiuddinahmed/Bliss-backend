@@ -34,11 +34,15 @@ export class ContentCommentService {
   }
 
   async findAll() {
-    return await this.contentCommentModel.find();
+    return await this.contentCommentModel
+      .find()
+      .populate('userId', 'firstName lastName');
   }
 
   async findByContent(contentId: string) {
-    return this.contentCommentModel.find({ contentId });
+    return this.contentCommentModel
+      .find({ contentId })
+      .populate('userId', 'firstName lastName');
   }
 
   async likeDislikeCommnet(
