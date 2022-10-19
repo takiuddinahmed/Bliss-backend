@@ -3,7 +3,6 @@ import {
   IsArray,
   IsEnum,
   IsMongoId,
-  IsNumber,
   IsOptional,
   IsString,
   IsUrl,
@@ -92,9 +91,9 @@ export class Content {
   url?: string;
 
   @IsOptional()
-  @IsNumber()
-  @Prop({ type: Number })
-  duration: number;
+  @IsString()
+  @Prop({ type: String })
+  duration: string;
 
   @IsOptional()
   @IsEnum(VisualityEnum)
