@@ -30,6 +30,12 @@ export class ContentService {
     });
   }
 
+  async getContentByCategory(categoryId: string) {
+    return await this.contentModel.find({
+      categoryId,
+    });
+  }
+
   async getContents() {
     return await this.contentModel.find();
   }
