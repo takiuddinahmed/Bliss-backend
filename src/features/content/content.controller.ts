@@ -11,6 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import { ContentFiles } from './content.model';
 import { ContentService } from './content.service';
@@ -63,6 +64,20 @@ export class ContentController {
   @Get(':permalink')
   async getOne(@Param('permalink') permalink: string) {
     return await this.contentService.getContent(permalink);
+  }
+
+  @Get('/like-dislike/:id/:likeDislike')
+  @UseGuards(JwtAuthGuard)
+  async likeComment(
+    @Param('id') id: string,
+    @Param('likeDislike') likeDislike: LikeDislikeEnum | 'cancel',
+    @AuthUser() user: IAuthUser,
+  ) {
+    return this.contentService.likeDislikeContent(
+      id,
+      user._id.toString(),
+      likeDislike,
+    );
   }
 
   @Patch(':permalink')

@@ -95,7 +95,7 @@ export class ContentService {
 
     // TODO check comment and content is available
 
-    const comment = await this.getContent(id);
+    const comment = await this.contentModel.findById(id);
     if (likeDislike === 'cancel') {
       return await this.contentModel.findByIdAndUpdate(
         id,
