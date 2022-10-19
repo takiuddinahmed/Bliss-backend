@@ -20,6 +20,16 @@ export class ContentService {
     private spaceService: SpaceService,
   ) {}
 
+  async getContentByCategoryAndContentType(
+    categoryId: string,
+    contentType: string,
+  ) {
+    return await this.contentModel.find({
+      categoryId,
+      contentType,
+    });
+  }
+
   async getContents() {
     return await this.contentModel.find();
   }
