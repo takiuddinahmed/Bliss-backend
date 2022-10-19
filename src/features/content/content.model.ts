@@ -37,12 +37,7 @@ export class Content {
   @IsArray()
   //@IsMongoId()
   @Prop([
-    {
-      type: [
-        { type: mongoose.Schema.Types.ObjectId, ref: collectionNames.category },
-      ],
-      required: true,
-    },
+    { type: mongoose.Schema.Types.ObjectId, ref: collectionNames.category },
   ])
   categoryId: Types.ObjectId[];
 
