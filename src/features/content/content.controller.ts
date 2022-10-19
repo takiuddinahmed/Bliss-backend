@@ -61,7 +61,6 @@ export class ContentController {
   }
 
   @Get(':permalink')
-  @UseGuards(JwtAuthGuard)
   async getOne(@Param('permalink') permalink: string) {
     return await this.contentService.getContent(permalink);
   }
