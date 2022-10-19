@@ -32,7 +32,7 @@ export class ContentComment {
   @Prop({
     type: Types.ObjectId,
     required: true,
-    ref: collectionNames.contentComment,
+    ref: collectionNames.user,
   })
   userId: Types.ObjectId | string;
 
@@ -53,9 +53,8 @@ export class ContentComment {
   file: FileData;
 
   @IsOptional()
-  @IsNumber()
-  @IsPositive()
-  duration: number;
+  @IsString()
+  duration: string;
 
   @Prop({ type: [LikeDislikeSchema], default: [] })
   likeDislikes: LikeDislike[];
