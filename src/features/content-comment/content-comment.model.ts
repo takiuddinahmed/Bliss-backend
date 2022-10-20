@@ -19,7 +19,7 @@ import {
   LikeDislikeSchema,
 } from '../common/models/likeDislike.model';
 
-@Schema()
+@Schema({ timestamps: true })
 export class ContentComment {
   @IsMongoId()
   @Prop({
