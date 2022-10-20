@@ -1,4 +1,11 @@
-import { IsString, IsEnum, ValidateIf, IsEmail } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  ValidateIf,
+  IsEmail,
+  IsOptional,
+} from 'class-validator';
+import { FileData } from 'src/features/common';
 import { ROLE } from '../user.model';
 
 export class EditUserDto {
@@ -22,4 +29,10 @@ export class EditUserDto {
   @IsEnum(ROLE)
   @ValidateIf((obj, value) => value != null)
   role: ROLE;
+
+  @IsOptional()
+  @IsString()
+  address: string;
+
+  proPic: FileData;
 }

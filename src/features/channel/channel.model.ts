@@ -1,6 +1,6 @@
 import { ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { collectionNames, FileData } from '../common';
 
@@ -17,6 +17,11 @@ export class Channel {
   @IsString()
   @Prop({ type: String, required: true })
   description: string;
+
+  @IsOptional()
+  @IsString()
+  @Prop({ type: String })
+  address: string;
 
   @Prop({ type: String, required: true })
   permalink: string;

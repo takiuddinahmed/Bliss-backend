@@ -1,6 +1,9 @@
 import {
-  IsEmail, IsEnum, IsString,
-  MinLength, ValidateIf
+  IsEmail,
+  IsEnum,
+  IsString,
+  MinLength,
+  ValidateIf,
 } from 'class-validator';
 import { ROLE } from '../user.model';
 
@@ -21,10 +24,6 @@ export class RegisterDto {
   @IsString()
   @MinLength(6)
   password: string;
-
-  @IsString()
-  @MinLength(6)
-  confirmPassword: string;
 
   @IsEnum(ROLE)
   @ValidateIf((obj, value) => value != null)
