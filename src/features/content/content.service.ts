@@ -47,6 +47,10 @@ export class ContentService {
     return content;
   }
 
+  async getContentByUser(userId: string) {
+    return await this.contentModel.find({ userId });
+  }
+
   async createContent(createContentDto: CreateContentDto, files: ContentFiles) {
     createContentDto.permalink = await generatePermalink(
       createContentDto.title,
@@ -135,7 +139,7 @@ export class ContentService {
 
   async addUserToFavorite(id: string, userId: string) {
     const content = await this.getById(id);
-    if (content?.favorites?.some((uId) => uId === userId)) {
+    if (content?.favorites?.some((uId) => uId.toString() === userId)) {
       return content;
     } else {
       return await this.contentModel.findByIdAndUpdate(
@@ -149,7 +153,7 @@ export class ContentService {
   }
   async removeUserFromFavorite(id: string, userId: string) {
     const content = await this.getById(id);
-    if (content?.favorites?.some((uId) => uId === userId)) {
+    if (content?.favorites?.some((uId) => uId.toString() === userId)) {
       return await this.contentModel.findByIdAndUpdate(
         id,
         {

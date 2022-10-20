@@ -106,6 +106,35 @@ export class ChannelService {
     );
   }
 
+  async subscribe(id: string, userId: string) {
+    const channel = await this.findOne(id);
+    if (channel?.subscribers?.some((uId) => uId.toString() === userId)) {
+      return channel;
+    } else {
+      return await this.channelModel.findByIdAndUpdate(
+        id,
+        {
+          $push: { subscribers: userId },
+        },
+        { new: true },
+      );
+    }
+  }
+  async unsubscribe(id: string, userId: string) {
+    const channel = await this.findOne(id);
+    if (channel?.subscribers?.some((uId) => uId.toString() === userId)) {
+      return await this.channelModel.findByIdAndUpdate(
+        id,
+        {
+          $pull: { subscribers: userId },
+        },
+        { new: true },
+      );
+    } else {
+      return channel;
+    }
+  }
+
   async remove(id: string, userId: string) {
     const channel = await this.channelModel.findOne({ _id: id, userId });
     if (!channel) {
