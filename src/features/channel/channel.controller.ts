@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -18,7 +19,6 @@ import { CreateChannelDto } from './dto/create-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
 
 @Controller('channel')
-@UseGuards(JwtAuthGuard)
 export class ChannelController {
   constructor(private readonly channelService: ChannelService) {}
 
@@ -44,6 +44,7 @@ export class ChannelController {
     ]),
   )
   @Post()
+  @UseGuards(JwtAuthGuard)
   async create(
     @Body() form: CreateChannelDto,
     @AuthUser() user: IAuthUser,
@@ -61,6 +62,7 @@ export class ChannelController {
     ]),
   )
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   async update(
     @Param('id') id: string,
     @Body() form: UpdateChannelDto,
@@ -76,7 +78,28 @@ export class ChannelController {
     );
   }
 
+  @Put('subscribe/:channelId')
+  @UseGuards(JwtAuthGuard)
+  async subscribe(
+    @Param('channelId') channelId: string,
+    @AuthUser() user: IAuthUser,
+  ) {
+    return await this.channelService.subscribe(channelId, user._id.toString());
+  }
+  @Put('unsubscribe/:channelId')
+  @UseGuards(JwtAuthGuard)
+  async unsubscribe(
+    @Param('channelId') channelId: string,
+    @AuthUser() user: IAuthUser,
+  ) {
+    return await this.channelService.unsubscribe(
+      channelId,
+      user._id.toString(),
+    );
+  }
+
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string, @AuthUser() user: IAuthUser) {
     return await this.channelService.remove(id, user._id.toString());
   }

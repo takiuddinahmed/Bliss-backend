@@ -31,6 +31,9 @@ export class Channel {
 
   @Prop({ type: FileData })
   banner: FileData;
+
+  @Prop({ type: Array<Types.ObjectId>, ref: collectionNames.user, default: [] })
+  subscribers: Types.ObjectId[];
 }
 
 export interface ChannelFiles {

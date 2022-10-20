@@ -36,6 +36,12 @@ export class ContentController {
     );
   }
 
+  @Get('user')
+  @UseGuards(JwtAuthGuard)
+  async getContentByUser(@AuthUser() user: IAuthUser) {
+    return await this.contentService.getContentByUser(user._id.toString());
+  }
+
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'file', maxCount: 1 },
