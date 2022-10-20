@@ -35,8 +35,8 @@ export class User {
   @Prop({ type: Types.ObjectId, ref: collectionNames.channel })
   channelId: string | Types.ObjectId;
 
-  @Prop({ type: FileData })
-  proPic: FileData;
+  @Prop({ type: String })
+  proPic: string;
 
   @Prop({ type: String })
   address: string;

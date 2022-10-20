@@ -45,7 +45,7 @@ export class UserController {
   async edit(
     @AuthUser() authUser: IAuthUser,
     @Body() editUserDto: EditUserDto,
-    @UploadedFile('proPic') proPicFile?: Express.Multer.File,
+    @UploadedFile() proPicFile?: Express.Multer.File,
   ): Promise<User> {
     return await this.userService.editUser(
       authUser._id,
