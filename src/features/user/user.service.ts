@@ -23,9 +23,7 @@ export class UserService {
   ) {}
 
   async getAll() {
-    return await this.userModel
-      .find()
-      .select('firstName lastName email phoneNumber role');
+    return await this.userModel.find().select({ password: 0 });
   }
 
   async register(registerDto: RegisterDto): Promise<User> {
@@ -74,9 +72,7 @@ export class UserService {
   }
 
   async getOne(id: string) {
-    const user = await this.userModel
-      .findById(id)
-      .select('firstName lastName email phoneNumber role channelId');
+    const user = await this.userModel.findById(id).select({ password: 0 });
     if (!user) throw new NotFoundException();
     return user;
   }
