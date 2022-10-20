@@ -1,6 +1,7 @@
 import {
   HttpException,
   Injectable,
+  InternalServerErrorException,
   NotAcceptableException,
   NotFoundException,
 } from '@nestjs/common';
@@ -8,6 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { comparePassword, hashPassword } from 'src/features/utils/bcrypt.util';
 import { collectionNames } from '../common';
+import { SpaceService } from '../space/space.service';
 import { EditPassDto } from './dto/editPassword.dto';
 import { EditUserDto } from './dto/editUser.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -17,6 +19,7 @@ import { User, UserDocument } from './user.model';
 export class UserService {
   constructor(
     @InjectModel(collectionNames.user) private userModel: Model<UserDocument>,
+    private readonly spaceService: SpaceService,
   ) {}
 
   async getAll() {
@@ -26,9 +29,6 @@ export class UserService {
   }
 
   async register(registerDto: RegisterDto): Promise<User> {
-    if (registerDto.password !== registerDto.confirmPassword)
-      throw new HttpException('Confirm Password not match', 400);
-
     const existUser = await this.userModel.findOne({
       email: registerDto.email,
     });
@@ -71,10 +71,21 @@ export class UserService {
     return user;
   }
 
-  async editUser(id: string, editUserDto: EditUserDto) {
+  async editUser(
+    id: string,
+    editUserDto: EditUserDto,
+    proPicFile?: Express.Multer.File,
+  ) {
     const user = await this.userModel.findById(id);
     if (!user) {
       throw new NotFoundException();
+    }
+    if (proPicFile) {
+      const proPicData = await this.spaceService.uploadFile(proPicFile);
+      if (!proPicData) {
+        throw new InternalServerErrorException('File upload failed');
+      }
+      editUserDto.proPic = proPicData;
     }
     return await this.userModel
       .findByIdAndUpdate(id, editUserDto, { new: true })
