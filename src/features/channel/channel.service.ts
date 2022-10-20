@@ -59,7 +59,6 @@ export class ChannelService {
   }
 
   async findOne(id: string) {
-    console.log('id is', id);
     const channel = await this.channelModel.findById(id);
     if (!channel) {
       throw new NotFoundException('Channel not found');
@@ -145,7 +144,7 @@ export class ChannelService {
       userId,
     });
     if (deleteChanel) {
-      await this.userService.findAndUpdate(userId);
+      await this.userService.removeChannelFromUser(channel.userId.toString());
     }
     return deleteChanel;
   }

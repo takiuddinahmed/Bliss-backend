@@ -34,5 +34,5 @@ export class EditUserDto {
   @IsString()
   address: string;
 
-  proPic: FileData;
+  proPic: string;
 }
