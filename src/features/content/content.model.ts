@@ -29,7 +29,7 @@ export class ContentView {
   viewCount: number;
 }
 
-@Schema()
+@Schema({ timestamps: true })
 export class Content {
   @Prop({ type: Types.ObjectId, required: true, ref: collectionNames.user })
   userId: Types.ObjectId | string;
