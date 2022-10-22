@@ -30,7 +30,7 @@ export class ContentService {
         categoryId,
         contentType,
       })
-      .sort({ created_at: -1 });
+      .sort({ updatedAt: -1 });
   }
 
   async getContentByCategory(categoryId: string) {
@@ -38,11 +38,11 @@ export class ContentService {
       .find({
         categoryId,
       })
-      .sort({ created_at: -1 });
+      .sort({ updatedAt: -1 });
   }
 
   async getContents() {
-    return await this.contentModel.find().sort({ created_at: -1 });
+    return await this.contentModel.find().sort({ updatedAt: -1 });
   }
 
   async getContent(permalink: string) {
@@ -52,7 +52,7 @@ export class ContentService {
   }
 
   async getContentByUser(userId: string) {
-    return await this.contentModel.find({ userId });
+    return await this.contentModel.find({ userId }).sort({ updatedAt: -1 });
   }
 
   async createContent(createContentDto: CreateContentDto, files: ContentFiles) {
@@ -177,7 +177,9 @@ export class ContentService {
   }
 
   async getUserFavoriteContents(userId: string) {
-    return await this.contentModel.find({ favorites: userId });
+    return await this.contentModel
+      .find({ favorites: userId })
+      .sort({ updatedAt: -1 });
   }
 
   async addUserView(id: string, userId: string) {
