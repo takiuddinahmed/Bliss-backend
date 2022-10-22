@@ -25,20 +25,24 @@ export class ContentService {
     categoryId: string,
     contentType: string,
   ) {
-    return await this.contentModel.find({
-      categoryId,
-      contentType,
-    });
+    return await this.contentModel
+      .find({
+        categoryId,
+        contentType,
+      })
+      .sort({ created_at: -1 });
   }
 
   async getContentByCategory(categoryId: string) {
-    return await this.contentModel.find({
-      categoryId,
-    });
+    return await this.contentModel
+      .find({
+        categoryId,
+      })
+      .sort({ created_at: -1 });
   }
 
   async getContents() {
-    return await this.contentModel.find();
+    return await this.contentModel.find().sort({ created_at: -1 });
   }
 
   async getContent(permalink: string) {
