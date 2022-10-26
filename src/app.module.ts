@@ -10,6 +10,7 @@ import { ContentTypeModule } from './features/content-type/content-type.module';
 import { SpaceModule } from './features/space/space.module';
 import { SubCategoryModule } from './features/sub-category/sub-category.module';
 import { ContentCommentModule } from './features/content-comment/content-comment.module';
+import { RestaurantsModule } from './features/restaurants/restaurants.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ContentCommentModule } from './features/content-comment/content-comment
     SpaceModule,
     SubCategoryModule,
     ContentCommentModule,
+    RestaurantsModule,
   ],
 })
 export class AppModule {}
