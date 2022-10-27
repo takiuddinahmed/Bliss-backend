@@ -1,6 +1,7 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { IsArray, IsObject, IsOptional, IsString } from 'class-validator';
-import { FileData } from '../common';
+import { collectionNames, FileData } from '../common';
+import { Types } from 'mongoose';
 
 export class OpenCloseTime {
   @Prop({ type: String })
@@ -10,6 +11,9 @@ export class OpenCloseTime {
 }
 
 export class Restaurant {
+  @Prop({ type: Types.ObjectId, ref: collectionNames.user })
+  userId: Types.ObjectId | string;
+
   @IsString()
   @Prop({ type: String, required: true })
   name: string;
@@ -60,6 +64,9 @@ export class Restaurant {
 
   @Prop({ type: String })
   permalink: string;
+
+  @Prop([{ type: Types.ObjectId, ref: collectionNames.user }])
+  followers: Types.ObjectId[];
 }
 
 export type RestaurantDocument = Restaurant & Document;
