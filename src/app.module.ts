@@ -12,6 +12,7 @@ import { SubCategoryModule } from './features/sub-category/sub-category.module';
 import { ContentCommentModule } from './features/content-comment/content-comment.module';
 import { CouncilorController } from './features/councilor/councilor.controller';
 import { CouncilorModule } from './features/councilor/councilor.module';
+import { RestaurantsModule } from './features/restaurants/restaurants.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { CouncilorModule } from './features/councilor/councilor.module';
     SubCategoryModule,
     ContentCommentModule,
     CouncilorModule,
+    RestaurantsModule,
   ],
 })
 export class AppModule {}
