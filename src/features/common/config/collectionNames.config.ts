@@ -6,4 +6,5 @@ export const collectionNames = {
   content: 'contents',
   contenType: 'contenttypes',
   contentComment: 'content-comments',
+  councilor: 'councilor',
 };
