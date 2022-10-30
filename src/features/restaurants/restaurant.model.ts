@@ -2,6 +2,10 @@ import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { IsArray, IsObject, IsOptional, IsString } from 'class-validator';
 import { collectionNames, FileData } from '../common';
 import { Types } from 'mongoose';
+import {
+  LikeDislike,
+  LikeDislikeSchema,
+} from '../common/models/likeDislike.model';
 
 export class OpenCloseTime {
   @Prop({ type: String })
@@ -67,6 +71,9 @@ export class Restaurant {
 
   @Prop([{ type: Types.ObjectId, ref: collectionNames.user }])
   followers: Types.ObjectId[];
+
+  @Prop({ type: [LikeDislikeSchema], default: [] })
+  likeDislikes: LikeDislike[];
 }
 
 export type RestaurantDocument = Restaurant & Document;

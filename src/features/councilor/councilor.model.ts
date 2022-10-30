@@ -1,18 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import {
-  IsArray,
   IsBoolean,
   IsEmail,
   IsEnum,
   IsOptional,
   IsString,
 } from 'class-validator';
-import {
-  collectionNames,
-  ContentTypeEnum,
-  FileData,
-  FileDataSchema,
-} from '../common';
+import { collectionNames, FileData, FileDataSchema } from '../common';
 import { Types } from 'mongoose';
 import {
   councilorFee,
@@ -39,7 +33,6 @@ export class Councilor {
   @Prop({ type: String, required: true })
   state: string;
 
-  @IsOptional()
   @Prop({
     type: Types.ObjectId,
     required: true,
@@ -88,11 +81,9 @@ export class Councilor {
   @Prop({ type: String, required: false })
   rulesRegulation: string;
 
-  @IsOptional()
-  @Prop({ type: FileDataSchema })
+  @Prop({ type: FileDataSchema, default: {} })
   profilePic: FileData;
 
-  @IsOptional()
   @Prop({ type: [FileDataSchema], default: [] })
   thumbnails: FileData[];
 
@@ -100,13 +91,16 @@ export class Councilor {
   @Prop({ type: Boolean, required: true })
   acceptTerms: boolean;
 
-  @IsOptional()
   @Prop({ type: Array<Types.ObjectId>, ref: collectionNames.user, default: [] })
-  folllower: Types.ObjectId[];
+  followers: Types.ObjectId[];
 
-  @IsOptional()
   @Prop({ type: [LikeDislikeSchema], default: [] })
   likeDislikes: LikeDislike[];
 }
 
 export const CouncilorSchema = SchemaFactory.createForClass(Councilor);
+
+export interface CouncilorFiles {
+  profilePic?: Express.Multer.File[];
+  thumbnails?: Express.Multer.File[];
+}
