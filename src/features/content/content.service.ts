@@ -55,6 +55,10 @@ export class ContentService {
     return await this.contentModel.find({ userId }).sort({ updatedAt: -1 });
   }
 
+  async getContentByChannel(channelId: string) {
+    return await this.contentModel.find({ channelId }).sort({ updatedAt: -1 });
+  }
+
   async createContent(createContentDto: CreateContentDto, files: ContentFiles) {
     createContentDto.permalink = await generatePermalink(
       createContentDto.title,

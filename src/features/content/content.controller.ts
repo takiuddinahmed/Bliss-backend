@@ -42,6 +42,11 @@ export class ContentController {
     return await this.contentService.getContentByUser(user._id.toString());
   }
 
+  @Get('channel/:channelId')
+  async getContentByChannel(@Param('channelId') channelId: string) {
+    return await this.contentService.getContentByChannel(channelId);
+  }
+
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'file', maxCount: 1 },
