@@ -152,13 +152,13 @@ export class CouncilorService {
   async likeDislikeContent(
     id: string,
     userId: string,
-    likeDislike: LikeDislikeEnum | 'cancel',
+    likeDislike: LikeDislikeEnum,
   ) {
     if (
       !(
         likeDislike === LikeDislikeEnum.LIKE ||
         likeDislike === LikeDislikeEnum.DISLIKE ||
-        likeDislike === 'cancel'
+        likeDislike === LikeDislikeEnum.CANCEL
       )
     )
       throw new BadRequestException(
@@ -168,7 +168,7 @@ export class CouncilorService {
     // TODO check comment and content is available
 
     const councilor = await this.councilorModel.findById(id);
-    if (likeDislike === 'cancel') {
+    if (likeDislike === LikeDislikeEnum.CANCEL) {
       return await this.councilorModel.findByIdAndUpdate(
         id,
         {

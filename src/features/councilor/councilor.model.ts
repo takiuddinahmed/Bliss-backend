@@ -16,23 +16,29 @@ import {
   LikeDislike,
   LikeDislikeSchema,
 } from '../common/models/likeDislike.model';
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
 export type CouncilorDocument = Councilor & Document;
 
 @Schema({ timestamps: true })
 export class Councilor {
+  @ApiProperty()
   @IsString()
   @Prop({ type: String, required: true })
   name: string;
 
+  @ApiProperty()
   @IsString()
   @Prop({ type: String, required: true })
   country: string;
 
+  @ApiProperty()
   @IsString()
   @Prop({ type: String, required: true })
   state: string;
 
+  @ApiProperty({ type: 'String', description: 'MongoId' })
   @Prop({
     type: Types.ObjectId,
     required: true,
@@ -40,53 +46,69 @@ export class Councilor {
   })
   userId: Types.ObjectId | string;
 
+  @ApiProperty()
   @IsString()
   @Prop({ type: String, required: true })
   officeAddress: string;
 
+  @ApiProperty()
   @IsString()
   @Prop({ type: String, required: true })
   openingHours: string;
 
+  @ApiProperty()
   @IsString()
   @Prop({ type: String, required: true })
   mobile: string;
 
+  @ApiProperty()
   @IsEmail()
+  @Transform(({ value }: { value: string }) =>
+    value && typeof value === 'string' ? value.toLowerCase() : value,
+  )
   @Prop({ type: String, required: true })
   email: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   @Prop({ type: String, required: false })
-  websiteLink: string;
+  websiteLink?: string;
 
+  @ApiProperty({ enum: councilorFee })
   @IsEnum(councilorFee)
   @Prop({ type: String, required: true, enum: councilorFee })
   serviceFee: councilorFee;
 
+  @ApiProperty({ enum: councilorServiceType })
   @IsEnum(councilorServiceType)
   @Prop({ type: String, required: true, enum: councilorServiceType })
   serviceType: councilorServiceType;
 
+  @ApiProperty()
   @IsString()
   @Prop({ type: String, required: false })
   aboutYourSelf: string;
 
+  @ApiProperty()
   @IsString()
   @Prop({ type: String, required: false })
   serviceDetails: string;
 
+  @ApiProperty()
   @IsString()
   @Prop({ type: String, required: false })
   rulesRegulation: string;
 
+  @ApiProperty({ type: 'File' })
   @Prop({ type: FileDataSchema, default: {} })
-  profilePic: FileData;
+  profilePic?: FileData;
 
+  @ApiProperty({ type: 'array', items: { type: 'File' } })
   @Prop({ type: [FileDataSchema], default: [] })
-  thumbnails: FileData[];
+  thumbnails?: FileData[];
 
+  @ApiProperty()
   @IsBoolean()
   @Prop({ type: Boolean, required: true })
   acceptTerms: boolean;

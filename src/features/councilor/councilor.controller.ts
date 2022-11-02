@@ -24,7 +24,10 @@ import { CreateCouncilorDto, UpdateCouncilorDto } from './councilor.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CouncilorFiles } from './councilor.model';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Councilor')
+@ApiBearerAuth()
 @Controller('councilor')
 export class CouncilorController {
   constructor(private readonly councilorService: CouncilorService) {}
@@ -78,11 +81,12 @@ export class CouncilorController {
     return await this.councilorService.update(id, dto, user, files);
   }
 
+  @ApiParam({ name: 'likeDislike', enum: LikeDislikeEnum })
   @Put('/like-dislike/:id/:likeDislike')
   @UseGuards(JwtAuthGuard)
   async likeComment(
     @Param('id') id: string,
-    @Param('likeDislike') likeDislike: LikeDislikeEnum | 'cancel',
+    @Param('likeDislike') likeDislike: LikeDislikeEnum,
     @AuthUser() user: IAuthUser,
   ) {
     return this.councilorService.likeDislikeContent(
