@@ -12,6 +12,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import { ContentFiles } from './content.model';
@@ -19,6 +20,8 @@ import { ContentService } from './content.service';
 import { CreateContentDto } from './create-content.dto';
 import { UpdateContentDto } from './update-content.dto';
 
+@ApiTags('Content')
+@ApiBearerAuth()
 @Controller('content')
 export class ContentController {
   constructor(private readonly contentService: ContentService) {}

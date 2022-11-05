@@ -8,12 +8,15 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard, Roles, RolesGuard } from '../security';
 import { ROLE } from '../user/user.model';
 import { CreateCategoryDto, UpdateCategoryDto } from './category.dto';
 
 import { CategoryService } from './category.service';
 
+@ApiTags('Category')
+@ApiBearerAuth()
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryServicec: CategoryService) {}

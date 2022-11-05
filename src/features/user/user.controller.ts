@@ -11,6 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthUser, IAuthUser, JwtAuthGuard } from 'src/features/security';
 import { EditPassDto } from './dto/editPassword.dto';
 import { EditUserDto } from './dto/editUser.dto';
@@ -18,6 +19,8 @@ import { RegisterDto } from './dto/register.dto';
 import { User } from './user.model';
 import { UserService } from './user.service';
 
+@ApiTags('User')
+@ApiBearerAuth()
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

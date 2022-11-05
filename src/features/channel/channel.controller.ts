@@ -12,12 +12,15 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import { ChannelFiles } from './channel.model';
 import { ChannelService } from './channel.service';
 import { CreateChannelDto } from './dto/create-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
 
+@ApiTags('Channel')
+@ApiBearerAuth()
 @Controller('channel')
 export class ChannelController {
   constructor(private readonly channelService: ChannelService) {}

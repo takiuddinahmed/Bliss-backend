@@ -11,6 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import {
@@ -19,6 +20,8 @@ import {
 } from './content-comment.dto';
 import { ContentCommentService } from './content-comment.service';
 
+@ApiTags('Content Comment')
+@ApiBearerAuth()
 @Controller('content-comment')
 @UseGuards(JwtAuthGuard)
 export class ContentCommentController {

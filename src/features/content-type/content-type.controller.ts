@@ -8,11 +8,14 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ROLE } from '../common/enum/user-role.enum';
 import { JwtAuthGuard, Roles, RolesGuard } from '../security';
 import { CreateContentTypeDto, UpdateContentTypeDto } from './content-type.dto';
 import { ContentTypeService } from './content-type.service';
 
+@ApiTags('Content Type')
+@ApiBearerAuth()
 @Controller('content-type')
 export class ContentTypeController {
   constructor(private readonly contentTypeService: ContentTypeService) {}
