@@ -13,6 +13,7 @@ import { ContentCommentModule } from './features/content-comment/content-comment
 import { CouncilorModule } from './features/councilor/councilor.module';
 import { RestaurantsModule } from './features/restaurants/restaurants.module';
 import { RestaurantBookingModule } from './features/restaurant-booking/restaurant-booking.module';
+import { CouncilorAppoinmentModule } from './features/councilor-appoinment';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { RestaurantBookingModule } from './features/restaurant-booking/restauran
     CouncilorModule,
     RestaurantsModule,
     RestaurantBookingModule,
+    CouncilorAppoinmentModule,
   ],
 })
 export class AppModule {}

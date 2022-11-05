@@ -7,6 +7,7 @@ export const collectionNames = {
   contenType: 'contenttypes',
   contentComment: 'content-comments',
   councilor: 'councilor',
+  councilorAppoinment: 'councilor-appoinments',
   restaurant: 'restaurant',
   restaurantBooking: 'restaurant-bookings',
 };
