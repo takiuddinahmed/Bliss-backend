@@ -1,5 +1,5 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { Types } from 'mongoose';
 import {
   IsDateString,
@@ -47,6 +47,9 @@ export class RestaurantBooking {
   @IsString()
   @Prop({ type: String })
   details: string;
+
+  @Prop({ type: Boolean, default: false })
+  accepted: boolean;
 }
 export type RestaurantBookingDocument = RestaurantBooking & Document;
 export type RestaurantBookingDocumentWithId = RestaurantBookingDocument & {
