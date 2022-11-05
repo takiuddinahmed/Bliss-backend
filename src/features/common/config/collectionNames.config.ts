@@ -8,4 +8,5 @@ export const collectionNames = {
   contentComment: 'content-comments',
   councilor: 'councilor',
   restaurant: 'restaurant',
+  restaurantBooking: 'restaurant-bookings',
 };

@@ -12,11 +12,13 @@ import {
   Put,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { ApiTags } from '@nestjs/swagger';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import { CreateRestaurantDto, UpdateRestaurantDto } from './restaurant.dto';
 import { RestaurantFiles } from './restaurant.model';
 import { RestaurantsService } from './restaurants.service';
 
+@ApiTags('Restaurants')
 @Controller('restaurants')
 export class RestaurantsController {
   constructor(private readonly restaurantsService: RestaurantsService) {}

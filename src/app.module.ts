@@ -12,6 +12,7 @@ import { SubCategoryModule } from './features/sub-category/sub-category.module';
 import { ContentCommentModule } from './features/content-comment/content-comment.module';
 import { CouncilorModule } from './features/councilor/councilor.module';
 import { RestaurantsModule } from './features/restaurants/restaurants.module';
+import { RestaurantBookingModule } from './features/restaurant-booking/restaurant-booking.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { RestaurantsModule } from './features/restaurants/restaurants.module';
     ContentCommentModule,
     CouncilorModule,
     RestaurantsModule,
+    RestaurantBookingModule,
   ],
 })
 export class AppModule {}

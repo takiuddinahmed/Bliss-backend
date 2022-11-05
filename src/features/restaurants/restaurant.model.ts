@@ -6,6 +6,7 @@ import {
   LikeDislike,
   LikeDislikeSchema,
 } from '../common/models/likeDislike.model';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class OpenCloseTime {
   @Prop({ type: String })
@@ -18,47 +19,56 @@ export class Restaurant {
   @Prop({ type: Types.ObjectId, ref: collectionNames.user })
   userId: Types.ObjectId | string;
 
+  @ApiProperty()
   @IsString()
   @Prop({ type: String, required: true })
   name: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsArray()
   @Prop({ type: [String], default: [] })
   contactNumber: string[];
 
+  @ApiProperty()
   @IsOptional()
   @IsObject()
   @Prop({ type: OpenCloseTime, default: {} })
   openCloseTime: OpenCloseTime;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   @Prop({ type: String, default: '' })
   description: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   @Prop({ type: String, default: '' })
   rulesAndRegulations: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   @Prop({ type: String, default: '' })
   website: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   @Prop({ type: String, default: '' })
   location: string;
 
-  @Prop({ type: [FileData], default: '' })
+  @ApiProperty({ type: 'array', items: { type: 'File' }, default: [] })
+  @Prop({ type: [FileData], default: [] })
   photoGallery: FileData[];
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   @Prop({ type: String, default: '' })
-  speciality: string;
+  speciality?: string;
 
   @Prop({ type: FileData })
   logo: FileData;
