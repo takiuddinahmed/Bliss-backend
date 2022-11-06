@@ -28,7 +28,7 @@ export class RestaurantsController {
     FileFieldsInterceptor([
       { name: 'logo', maxCount: 1 },
       { name: 'banner', maxCount: 1 },
-      { name: 'photoGallery', maxCount: 1 },
+      { name: 'photoGallery', maxCount: 10 },
     ]),
   )
   @UseGuards(JwtAuthGuard)
@@ -72,7 +72,7 @@ export class RestaurantsController {
     FileFieldsInterceptor([
       { name: 'logo', maxCount: 1 },
       { name: 'banner', maxCount: 1 },
-      { name: 'photoGallery', maxCount: 1 },
+      { name: 'photoGallery', maxCount: 10 },
     ]),
   )
   @UseGuards(JwtAuthGuard)
