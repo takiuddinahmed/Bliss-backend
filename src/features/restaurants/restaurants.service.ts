@@ -12,13 +12,17 @@ import { IAuthUser } from '../security';
 import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
 import { CreateRestaurantDto, UpdateRestaurantDto } from './restaurant.dto';
-import { Restaurant, RestaurantFiles } from './restaurant.model';
+import {
+  Restaurant,
+  RestaurantDocument,
+  RestaurantFiles,
+} from './restaurant.model';
 
 @Injectable()
 export class RestaurantsService {
   constructor(
     @InjectModel(collectionNames.restaurant)
-    private restaurantModel: Model<Restaurant>,
+    private restaurantModel: Model<RestaurantDocument>,
     private spaceService: SpaceService,
   ) {}
 

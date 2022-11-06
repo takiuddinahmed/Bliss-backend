@@ -1,4 +1,4 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { Types } from 'mongoose';
 import {
@@ -11,6 +11,7 @@ import {
 import { CouncilorAppoinmentType } from './councilor-appoinment-type.enum';
 import { collectionNames } from '../common';
 
+@Schema({ timestamps: true })
 export class CouncilorAppoinment {
   @ApiProperty({ type: 'mongoId' })
   @IsMongoId()

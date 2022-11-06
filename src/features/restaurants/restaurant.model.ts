@@ -1,4 +1,4 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsArray, IsObject, IsOptional, IsString } from 'class-validator';
 import { collectionNames, FileData } from '../common';
 import { Types } from 'mongoose';
@@ -14,7 +14,7 @@ export class OpenCloseTime {
   @Prop({ type: String })
   closeTime: string;
 }
-
+@Schema({ timestamps: true })
 export class Restaurant {
   @Prop({ type: Types.ObjectId, ref: collectionNames.user })
   userId: Types.ObjectId | string;
@@ -61,7 +61,7 @@ export class Restaurant {
   location: string;
 
   @ApiProperty({ type: 'array', items: { type: 'File' }, default: [] })
-  @Prop({ type: [FileData], default: [] })
+  @Prop({ type: Array<FileData>, default: [] })
   photoGallery: FileData[];
 
   @ApiProperty()

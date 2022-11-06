@@ -1,5 +1,5 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty, ApiResponse } from '@nestjs/swagger';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ApiProperty } from '@nestjs/swagger';
 import { Types } from 'mongoose';
 import {
   IsDateString,
@@ -11,6 +11,7 @@ import {
 import { RestaurantBookingType } from './restaurant-booking-type.enum';
 import { collectionNames } from '../common';
 
+@Schema({ timestamps: true })
 export class RestaurantBooking {
   @ApiProperty({ type: 'mongoId' })
   @IsMongoId()
