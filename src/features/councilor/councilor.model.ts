@@ -108,7 +108,10 @@ export class Councilor {
   @Prop({ type: [FileDataSchema], default: [] })
   thumbnails?: FileData[];
 
-  @ApiProperty()
+  @ApiProperty({ enum: ['true', 'false'] })
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value === 'true' : value,
+  )
   @IsBoolean()
   @Prop({ type: Boolean, required: true })
   acceptTerms: boolean;
