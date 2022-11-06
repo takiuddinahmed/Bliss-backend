@@ -8,4 +8,5 @@ export enum councilorFee {
 export enum councilorServiceType {
   online = 'online',
   offline = 'offline',
+  onlineOffline = 'online-offline',
 }
