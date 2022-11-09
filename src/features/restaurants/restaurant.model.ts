@@ -9,8 +9,10 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 
 export class OpenCloseTime {
+  @ApiProperty()
   @Prop({ type: String })
   openTime: string;
+  @ApiProperty()
   @Prop({ type: String })
   closeTime: string;
 }
@@ -30,7 +32,7 @@ export class Restaurant {
   @Prop({ type: [String], default: [] })
   contactNumber: string[];
 
-  @ApiProperty()
+  @ApiProperty({ type: () => OpenCloseTime })
   @IsOptional()
   @IsObject()
   @Prop({ type: OpenCloseTime, default: {} })
@@ -70,9 +72,11 @@ export class Restaurant {
   @Prop({ type: String, default: '' })
   speciality?: string;
 
+  @ApiProperty({ type: 'File' })
   @Prop({ type: FileData })
   logo: FileData;
 
+  @ApiProperty({ type: 'File' })
   @Prop({ type: FileData })
   banner: FileData;
 
