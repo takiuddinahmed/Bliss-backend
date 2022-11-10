@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsArray, IsObject, IsOptional, IsString } from 'class-validator';
-import { collectionNames, FileData } from '../common';
+import { collectionNames, FileData, FileDataSchema } from '../common';
 import { Types } from 'mongoose';
 import {
   LikeDislike,
@@ -30,37 +30,43 @@ export class Restaurant {
   @IsOptional()
   @IsArray()
   @Prop({ type: [String], default: [] })
-  contactNumber: string[];
+  contactNumber?: string[];
 
   @ApiProperty({ type: () => OpenCloseTime })
   @IsOptional()
   @IsObject()
   @Prop({ type: OpenCloseTime, default: {} })
-  openCloseTime: OpenCloseTime;
+  openCloseTime?: OpenCloseTime;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
   @Prop({ type: String, default: '' })
-  description: string;
+  description?: string;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
   @Prop({ type: String, default: '' })
-  rulesAndRegulations: string;
+  rulesAndRegulations?: string;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
   @Prop({ type: String, default: '' })
-  website: string;
+  website?: string;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
   @Prop({ type: String, default: '' })
-  location: string;
+  location?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  @Prop({ type: String })
+  address?: string;
 
   @ApiProperty({ type: 'array', items: { type: 'File' }, default: [] })
   @Prop({ type: Array<FileData>, default: [] })
@@ -73,12 +79,12 @@ export class Restaurant {
   speciality?: string;
 
   @ApiProperty({ type: 'File' })
-  @Prop({ type: FileData })
-  logo: FileData;
+  @Prop({ type: FileDataSchema })
+  logo?: FileData;
 
   @ApiProperty({ type: 'File' })
-  @Prop({ type: FileData })
-  banner: FileData;
+  @Prop({ type: FileDataSchema })
+  banner?: FileData;
 
   @Prop({ type: String })
   permalink: string;

@@ -57,8 +57,6 @@ export class RestaurantsService {
       }
     }
 
-    console.log({ restaurantCreateDto: dto });
-
     return await this.restaurantModel.create(dto);
   }
 
