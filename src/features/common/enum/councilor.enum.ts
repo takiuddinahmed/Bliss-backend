@@ -7,6 +7,17 @@ export enum councilorFee {
 
 export enum councilorServiceType {
   online = 'online',
-  offline = 'offline',
-  onlineOffline = 'online-offline',
+  offline = 'at office',
+}
+
+export enum CouncilorType {
+  Lawyers,
+  Therapist,
+  Pastors,
+  Reverents,
+  GiftedPeople,
+  Rabi,
+  Councilors,
+  Coaches,
+  Mentors,
 }

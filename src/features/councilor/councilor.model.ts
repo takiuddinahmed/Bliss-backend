@@ -11,6 +11,7 @@ import { Types } from 'mongoose';
 import {
   councilorFee,
   councilorServiceType,
+  CouncilorType,
 } from '../common/enum/councilor.enum';
 import {
   LikeDislike,
@@ -79,6 +80,11 @@ export class Councilor {
   @IsEnum(councilorFee)
   @Prop({ type: String, required: true, enum: councilorFee })
   serviceFee: councilorFee;
+
+  @ApiProperty({ enum: CouncilorType })
+  @IsEnum(CouncilorType)
+  @Prop({ type: String, enum: CouncilorType })
+  councilorType: CouncilorType;
 
   @ApiProperty({ enum: councilorServiceType })
   @IsEnum(councilorServiceType)
