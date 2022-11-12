@@ -3,7 +3,7 @@ import { Types } from 'mongoose';
 import { collectionNames } from '../config/collectionNames.config';
 import { LikeDislikeEnum } from '../enum/likeDislike.enum';
 
-@Schema()
+@Schema({ timestamps: true })
 export class LikeDislike {
   @Prop({ type: Types.ObjectId, ref: collectionNames.user })
   userId: Types.ObjectId;

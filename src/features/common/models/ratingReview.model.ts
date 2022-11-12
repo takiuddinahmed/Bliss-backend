@@ -5,7 +5,7 @@ import { Transform } from 'class-transformer';
 import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 import { Types } from 'mongoose';
 import { collectionNames } from '../config/collectionNames.config';
-@Schema()
+@Schema({ timestamps: true })
 export class RatingReview {
   @Prop({ type: Types.ObjectId, ref: collectionNames.user })
   userId: Types.ObjectId;

@@ -7,6 +7,11 @@ import {
   LikeDislikeSchema,
 } from '../common/models/likeDislike.model';
 import { ApiProperty } from '@nestjs/swagger';
+import {
+  RatingReview,
+  RatingReviewSchema,
+} from '../common/models/ratingReview.model';
+import { AskQueAns, AskQueAnsSchema } from '../common/models/askQue.model';
 
 export class OpenCloseTime {
   @ApiProperty()
@@ -94,6 +99,12 @@ export class Restaurant {
 
   @Prop({ type: [LikeDislikeSchema], default: [] })
   likeDislikes: LikeDislike[];
+
+  @Prop({ type: [RatingReviewSchema], default: [] })
+  ratingReviews: RatingReview[];
+
+  @Prop({ type: [AskQueAnsSchema], default: [] })
+  askQueAns: AskQueAns[];
 }
 
 export type RestaurantDocument = Restaurant & Document;

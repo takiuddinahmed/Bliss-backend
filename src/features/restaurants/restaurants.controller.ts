@@ -13,6 +13,8 @@ import {
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AnsQue, CreateAskQue } from '../common/models/askQue.model';
+import { CreateRatingReviewDto } from '../common/models/ratingReview.model';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import { CreateRestaurantDto, UpdateRestaurantDto } from './restaurant.dto';
 import { RestaurantFiles } from './restaurant.model';
@@ -66,6 +68,39 @@ export class RestaurantsController {
   @UseGuards(JwtAuthGuard)
   async unfollow(@Param('id') id: string, @AuthUser() user: IAuthUser) {
     return await this.restaurantsService.unfollow(id, user?._id?.toString());
+  }
+
+  @Put('ratingReview/:id')
+  @UseGuards(JwtAuthGuard)
+  async ratingReview(
+    @Param('id') id: string,
+    @Body() dto: CreateRatingReviewDto,
+    @AuthUser() user: IAuthUser,
+  ) {
+    return await this.restaurantsService.addRatingReview(
+      id,
+      user?._id?.toString(),
+      dto,
+    );
+  }
+
+  @Put('askQue/:id')
+  @UseGuards(JwtAuthGuard)
+  async createAskQue(
+    @Param('id') id: string,
+    @Body() dto: CreateAskQue,
+    @AuthUser() user: IAuthUser,
+  ) {
+    return this.restaurantsService.addAskQue(id, user?._id?.toString(), dto);
+  }
+  @Put('ansQue/:id/:queId')
+  @UseGuards(JwtAuthGuard)
+  async answerQue(
+    @Param('id') id: string,
+    @Param('queId') queId: string,
+    @Body() dto: AnsQue,
+  ) {
+    return this.restaurantsService.answerQue(id, queId, dto);
   }
 
   @UseInterceptors(

@@ -8,6 +8,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { collectionNames } from '../common';
 import { ROLE } from '../common/enum/user-role.enum';
+import { AnsQue, CreateAskQue } from '../common/models/askQue.model';
+import { CreateRatingReviewDto } from '../common/models/ratingReview.model';
 import { IAuthUser } from '../security';
 import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
@@ -126,7 +128,7 @@ export class RestaurantsService {
   async follow(id: string, userId: string) {
     const restaurant = await this.restaurantModel.findById(id);
     if (!restaurant) throw new NotFoundException('Restaurant not found');
-    if (restaurant.followers.some((user) => user?.toString() === userId)) {
+    if (restaurant?.followers?.some((user) => user?.toString() === userId)) {
       return restaurant;
     } else {
       return await this.restaurantModel.findByIdAndUpdate(id, {
@@ -148,5 +150,80 @@ export class RestaurantsService {
     } else {
       return restaurant;
     }
+  }
+
+  async addRatingReview(
+    id: string,
+    userId: string,
+    dto: CreateRatingReviewDto,
+  ) {
+    const restaurant = await this.restaurantModel.findById(id);
+    if (!restaurant) throw new NotFoundException('Restaurant not found');
+    if (!restaurant?.ratingReviews?.length) {
+      return await this.restaurantModel.findByIdAndUpdate(
+        id,
+        {
+          ratingReviews: [{ userId, ...dto }],
+        },
+        { new: true },
+      );
+    } else if (
+      restaurant?.ratingReviews?.some((rr) => rr?.userId?.toString() === userId)
+    ) {
+      return restaurant;
+    } else {
+      return await this.restaurantModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            ratingReviews: {
+              userId,
+              ...dto,
+            },
+          },
+        },
+        { new: true },
+      );
+    }
+  }
+
+  async addAskQue(id: string, userId: string, dto: CreateAskQue) {
+    const restaurant = await this.restaurantModel.findById(id);
+    if (!restaurant) throw new NotFoundException('Restaurant not found');
+    if (!restaurant?.askQueAns?.length) {
+      return await this.restaurantModel.findByIdAndUpdate(
+        id,
+        {
+          askQueAns: [{ userId, ...dto }],
+        },
+        { new: true },
+      );
+    } else {
+      return await this.restaurantModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            askQueAns: {
+              userId,
+              ...dto,
+            },
+          },
+        },
+        { new: true },
+      );
+    }
+  }
+
+  async answerQue(id: string, queId: string, dto: AnsQue) {
+    const restaurant = await this.restaurantModel.findById(id);
+    if (!restaurant) throw new NotFoundException('Restaurant not found');
+    return this.restaurantModel.findOneAndUpdate(
+      {
+        '_id': id,
+        'askQueAns._id': queId,
+      },
+      { 'askQueAns.$.answer': dto.answer },
+      { new: true },
+    );
   }
 }
