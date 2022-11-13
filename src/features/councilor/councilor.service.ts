@@ -128,22 +128,30 @@ export class CouncilorService {
     if (restaurant.followers.some((user) => user?.toString() === userId)) {
       return restaurant;
     } else {
-      return await this.councilorModel.findByIdAndUpdate(id, {
-        $push: {
-          followers: userId,
+      return await this.councilorModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            followers: userId,
+          },
         },
-      });
+        { new: true },
+      );
     }
   }
   async unfollow(id: string, userId: string) {
     const restaurant = await this.councilorModel.findById(id);
     if (!restaurant) throw new NotFoundException('Councilor not found');
     if (restaurant.followers.some((user) => user?.toString() === userId)) {
-      return await this.councilorModel.findByIdAndUpdate(id, {
-        $pull: {
-          followers: userId,
+      return await this.councilorModel.findByIdAndUpdate(
+        id,
+        {
+          $pull: {
+            followers: userId,
+          },
         },
-      });
+        { new: true },
+      );
     } else {
       return restaurant;
     }

@@ -28,10 +28,12 @@ export class RestaurantBooking {
 
   @ApiProperty()
   @IsNumber()
+  @Prop({ type: Number })
   memberCount: number;
 
   @ApiProperty()
   @IsString()
+  @Prop({ type: String })
   phoneNumber: string;
 
   @ApiProperty({ enum: RestaurantBookingType })
