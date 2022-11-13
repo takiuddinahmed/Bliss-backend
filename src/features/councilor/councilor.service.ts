@@ -12,6 +12,7 @@ import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { IAuthUser } from '../security';
 import { SpaceService } from '../space/space.service';
 import { ROLE } from '../user/user.model';
+import { generatePermalink } from '../utils';
 import { CreateCouncilorDto, UpdateCouncilorDto } from './councilor.dto';
 import { CouncilorDocument, CouncilorFiles } from './councilor.model';
 
@@ -21,7 +22,9 @@ export class CouncilorService {
     @InjectModel(collectionNames.councilor)
     private councilorModel: Model<CouncilorDocument>,
     private readonly spaceService: SpaceService,
-  ) {}
+  ) {
+    // this.migrate();
+  }
 
   // create coouncilor
   async createCouncilor(
@@ -35,6 +38,7 @@ export class CouncilorService {
     if (cheeckCouncilor) {
       throw new BadRequestException('You already have a councilor form');
     }
+    dto.permalink = await generatePermalink(dto.name, this.councilorModel);
     if (files?.profilePic?.length) {
       const fileData = await this.spaceService.uploadFile(files?.profilePic[0]);
       if (!fileData) {
@@ -67,7 +71,15 @@ export class CouncilorService {
 
   async getOne(id: string) {
     const councilor = await this.councilorModel.findById(id);
-    if (councilor) {
+    if (!councilor) {
+      throw new NotFoundException('Councilor not found');
+    }
+    return councilor;
+  }
+
+  async getOneByPermalink(permalink: string) {
+    const councilor = await this.councilorModel.findOne({ permalink });
+    if (!councilor) {
       throw new NotFoundException('Councilor not found');
     }
     return councilor;
@@ -210,6 +222,20 @@ export class CouncilorService {
         },
         { new: true },
       );
+    }
+  }
+
+  async migrate() {
+    const list = await this.councilorModel.find();
+    for (let i = 0; i < list.length; i++) {
+      const c = list[i];
+      if (!c?.permalink?.length) {
+        await c.updateOne({
+          permalink: await generatePermalink(c.name, this.councilorModel),
+        });
+
+        console.log(`${c.name} updated`);
+      }
     }
   }
 }

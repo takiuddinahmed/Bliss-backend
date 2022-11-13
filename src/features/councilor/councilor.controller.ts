@@ -64,6 +64,11 @@ export class CouncilorController {
     return await this.councilorService.getOne(id);
   }
 
+  @Get('permalink/:permalink')
+  async getByPermalink(@Param('permalink') permalink: string) {
+    return await this.councilorService.getOneByPermalink(permalink);
+  }
+
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'profilePic', maxCount: 1 },

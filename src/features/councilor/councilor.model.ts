@@ -127,6 +127,9 @@ export class Councilor {
 
   @Prop({ type: [LikeDislikeSchema], default: [] })
   likeDislikes: LikeDislike[];
+
+  @Prop({ type: String })
+  permalink: string;
 }
 
 export const CouncilorSchema = SchemaFactory.createForClass(Councilor);

@@ -16,9 +16,9 @@ import {
 } from './councilor-appoinment.dto';
 import { CouncilorAppoinmentService } from './councilor-appoinment.service';
 
-@ApiTags('Restaurant Booking')
+@ApiTags('Councilor Appoinment')
 @ApiBearerAuth()
-@Controller('restaurant-booking')
+@Controller('councilor-apoinment')
 export class CouncilorAppoinmentController {
   constructor(
     private readonly councilorAppoinmentService: CouncilorAppoinmentService,
@@ -39,7 +39,7 @@ export class CouncilorAppoinmentController {
     return this.councilorAppoinmentService.findAll();
   }
 
-  @Get('restaurant/:councilorId')
+  @Get('councilor/:councilorId')
   findByRestaurant(@Param('councilorId') councilorId: string) {
     return this.councilorAppoinmentService.findByCouncilor(councilorId);
   }
