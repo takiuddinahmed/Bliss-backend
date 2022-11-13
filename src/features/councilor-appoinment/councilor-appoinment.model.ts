@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty, ApiResponse } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Types } from 'mongoose';
 import {
   IsDateString,
@@ -28,10 +28,12 @@ export class CouncilorAppoinment {
 
   @ApiProperty()
   @IsNumber()
+  @Prop({ type: String })
   memberCount: number;
 
   @ApiProperty()
   @IsString()
+  @Prop({ type: String })
   phoneNumber: string;
 
   @ApiProperty({ enum: CouncilorAppoinmentType })

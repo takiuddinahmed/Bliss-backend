@@ -10,4 +10,5 @@ export const collectionNames = {
   councilorAppoinment: 'councilor-appoinments',
   restaurant: 'restaurant',
   restaurantBooking: 'restaurant-bookings',
+  restaurantMenu: 'restaurant-menus',
 };
