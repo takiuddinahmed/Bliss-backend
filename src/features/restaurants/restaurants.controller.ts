@@ -31,6 +31,7 @@ export class RestaurantsController {
       { name: 'logo', maxCount: 1 },
       { name: 'banner', maxCount: 1 },
       { name: 'photoGallery', maxCount: 10 },
+      { name: 'videos', maxCount: 5 },
     ]),
   )
   @UseGuards(JwtAuthGuard)
@@ -108,6 +109,7 @@ export class RestaurantsController {
       { name: 'logo', maxCount: 1 },
       { name: 'banner', maxCount: 1 },
       { name: 'photoGallery', maxCount: 10 },
+      { name: 'videos', maxCount: 5 },
     ]),
   )
   @UseGuards(JwtAuthGuard)

@@ -77,6 +77,10 @@ export class Restaurant {
   @Prop({ type: Array<FileData>, default: [] })
   photoGallery: FileData[];
 
+  @ApiProperty({ type: 'array', items: { type: 'File' }, default: [] })
+  @Prop({ type: Array<FileData>, default: [] })
+  videos: FileData[];
+
   @ApiProperty()
   @IsOptional()
   @IsString()
@@ -115,4 +119,5 @@ export interface RestaurantFiles {
   logo: Express.Multer.File[];
   banner: Express.Multer.File[];
   photoGallery: Express.Multer.File[];
+  videos: Express.Multer.File[];
 }

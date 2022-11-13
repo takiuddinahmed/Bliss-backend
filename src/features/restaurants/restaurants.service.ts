@@ -58,6 +58,17 @@ export class RestaurantsService {
         dto.photoGallery[i] = fileData;
       }
     }
+    // check video gallery
+    if (files?.videos?.length) {
+      dto.videos = [];
+      for (let i = 0; i < files.videos.length; i++) {
+        const fileData = await this.spaceService.uploadFile(files?.videos[i]);
+        if (!fileData)
+          throw new InternalServerErrorException('File upload failed');
+
+        dto.videos[i] = fileData;
+      }
+    }
 
     return await this.restaurantModel.create(dto);
   }
@@ -114,6 +125,17 @@ export class RestaurantsService {
           throw new InternalServerErrorException('File upload failed');
 
         dto.photoGallery[i] = fileData;
+      }
+    }
+    // check video gallery
+    if (files?.videos?.length) {
+      dto.videos = [];
+      for (let i = 0; i < files.videos.length; i++) {
+        const fileData = await this.spaceService.uploadFile(files?.videos[i]);
+        if (!fileData)
+          throw new InternalServerErrorException('File upload failed');
+
+        dto.videos[i] = fileData;
       }
     }
     return await this.restaurantModel.findByIdAndUpdate(id, dto, { new: true });
