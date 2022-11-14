@@ -1,4 +1,4 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { collectionNames, FileData, FileDataSchema } from 'src/features/common';
 import { Types } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
@@ -46,4 +46,14 @@ export class RestaurantMenu {
   @Prop({ type: [FileDataSchema], default: [] })
   thumnails: FileData[];
   permalink: string;
+}
+
+export type RestaurantMenuDocument = RestaurantMenu & Document;
+export const RestaurantMenuSchema =
+  SchemaFactory.createForClass(RestaurantMenu);
+
+export interface RestaurantMenuFiles {
+  image: Express.Multer.File[];
+  videos: Express.Multer.File[];
+  thumnails: Express.Multer.File[];
 }
