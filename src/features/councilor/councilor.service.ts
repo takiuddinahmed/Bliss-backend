@@ -69,6 +69,10 @@ export class CouncilorService {
     return await this.councilorModel.find();
   }
 
+  async getByUser(userId: string) {
+    return await this.councilorModel.find({ userId });
+  }
+
   async getOne(id: string) {
     const councilor = await this.councilorModel.findById(id);
     if (!councilor) {

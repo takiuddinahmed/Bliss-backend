@@ -58,6 +58,11 @@ export class RestaurantMenuController {
     return this.restaurantMenuService.findOneByPermalink(permalink);
   }
 
+  @Get('restaurant/:restaurantId')
+  findByRestaurant(@Param('restaurantId') restaurantId: string) {
+    return this.restaurantMenuService.findByRestaurant(restaurantId);
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,

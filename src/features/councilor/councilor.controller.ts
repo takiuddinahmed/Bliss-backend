@@ -59,6 +59,11 @@ export class CouncilorController {
     return this.councilorService.getAll();
   }
 
+  @Get('user/:userId')
+  async getByUser(@Param('userId') userId: string) {
+    return this.councilorService.getByUser(userId);
+  }
+
   @Get(':id')
   async getOne(@Param('id') id: string) {
     return await this.councilorService.getOne(id);

@@ -68,6 +68,10 @@ export class RestaurantMenuService {
     return await this.restaurantMenuModel.find();
   }
 
+  async findByRestaurant(restaurantId: string) {
+    return await this.restaurantMenuModel.find({ restaurantId });
+  }
+
   async findOne(id: string, acceptNotFound = false) {
     const restaurantMenu = await this.restaurantMenuModel.findById(id);
     if (!restaurantMenu && !acceptNotFound)

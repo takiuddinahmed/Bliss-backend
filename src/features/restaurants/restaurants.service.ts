@@ -77,6 +77,10 @@ export class RestaurantsService {
     return await this.restaurantModel.find();
   }
 
+  async getByUser(userId: string) {
+    return await this.restaurantModel.find({ userId });
+  }
+
   async findOne(id: string) {
     const restaurant = await this.restaurantModel.findById(id);
     if (!restaurant) throw new NotFoundException('Restaurant not found');

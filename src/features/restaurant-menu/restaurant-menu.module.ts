@@ -14,7 +14,7 @@ import { SpaceModule } from '../space';
         schema: restaurantSchema,
       },
     ]),
-    SpaceModule
+    SpaceModule,
   ],
   controllers: [RestaurantMenuController],
   providers: [RestaurantMenuService],

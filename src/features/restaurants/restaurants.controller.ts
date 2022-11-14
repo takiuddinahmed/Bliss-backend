@@ -50,6 +50,11 @@ export class RestaurantsController {
     return this.restaurantsService.findAll();
   }
 
+  @Get('user/:userId')
+  async getByUser(@Param('userId') userId: string) {
+    return this.restaurantsService.getByUser(userId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.restaurantsService.findOne(id);

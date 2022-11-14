@@ -2,7 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { collectionNames, FileData, FileDataSchema } from 'src/features/common';
 import { Types } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsMongoId, IsString } from 'class-validator';
+import { IsBoolean, IsMongoId, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 @Schema({ timestamps: true })
 export class RestaurantMenu {
@@ -31,8 +32,29 @@ export class RestaurantMenu {
 
   @ApiProperty()
   @IsString()
+  @Prop({ type: String })
+  category: string;
+
+  @ApiProperty()
+  @IsString()
   @Prop({ type: String, required: true })
   description: string;
+
+  @ApiProperty({ enum: ['true', 'false'] })
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value === 'true' : value,
+  )
+  @IsBoolean()
+  @Prop({ type: Boolean })
+  featured: boolean;
+
+  @ApiProperty({ enum: ['true', 'false'] })
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value === 'true' : value,
+  )
+  @IsBoolean()
+  @Prop({ type: Boolean })
+  popular: boolean;
 
   @ApiProperty({ type: 'File' })
   @Prop({ type: FileDataSchema })
