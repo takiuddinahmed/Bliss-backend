@@ -53,7 +53,7 @@ export class RestaurantMenuService {
     }
     // check video gallery
     if (files?.thumbnails?.length) {
-      dto.videos = [];
+      dto.thumbnails = [];
       for (let i = 0; i < files.thumbnails.length; i++) {
         const fileData = await this.spaceService.uploadFile(
           files?.thumbnails[i],
