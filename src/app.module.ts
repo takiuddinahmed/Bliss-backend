@@ -14,7 +14,7 @@ import { CouncilorModule } from './features/councilor/councilor.module';
 import { RestaurantsModule } from './features/restaurants/restaurants.module';
 import { RestaurantBookingModule } from './features/restaurant-booking/restaurant-booking.module';
 import { CouncilorAppoinmentModule } from './features/councilor-appoinment';
-import { RestaurantMenuModule } from './restaurant-menu/restaurant-menu.module';
+import { RestaurantMenuModule } from './features/restaurant-menu/restaurant-menu.module';
 
 @Module({
   imports: [
