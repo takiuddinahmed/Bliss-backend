@@ -4,6 +4,14 @@ import { Types } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsMongoId, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
+import {
+  LikeDislike,
+  LikeDislikeSchema,
+} from '../common/models/likeDislike.model';
+import {
+  RatingReview,
+  RatingReviewSchema,
+} from '../common/models/ratingReview.model';
 
 @Schema({ timestamps: true })
 export class RestaurantMenu {
@@ -67,7 +75,15 @@ export class RestaurantMenu {
   @ApiProperty({ type: 'array', items: { type: 'File' }, default: [] })
   @Prop({ type: [FileDataSchema], default: [] })
   thumnails: FileData[];
+
+  @Prop({ type: String })
   permalink: string;
+
+  @Prop({ type: [LikeDislikeSchema], default: [] })
+  likeDislikes: LikeDislike[];
+
+  @Prop({ type: [RatingReviewSchema], default: [] })
+  ratingReviews: RatingReview[];
 }
 
 export type RestaurantMenuDocument = RestaurantMenu & Document;
