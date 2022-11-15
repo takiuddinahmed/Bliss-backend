@@ -229,17 +229,17 @@ export class CouncilorService {
     }
   }
 
-  async migrate() {
-    const list = await this.councilorModel.find();
-    for (let i = 0; i < list.length; i++) {
-      const c = list[i];
-      if (!c?.permalink?.length) {
-        await c.updateOne({
-          permalink: await generatePermalink(c.name, this.councilorModel),
-        });
+  // async migrate() {
+  //   const list = await this.councilorModel.find();
+  //   for (let i = 0; i < list.length; i++) {
+  //     const c = list[i];
+  //     if (!c?.permalink?.length) {
+  //       await c.updateOne({
+  //         permalink: await generatePermalink(c.name, this.councilorModel),
+  //       });
 
-        console.log(`${c.name} updated`);
-      }
-    }
-  }
+  //       console.log(`${c.name} updated`);
+  //     }
+  //   }
+  // }
 }

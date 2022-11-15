@@ -52,16 +52,16 @@ export class RestaurantMenuService {
       }
     }
     // check video gallery
-    if (files?.thumnails?.length) {
+    if (files?.thumbnails?.length) {
       dto.videos = [];
-      for (let i = 0; i < files.thumnails.length; i++) {
+      for (let i = 0; i < files.thumbnails.length; i++) {
         const fileData = await this.spaceService.uploadFile(
-          files?.thumnails[i],
+          files?.thumbnails[i],
         );
         if (!fileData)
           throw new InternalServerErrorException('Thumnails upload failed');
 
-        dto.thumnails[i] = fileData;
+        dto.thumbnails[i] = fileData;
       }
     }
 
@@ -120,16 +120,16 @@ export class RestaurantMenuService {
       }
     }
     // check video gallery
-    if (files?.thumnails?.length) {
+    if (files?.thumbnails?.length) {
       dto.videos = [];
-      for (let i = 0; i < files.thumnails.length; i++) {
+      for (let i = 0; i < files.thumbnails.length; i++) {
         const fileData = await this.spaceService.uploadFile(
-          files?.thumnails[i],
+          files?.thumbnails[i],
         );
         if (!fileData)
-          throw new InternalServerErrorException('Thumnails upload failed');
+          throw new InternalServerErrorException('Thumbnails upload failed');
 
-        dto.thumnails[i] = fileData;
+        dto.thumbnails[i] = fileData;
       }
     }
     return await this.restaurantMenuModel.findByIdAndUpdate(id, dto, {

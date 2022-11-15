@@ -74,7 +74,7 @@ export class RestaurantMenu {
 
   @ApiProperty({ type: 'array', items: { type: 'File' }, default: [] })
   @Prop({ type: [FileDataSchema], default: [] })
-  thumnails: FileData[];
+  thumbnails: FileData[];
 
   @Prop({ type: String })
   permalink: string;
@@ -93,5 +93,5 @@ export const RestaurantMenuSchema =
 export interface RestaurantMenuFiles {
   image: Express.Multer.File[];
   videos: Express.Multer.File[];
-  thumnails: Express.Multer.File[];
+  thumbnails: Express.Multer.File[];
 }

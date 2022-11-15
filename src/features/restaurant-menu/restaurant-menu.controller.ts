@@ -31,7 +31,7 @@ export class RestaurantMenuController {
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'image', maxCount: 1 },
-      { name: 'thumnails', maxCount: 10 },
+      { name: 'thumbnails', maxCount: 10 },
       { name: 'videos', maxCount: 5 },
     ]),
   )
@@ -69,7 +69,7 @@ export class RestaurantMenuController {
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'image', maxCount: 1 },
-      { name: 'thumnails', maxCount: 10 },
+      { name: 'thumbnails', maxCount: 10 },
       { name: 'videos', maxCount: 5 },
     ]),
   )
