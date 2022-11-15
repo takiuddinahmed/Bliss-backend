@@ -16,7 +16,7 @@ import {
 @Schema({ timestamps: true })
 export class RestaurantMenu {
   @Prop({ type: Types.ObjectId, ref: collectionNames.user })
-  userId: Types.ObjectId;
+  userId: Types.ObjectId | string;
 
   @ApiProperty({ type: 'Mongo Id' })
   @IsMongoId()
