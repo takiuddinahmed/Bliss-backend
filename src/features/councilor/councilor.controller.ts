@@ -131,4 +131,10 @@ export class CouncilorController {
   async unfollow(@Param('id') id: string, @AuthUser() user: IAuthUser) {
     return await this.councilorService.unfollow(id, user?._id?.toString());
   }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  async remove(@Param('id') id: string) {
+    return await this.councilorService.remove(id);
+  }
 }
