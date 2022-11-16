@@ -6,9 +6,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { collectionNames } from '../common';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
+import { CreateRatingReviewDto } from '../common/models/ratingReview.model';
 import { IAuthUser } from '../security';
 import { SpaceService } from '../space/space.service';
 import { ROLE } from '../user/user.model';
@@ -32,12 +33,6 @@ export class CouncilorService {
     dto: CreateCouncilorDto,
     files: CouncilorFiles,
   ) {
-    const cheeckCouncilor = await this.councilorModel.findOne({
-      userId: user._id,
-    });
-    if (cheeckCouncilor) {
-      throw new BadRequestException('You already have a councilor form');
-    }
     dto.permalink = await generatePermalink(dto.name, this.councilorModel);
     if (files?.profilePic?.length) {
       const fileData = await this.spaceService.uploadFile(files?.profilePic[0]);
@@ -70,7 +65,9 @@ export class CouncilorService {
   }
 
   async getByUser(userId: string) {
-    return await this.councilorModel.find({ userId });
+    return await this.councilorModel.find({
+      userId: new Types.ObjectId(userId),
+    });
   }
 
   async getOne(id: string) {
@@ -222,6 +219,41 @@ export class CouncilorService {
         {
           $push: {
             likeDislikes: { userId, likeDislike },
+          },
+        },
+        { new: true },
+      );
+    }
+  }
+
+  async addRatingReview(
+    id: string,
+    userId: string,
+    dto: CreateRatingReviewDto,
+  ) {
+    const councilor = await this.councilorModel.findById(id);
+    if (!councilor) throw new NotFoundException('Councilor not found');
+    if (!councilor?.ratingReviews?.length) {
+      return await this.councilorModel.findByIdAndUpdate(
+        id,
+        {
+          ratingReviews: [{ userId, ...dto }],
+        },
+        { new: true },
+      );
+    } else if (
+      councilor?.ratingReviews?.some((rr) => rr?.userId?.toString() === userId)
+    ) {
+      return councilor;
+    } else {
+      return await this.councilorModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            ratingReviews: {
+              userId,
+              ...dto,
+            },
           },
         },
         { new: true },

@@ -19,6 +19,10 @@ import {
 } from '../common/models/likeDislike.model';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
+import {
+  RatingReview,
+  RatingReviewSchema,
+} from '../common/models/ratingReview.model';
 
 export type CouncilorDocument = Councilor & Document;
 
@@ -130,6 +134,9 @@ export class Councilor {
 
   @Prop({ type: String })
   permalink: string;
+
+  @Prop({ type: [RatingReviewSchema], default: [] })
+  ratingReviews: RatingReview[];
 }
 
 export const CouncilorSchema = SchemaFactory.createForClass(Councilor);
