@@ -25,6 +25,7 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CouncilorFiles } from './councilor.model';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import { CreateRatingReviewDto } from '../common/models/ratingReview.model';
 
 @ApiTags('Councilor')
 @ApiBearerAuth()
@@ -103,6 +104,20 @@ export class CouncilorController {
       id,
       user._id.toString(),
       likeDislike,
+    );
+  }
+
+  @Put('ratingReview/:id')
+  @UseGuards(JwtAuthGuard)
+  async ratingReview(
+    @Param('id') id: string,
+    @Body() dto: CreateRatingReviewDto,
+    @AuthUser() user: IAuthUser,
+  ) {
+    return await this.councilorService.addRatingReview(
+      id,
+      user?._id?.toString(),
+      dto,
     );
   }
 
