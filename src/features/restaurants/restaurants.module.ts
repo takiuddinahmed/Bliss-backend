@@ -15,5 +15,6 @@ import { SpaceModule } from '../space';
   ],
   controllers: [RestaurantsController],
   providers: [RestaurantsService],
+  exports: [RestaurantsService],
 })
 export class RestaurantsModule {}

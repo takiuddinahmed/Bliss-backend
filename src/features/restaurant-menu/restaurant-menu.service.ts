@@ -9,6 +9,7 @@ import { Model } from 'mongoose';
 import { collectionNames } from '../common';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { CreateRatingReviewDto } from '../common/models/ratingReview.model';
+import { RestaurantsService } from '../restaurants/restaurants.service';
 import { IAuthUser } from '../security';
 import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
@@ -27,6 +28,7 @@ export class RestaurantMenuService {
     @InjectModel(collectionNames.restaurantMenu)
     private restaurantMenuModel: Model<RestaurantMenuDocument>,
     private spaceService: SpaceService,
+    private restaurantsService: RestaurantsService,
   ) {}
 
   async create(dto: CreateRestaurantMenuDto, files: RestaurantMenuFiles) {
@@ -74,6 +76,15 @@ export class RestaurantMenuService {
 
   async findByRestaurant(restaurantId: string) {
     return await this.restaurantMenuModel.find({ restaurantId });
+  }
+
+  async findByRestaurantPermalink(restaurantPermalink: string) {
+    const restaurant = await this.restaurantsService.findByPermalink(
+      restaurantPermalink,
+    );
+    return await this.restaurantMenuModel.find({
+      restaurantId: restaurant._id?.toString(),
+    });
   }
 
   async findOne(id: string, acceptNotFound = false) {

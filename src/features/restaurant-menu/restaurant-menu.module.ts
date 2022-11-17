@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { collectionNames } from '../common';
 import { SpaceModule } from '../space';
 import { RestaurantMenuSchema } from './restaurant-menu.model';
+import { RestaurantsModule } from '../restaurants/restaurants.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { RestaurantMenuSchema } from './restaurant-menu.model';
       },
     ]),
     SpaceModule,
+    RestaurantsModule,
   ],
   controllers: [RestaurantMenuController],
   providers: [RestaurantMenuService],

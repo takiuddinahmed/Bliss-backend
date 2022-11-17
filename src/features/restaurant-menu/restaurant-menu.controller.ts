@@ -65,6 +65,14 @@ export class RestaurantMenuController {
   findByRestaurant(@Param('restaurantId') restaurantId: string) {
     return this.restaurantMenuService.findByRestaurant(restaurantId);
   }
+  @Get('restaurant/permalink/:restaurantPermalink')
+  findByRestaurantPermalink(
+    @Param('restaurantPermalink') restaurantPermalink: string,
+  ) {
+    return this.restaurantMenuService.findByRestaurantPermalink(
+      restaurantPermalink,
+    );
+  }
 
   @UseInterceptors(
     FileFieldsInterceptor([
