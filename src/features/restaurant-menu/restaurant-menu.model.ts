@@ -39,9 +39,9 @@ export class RestaurantMenu {
   price: string;
 
   @ApiProperty()
-  @IsString()
-  @Prop({ type: String })
-  category: string;
+  @IsMongoId()
+  @Prop({ type: Types.ObjectId, ref: collectionNames.restaurantCatogory })
+  restaurantCategoryId: Types.ObjectId | string;
 
   @ApiProperty()
   @IsString()

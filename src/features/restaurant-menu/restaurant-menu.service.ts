@@ -71,33 +71,43 @@ export class RestaurantMenuService {
   }
 
   async findAll() {
-    return await this.restaurantMenuModel.find();
+    return await this.restaurantMenuModel
+      .find()
+      .populate('restaurantCategoryId');
   }
 
   async findByRestaurant(restaurantId: string) {
-    return await this.restaurantMenuModel.find({ restaurantId });
+    return await this.restaurantMenuModel
+      .find({ restaurantId })
+      .populate('restaurantCategoryId');
   }
 
   async findByRestaurantPermalink(restaurantPermalink: string) {
     const restaurant = await this.restaurantsService.findByPermalink(
       restaurantPermalink,
     );
-    return await this.restaurantMenuModel.find({
-      restaurantId: restaurant._id?.toString(),
-    });
+    return await this.restaurantMenuModel
+      .find({
+        restaurantId: restaurant._id?.toString(),
+      })
+      .populate('restaurantCategoryId');
   }
 
   async findOne(id: string, acceptNotFound = false) {
-    const restaurantMenu = await this.restaurantMenuModel.findById(id);
+    const restaurantMenu = await this.restaurantMenuModel
+      .findById(id)
+      .populate('restaurantCategoryId');
     if (!restaurantMenu && !acceptNotFound)
       throw new NotFoundException('Restaurant Menu not found');
     return restaurantMenu;
   }
 
   async findOneByPermalink(permalink: string) {
-    const restaurantMenu = await this.restaurantMenuModel.findOne({
-      permalink,
-    });
+    const restaurantMenu = await this.restaurantMenuModel
+      .findOne({
+        permalink,
+      })
+      .populate('restaurantCategoryId');
     if (!restaurantMenu)
       throw new NotFoundException('Restaurant Menu not found');
     return restaurantMenu;
@@ -143,9 +153,11 @@ export class RestaurantMenuService {
         dto.thumbnails[i] = fileData;
       }
     }
-    return await this.restaurantMenuModel.findByIdAndUpdate(id, dto, {
-      new: true,
-    });
+    // return await this.restaurantMenuModel.findByIdAndUpdate(id, dto, {
+    //   new: true,
+    // });
+    await restaurantMenu.updateOne(dto);
+    return await this.findOne(id);
   }
 
   async addRatingReview(
@@ -157,13 +169,14 @@ export class RestaurantMenuService {
     if (!restaurantMenu)
       throw new NotFoundException('Restaurant menu not found');
     if (!restaurantMenu?.ratingReviews?.length) {
-      return await this.restaurantMenuModel.findByIdAndUpdate(
+      await this.restaurantMenuModel.findByIdAndUpdate(
         id,
         {
           ratingReviews: [{ userId, ...dto }],
         },
         { new: true },
       );
+      return await this.findOne(id);
     } else if (
       restaurantMenu?.ratingReviews?.some(
         (rr) => rr?.userId?.toString() === userId,
@@ -171,7 +184,7 @@ export class RestaurantMenuService {
     ) {
       return restaurantMenu;
     } else {
-      return await this.restaurantMenuModel.findByIdAndUpdate(
+      await this.restaurantMenuModel.findByIdAndUpdate(
         id,
         {
           $push: {
@@ -183,6 +196,7 @@ export class RestaurantMenuService {
         },
         { new: true },
       );
+      return this.findOne(id);
     }
   }
 
@@ -206,7 +220,7 @@ export class RestaurantMenuService {
 
     const restaurantMenu = await this.restaurantMenuModel.findById(id);
     if (likeDislike === LikeDislikeEnum.CANCEL) {
-      return await this.restaurantMenuModel.findByIdAndUpdate(
+      await this.restaurantMenuModel.findByIdAndUpdate(
         id,
         {
           $pull: {
@@ -215,11 +229,12 @@ export class RestaurantMenuService {
         },
         { new: true },
       );
+      return await this.findOne(id);
     }
     if (
       restaurantMenu.likeDislikes.some((ld) => ld.userId.toString() === userId)
     ) {
-      return await this.restaurantMenuModel.findOneAndUpdate(
+      await this.restaurantMenuModel.findOneAndUpdate(
         {
           '_id': id,
           'likeDislikes.userId': userId,
@@ -231,8 +246,9 @@ export class RestaurantMenuService {
           new: true,
         },
       );
+      return await this.findOne(id);
     } else {
-      return await this.restaurantMenuModel.findByIdAndUpdate(
+      await this.restaurantMenuModel.findByIdAndUpdate(
         id,
         {
           $push: {
@@ -241,6 +257,7 @@ export class RestaurantMenuService {
         },
         { new: true },
       );
+      return await this.findOne(id);
     }
   }
 
