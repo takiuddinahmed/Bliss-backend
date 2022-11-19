@@ -11,4 +11,5 @@ export const collectionNames = {
   restaurant: 'restaurant',
   restaurantBooking: 'restaurant-bookings',
   restaurantMenu: 'restaurant-menus',
+  restaurantCatogory: 'restaurant-categories',
 };

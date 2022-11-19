@@ -15,6 +15,7 @@ import { RestaurantsModule } from './features/restaurants/restaurants.module';
 import { RestaurantBookingModule } from './features/restaurant-booking/restaurant-booking.module';
 import { CouncilorAppoinmentModule } from './features/councilor-appoinment';
 import { RestaurantMenuModule } from './features/restaurant-menu/restaurant-menu.module';
+import { RestaurantCategoryModule } from './features/restaurant-category/restaurant-category.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { RestaurantMenuModule } from './features/restaurant-menu/restaurant-menu
     RestaurantBookingModule,
     CouncilorAppoinmentModule,
     RestaurantMenuModule,
+    RestaurantCategoryModule,
   ],
 })
 export class AppModule {}
