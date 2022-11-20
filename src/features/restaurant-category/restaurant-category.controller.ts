@@ -1,17 +1,17 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
-  UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import {
   CreateRestaurantCategoryDto,
@@ -27,12 +27,13 @@ export class RestaurantCategoryController {
     private readonly restaurantCategoryService: RestaurantCategoryService,
   ) {}
 
+  @ApiConsumes('multipart/form-data')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   @Post()
   create(
     @Body() dto: CreateRestaurantCategoryDto,
-    @UploadedFile('image') image: Express.Multer.File,
+    @UploadedFile() image: Express.Multer.File,
     @AuthUser() user: IAuthUser,
   ) {
     dto.userId = user?._id?.toString();
@@ -54,13 +55,14 @@ export class RestaurantCategoryController {
     return this.restaurantCategoryService.findByPermalink(permalink);
   }
 
+  @ApiConsumes('multipart/form-data')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() dto: CreateRestaurantCategoryDto,
-    @UploadedFile('image') image: Express.Multer.File,
+    @Body() dto: UpdateRestaurantCategoryDto,
+    @UploadedFile() image: Express.Multer.File,
     @AuthUser() user: IAuthUser,
   ) {
     dto.userId = user?._id?.toString();

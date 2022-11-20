@@ -14,7 +14,7 @@ export class RestaurantCategory {
   @Prop({ type: String })
   name: string;
 
-  @ApiProperty({ type: 'File' })
+  @ApiProperty({ type: 'string', format: 'binary', description: 'File' })
   @Prop({ type: FileDataSchema, default: {} })
   image?: FileData;
 
