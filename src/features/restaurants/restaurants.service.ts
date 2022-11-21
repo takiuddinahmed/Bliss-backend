@@ -104,7 +104,7 @@ export class RestaurantsService {
     if (
       !(
         user.role === ROLE.ADMIN ||
-        user._id.toString() === dto.userId.toString()
+        user._id.toString() !== dto.userId.toString()
       )
     )
       throw new UnauthorizedException('Permission denied');
