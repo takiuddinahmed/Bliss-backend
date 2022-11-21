@@ -101,7 +101,12 @@ export class RestaurantsService {
   ) {
     const restaurant = await this.restaurantModel.findById(id);
     if (!restaurant) throw new NotFoundException('Restaurant not found');
-    if (!(user.role === ROLE.ADMIN || user._id.toString() === dto))
+    if (
+      !(
+        user.role === ROLE.ADMIN ||
+        user._id.toString() === dto.userId.toString()
+      )
+    )
       throw new UnauthorizedException('Permission denied');
 
     // check logo
