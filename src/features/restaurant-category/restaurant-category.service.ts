@@ -33,6 +33,7 @@ export class RestaurantCategoryService {
         throw new InternalServerErrorException('File upload failed');
       dto.image = fileData;
     }
+    console.log(dto);
     return await this.restaurantCategoryModel.create(dto);
   }
 
@@ -71,6 +72,8 @@ export class RestaurantCategoryService {
         throw new InternalServerErrorException('File upload failed');
       dto.image = fileData;
     }
+
+    console.log(dto);
 
     return await this.restaurantCategoryModel.findByIdAndUpdate(id, dto);
   }
