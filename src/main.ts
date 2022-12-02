@@ -10,6 +10,7 @@ async function bootstrap() {
       'http://localhost:3000',
       'https://jellyfish-app-dxc3k.ondigitalocean.app',
       'https://honestelite.com',
+      'https://honest-elite-eq9w37oiv-kmasalam.vercel.app',
     ],
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
