@@ -1,5 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsArray, IsObject, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsEnum,
+  IsObject,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { collectionNames, FileData, FileDataSchema } from '../common';
 import { Types } from 'mongoose';
 import {
@@ -12,6 +18,7 @@ import {
   RatingReviewSchema,
 } from '../common/models/ratingReview.model';
 import { AskQueAns, AskQueAnsSchema } from '../common/models/askQue.model';
+import { RestaurantCategory } from './restaurant.type';
 
 export class OpenCloseTime {
   @ApiProperty()
@@ -109,6 +116,15 @@ export class Restaurant {
 
   @Prop({ type: [AskQueAnsSchema], default: [] })
   askQueAns: AskQueAns[];
+
+  @ApiProperty({ enum: RestaurantCategory })
+  @IsEnum(RestaurantCategory)
+  @Prop({
+    type: [RestaurantCategory],
+    required: true,
+    enum: RestaurantCategory,
+  })
+  restaurantCategory: RestaurantCategory[];
 }
 
 export type RestaurantDocument = Restaurant & Document;
