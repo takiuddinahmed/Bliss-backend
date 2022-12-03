@@ -120,7 +120,7 @@ export class Restaurant {
   @ApiProperty({ enum: RestaurantCategory })
   @IsEnum(RestaurantCategory)
   @Prop({
-    type: [RestaurantCategory],
+    type: [String],
     required: true,
     enum: RestaurantCategory,
   })
