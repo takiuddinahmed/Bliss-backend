@@ -125,6 +125,14 @@ export class Restaurant {
     // enum: RestaurantCategory,
   })
   restaurantCategory: RestaurantCategory[];
+
+  @ApiProperty()
+  @IsString()
+  @Prop({
+    type: String,
+    required: true,
+  })
+  country: string;
 }
 
 export type RestaurantDocument = Restaurant & Document;
