@@ -122,7 +122,7 @@ export class Restaurant {
   @Prop({
     type: [String],
     required: true,
-    enum: RestaurantCategory,
+    // enum: RestaurantCategory,
   })
   restaurantCategory: RestaurantCategory[];
 }
