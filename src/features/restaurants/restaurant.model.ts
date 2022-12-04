@@ -118,7 +118,7 @@ export class Restaurant {
   askQueAns: AskQueAns[];
 
   @ApiProperty({ enum: RestaurantCategory })
-  @IsEnum(RestaurantCategory)
+  @IsArray()
   @Prop({
     type: [String],
     required: true,
