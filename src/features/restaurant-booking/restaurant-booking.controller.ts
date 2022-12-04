@@ -41,6 +41,12 @@ export class RestaurantBookingController {
     return this.restaurantBookingService.findByRestaurant(restaurantId);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('user')
+  findByUser(@AuthUser() user: IAuthUser) {
+    return this.restaurantBookingService.findByUser(user?._id?.toString());
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.restaurantBookingService.findOne(id);

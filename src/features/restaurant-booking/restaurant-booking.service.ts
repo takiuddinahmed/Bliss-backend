@@ -33,6 +33,14 @@ export class RestaurantBookingService {
     return await this.restaurantBookingModel.find({ restaurantId });
   }
 
+  async findByUser(userId: string) {
+    return (
+      await this.restaurantBookingModel
+        .find({ userId })
+        .populate('restaurantId')
+    ).filter((d) => d.restaurantId);
+  }
+
   async findOne(id: string) {
     const restaurantBooking = await this.restaurantBookingModel.findById(id);
     if (!restaurantBooking) throw new NotFoundException('Restaurant not found');

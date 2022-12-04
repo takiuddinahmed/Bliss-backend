@@ -35,6 +35,16 @@ export class CouncilorAppoinmentService {
     });
   }
 
+  async findByUser(userId: string) {
+    return (
+      await this.councilorAppoinmentModel
+        .find({
+          userId,
+        })
+        .populate('councilorId')
+    ).filter((d) => d.councilorId);
+  }
+
   async findOne(id: string) {
     const councilorAppoinment = await this.councilorAppoinmentModel.findById(
       id,
