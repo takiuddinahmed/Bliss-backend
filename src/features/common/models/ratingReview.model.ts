@@ -5,9 +5,17 @@ import { Transform } from 'class-transformer';
 import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 import { Types } from 'mongoose';
 import { collectionNames } from '../config/collectionNames.config';
-@Schema({ timestamps: true })
+import { userPopulateSelect } from '../config/userVirtual.config';
+@Schema({
+  timestamps: true,
+  toJSON: { virtuals: true },
+})
 export class RatingReview {
-  @Prop({ type: Types.ObjectId, ref: collectionNames.user })
+  @Prop({
+    type: Types.ObjectId,
+    ref: collectionNames.user,
+    autopopulate: { select: userPopulateSelect },
+  })
   userId: Types.ObjectId;
 
   @ApiProperty()

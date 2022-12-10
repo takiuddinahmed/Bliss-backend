@@ -1,5 +1,9 @@
 export { CommentContentTypeEnum } from './enum/commentContentType.enum';
 export { collectionNames } from './config/collectionNames.config';
+export {
+  userVirtualOptions,
+  userPopulateSelect,
+} from './config/userVirtual.config';
 export { ContentTypeEnum } from './enum/contentType.enum';
 export {
   FileData,

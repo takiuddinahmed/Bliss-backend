@@ -6,7 +6,12 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { collectionNames, FileData, FileDataSchema } from '../common';
+import {
+  collectionNames,
+  FileData,
+  FileDataSchema,
+  userVirtualOptions,
+} from '../common';
 import { Types } from 'mongoose';
 import {
   councilorFee,
@@ -26,7 +31,10 @@ import {
 
 export type CouncilorDocument = Councilor & Document;
 
-@Schema({ timestamps: true })
+@Schema({
+  timestamps: true,
+  toJSON: { virtuals: true },
+})
 export class Councilor {
   @ApiProperty()
   @IsString()
@@ -140,6 +148,8 @@ export class Councilor {
 }
 
 export const CouncilorSchema = SchemaFactory.createForClass(Councilor);
+
+CouncilorSchema.virtual('user', userVirtualOptions);
 
 export interface CouncilorFiles {
   profilePic?: Express.Multer.File[];
