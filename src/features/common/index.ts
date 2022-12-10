@@ -4,6 +4,7 @@ export {
   userVirtualOptions,
   userPopulateSelect,
 } from './config/userVirtual.config';
+export { PopulatedUser } from './interface/populatedUser.interface';
 export { ContentTypeEnum } from './enum/contentType.enum';
 export {
   FileData,

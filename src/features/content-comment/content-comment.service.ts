@@ -21,7 +21,9 @@ export class ContentCommentService {
     @InjectModel(collectionNames.contentComment)
     private contentCommentModel: Model<ContentComment>,
     private spaceService: SpaceService,
-  ) {}
+  ) {
+    // this.deleteDeletedUserComment();
+  }
 
   async create(form: CreateContentCommentDto, file?: Express.Multer.File) {
     if (file) {
@@ -34,15 +36,11 @@ export class ContentCommentService {
   }
 
   async findAll() {
-    return await this.contentCommentModel
-      .find()
-      .populate('userId', 'firstName lastName');
+    return await this.contentCommentModel.find();
   }
 
   async findByContent(contentId: string) {
-    return this.contentCommentModel
-      .find({ contentId })
-      .populate('userId', 'firstName lastName');
+    return this.contentCommentModel.find({ contentId });
   }
 
   async likeDislikeCommnet(
@@ -144,5 +142,14 @@ export class ContentCommentService {
       await this.spaceService.deleteFile(contentComment.file);
     }
     return this.contentCommentModel.findByIdAndDelete(id);
+  }
+
+  async deleteDeletedUserComment() {
+    const contentComments = await this.contentCommentModel.find();
+    for (const contentComment of contentComments) {
+      if (!contentComment.userId) {
+        await contentComment.remove();
+      }
+    }
   }
 }

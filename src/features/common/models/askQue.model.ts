@@ -3,11 +3,17 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { collectionNames } from '../config/collectionNames.config';
+import { userPopulateSelect } from '../config/userVirtual.config';
+import { PopulatedUser } from '../interface/populatedUser.interface';
 
 @Schema({ timestamps: true })
 export class AskQueAns {
-  @Prop({ type: Types.ObjectId, ref: collectionNames.user })
-  userId: Types.ObjectId;
+  @Prop({
+    type: Types.ObjectId,
+    ref: collectionNames.user,
+    autopopulate: userPopulateSelect,
+  })
+  userId: Types.ObjectId | PopulatedUser;
 
   @IsString()
   @Prop({ type: String })

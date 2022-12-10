@@ -16,7 +16,7 @@ import { RestaurantBookingModule } from './features/restaurant-booking/restauran
 import { CouncilorAppoinmentModule } from './features/councilor-appoinment';
 import { RestaurantMenuModule } from './features/restaurant-menu/restaurant-menu.module';
 import { RestaurantCategoryModule } from './features/restaurant-category/restaurant-category.module';
-import * as mongooseAutopopulate from 'mongoose-autopopulate' 
+import * as mongooseAutopopulate from 'mongoose-autopopulate';
 
 @Module({
   imports: [

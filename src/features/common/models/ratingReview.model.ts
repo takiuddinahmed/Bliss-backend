@@ -6,6 +6,7 @@ import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 import { Types } from 'mongoose';
 import { collectionNames } from '../config/collectionNames.config';
 import { userPopulateSelect } from '../config/userVirtual.config';
+import { PopulatedUser } from '../interface/populatedUser.interface';
 @Schema({
   timestamps: true,
   toJSON: { virtuals: true },
@@ -16,7 +17,7 @@ export class RatingReview {
     ref: collectionNames.user,
     autopopulate: { select: userPopulateSelect },
   })
-  userId: Types.ObjectId;
+  userId: Types.ObjectId | PopulatedUser;
 
   @ApiProperty()
   @Transform(({ value }: { value: string | number }) =>

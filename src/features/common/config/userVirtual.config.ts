@@ -11,4 +11,3 @@ export const userVirtualOptions = {
   },
   autopopulate: true,
 };
-

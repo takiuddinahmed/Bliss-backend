@@ -1,33 +1,29 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import {
-  IsEnum,
-  IsMongoId,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  IsString,
-} from 'class-validator';
+import { IsEnum, IsMongoId, IsOptional, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import {
   collectionNames,
   CommentContentTypeEnum,
   FileData,
   FileDataSchema,
+  PopulatedUser,
+  userVirtualOptions,
 } from '../common';
 import {
   LikeDislike,
   LikeDislikeSchema,
 } from '../common/models/likeDislike.model';
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, toJSON: { virtuals: true } })
 export class ContentComment {
   @IsMongoId()
   @Prop({
     type: Types.ObjectId,
     required: true,
     ref: collectionNames.contentComment,
+    autopopulate: userVirtualOptions,
   })
-  contentId: Types.ObjectId | string;
+  contentId: Types.ObjectId | string | PopulatedUser;
 
   @Prop({
     type: Types.ObjectId,

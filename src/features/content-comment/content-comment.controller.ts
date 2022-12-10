@@ -23,11 +23,11 @@ import { ContentCommentService } from './content-comment.service';
 @ApiTags('Content Comment')
 @ApiBearerAuth()
 @Controller('content-comment')
-@UseGuards(JwtAuthGuard)
 export class ContentCommentController {
   constructor(private readonly contentCommentService: ContentCommentService) {}
 
   @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(
     @Body() form: CreateContentCommentDto,
@@ -53,6 +53,7 @@ export class ContentCommentController {
     return this.contentCommentService.findByContent(contentId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/like-dislike/:id/:likeDislike')
   async likeComment(
     @Param('id') id: string,
@@ -66,11 +67,13 @@ export class ContentCommentController {
     );
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() form: UpdateContnetCommentDto) {
     return this.contentCommentService.update(id, form);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.contentCommentService.remove(id);
