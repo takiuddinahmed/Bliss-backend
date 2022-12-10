@@ -45,6 +45,16 @@ export class ContentController {
     return await this.contentService.getContentByUser(user._id.toString());
   }
 
+  @Get('fun-video')
+  async getFunVideoContents() {
+    return await this.contentService.getFunVideoContents();
+  }
+
+  @Get('fun-video/category/:categoryId')
+  async getFunVideoBycategory(@Param('categoryId') categoryId: string) {
+    return await this.contentService.getFunVideoContents({ categoryId });
+  }
+
   @Get('channel/:channelId')
   async getContentByChannel(@Param('channelId') channelId: string) {
     return await this.contentService.getContentByChannel(channelId);

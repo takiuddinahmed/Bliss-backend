@@ -1,6 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsArray,
+  IsBoolean,
   IsEnum,
   IsMongoId,
   IsOptional,
@@ -15,6 +18,7 @@ import {
   FileData,
   FileDataSchema,
   SexualityEnum,
+  userVirtualOptions,
   VisualityEnum,
 } from '../common';
 import {
@@ -29,11 +33,12 @@ export class ContentView {
   viewCount: number;
 }
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, toJSON: { virtuals: true } })
 export class Content {
   @Prop({ type: Types.ObjectId, required: true, ref: collectionNames.user })
   userId: Types.ObjectId | string;
 
+  @ApiProperty()
   @IsArray()
   //@IsMongoId()
   @Prop([
@@ -41,17 +46,20 @@ export class Content {
   ])
   categoryId: Types.ObjectId[];
 
+  @ApiProperty()
   @IsOptional()
   @IsArray()
   @Prop([
     { type: Types.ObjectId, required: true, ref: collectionNames.subCategory },
   ])
-  subCategoryId: Types.ObjectId[];
+  subCategoryId?: Types.ObjectId[];
 
+  @ApiProperty()
   @IsMongoId()
   @Prop({ type: Types.ObjectId, required: true, ref: collectionNames.channel })
   channelId: Types.ObjectId;
 
+  @ApiProperty({ enum: SexualityEnum })
   @IsEnum(SexualityEnum)
   @Prop({
     type: String,
@@ -61,18 +69,30 @@ export class Content {
   })
   sexuality: SexualityEnum;
 
+  @ApiProperty({ enum: ContentTypeEnum })
   @IsEnum(ContentTypeEnum)
   @Prop({ type: String, required: true, enum: ContentTypeEnum })
   contentType: ContentTypeEnum;
 
+  @ApiProperty()
   @IsString()
   @Prop({ type: String, default: '' })
-  title: string;
+  title?: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   @Prop({ type: String, default: '' })
-  description: string;
+  description?: string;
+
+  @IsOptional()
+  @ApiProperty({ enum: ['true', 'false'] })
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value === 'true' : value,
+  )
+  @IsBoolean()
+  @Prop({ type: Boolean, default: false })
+  isFunVideo?: boolean;
 
   @Prop({ type: FileDataSchema })
   file: FileData;
@@ -80,16 +100,19 @@ export class Content {
   @Prop({ type: [FileDataSchema], default: [] })
   thumbnails: FileData[];
 
+  @ApiProperty()
   @IsOptional()
   @IsUrl()
   @Prop({ type: String })
   url?: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   @Prop({ type: String })
-  duration: string;
+  duration?: string;
 
+  @ApiProperty({ enum: VisualityEnum })
   @IsOptional()
   @IsEnum(VisualityEnum)
   @Prop({
@@ -130,5 +153,7 @@ export type ContentDocument = Content & Document;
 export type ContentDocumentWithId = ContentDocument & { _id: Types.ObjectId };
 
 const ContentSchema = SchemaFactory.createForClass(Content);
+
+ContentSchema.virtual('user', userVirtualOptions);
 
 export default ContentSchema;

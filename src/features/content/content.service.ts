@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { collectionNames, FileData } from '../common';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { SpaceService } from '../space/space.service';
@@ -57,6 +57,12 @@ export class ContentService {
 
   async getContentByChannel(channelId: string) {
     return await this.contentModel.find({ channelId }).sort({ updatedAt: -1 });
+  }
+
+  async getFunVideoContents(filter: FilterQuery<Content> = {}) {
+    return await this.contentModel
+      .find({ ...filter, isFunVideo: true })
+      .sort({ updatedAt: -1 });
   }
 
   async createContent(createContentDto: CreateContentDto, files: ContentFiles) {
