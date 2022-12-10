@@ -1,5 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { collectionNames, FileData, FileDataSchema } from 'src/features/common';
+import {
+  collectionNames,
+  FileData,
+  FileDataSchema,
+  userVirtualOptions,
+} from 'src/features/common';
 import { Types } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsMongoId, IsString } from 'class-validator';
@@ -13,7 +18,7 @@ import {
   RatingReviewSchema,
 } from '../common/models/ratingReview.model';
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, toJSON: { virtuals: true } })
 export class RestaurantMenu {
   @Prop({ type: Types.ObjectId, ref: collectionNames.user })
   userId: Types.ObjectId | string;
@@ -92,6 +97,18 @@ export class RestaurantMenu {
 export type RestaurantMenuDocument = RestaurantMenu & Document;
 export const RestaurantMenuSchema =
   SchemaFactory.createForClass(RestaurantMenu);
+
+RestaurantMenuSchema.virtual('user', userVirtualOptions);
+RestaurantMenuSchema.virtual('restaurant', {
+  ref: collectionNames.restaurant,
+  localField: 'restaurantId',
+  foreignField: '_id',
+  autopopulate: true,
+  justOne: true,
+  options: {
+    select: 'name website logo banner permalink followers',
+  },
+});
 
 export interface RestaurantMenuFiles {
   image: Express.Multer.File[];
