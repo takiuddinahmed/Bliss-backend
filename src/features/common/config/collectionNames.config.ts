@@ -12,4 +12,6 @@ export const collectionNames = {
   restaurantBooking: 'restaurant-bookings',
   restaurantMenu: 'restaurant-menus',
   restaurantCatogory: 'restaurant-categories',
+  resortType: 'resort-types',
+  resort: 'resorts',
 };
