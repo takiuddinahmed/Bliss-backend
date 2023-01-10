@@ -18,6 +18,7 @@ import { RestaurantMenuModule } from './features/restaurant-menu/restaurant-menu
 import { RestaurantCategoryModule } from './features/restaurant-category/restaurant-category.module';
 import { ResortTypeModule } from './features/resort-type/resort-type.module';
 import * as mongooseAutopopulate from 'mongoose-autopopulate';
+import { ResortModule } from './features/resort';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import * as mongooseAutopopulate from 'mongoose-autopopulate';
     RestaurantMenuModule,
     RestaurantCategoryModule,
     ResortTypeModule,
+    ResortModule,
   ],
 })
 export class AppModule {}
