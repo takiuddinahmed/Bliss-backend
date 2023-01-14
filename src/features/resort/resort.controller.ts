@@ -7,11 +7,15 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard, RolesGuard } from '../security';
-import { CreateResortDto, UpdateResortDto } from './resort-type.dto';
-import { ResortService } from './resort-type.service';
+import { AuthUser, IAuthUser, JwtAuthGuard, RolesGuard } from '../security';
+import { CreateResortDto, UpdateResortDto } from './resort.dto';
+import { ResortFiles } from './resort.model';
+import { ResortService } from './resort.service';
 
 @ApiTags('Resort')
 @ApiBearerAuth()
@@ -19,10 +23,23 @@ import { ResortService } from './resort-type.service';
 export class ResortController {
   constructor(private readonly ResortService: ResortService) {}
 
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'images', maxCount: 10 },
+      { name: 'videos', maxCount: 10 },
+      { name: 'banner', maxCount: 1 },
+      { name: 'packageImages', maxCount: 10 },
+    ]),
+  )
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  create(@Body() createResortDto: CreateResortDto) {
-    return this.ResortService.create(createResortDto);
+  create(
+    @Body() dto: CreateResortDto,
+    @AuthUser() user: IAuthUser,
+    @UploadedFiles() files: ResortFiles,
+  ) {
+    dto.userId = user?._id?.toString();
+    return this.ResortService.create(dto, files);
   }
 
   @Get()
@@ -35,12 +52,17 @@ export class ResortController {
     return this.ResortService.getById(id);
   }
 
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'images', maxCount: 10 },
+      { name: 'videos', maxCount: 10 },
+      { name: 'banner', maxCount: 1 },
+      { name: 'packageImages', maxCount: 10 },
+    ]),
+  )
   @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  update(
-    @Param('id') id: string,
-    @Body() updateResortDto: UpdateResortDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateResortDto: UpdateResortDto) {
     return this.ResortService.update(id, updateResortDto);
   }
 

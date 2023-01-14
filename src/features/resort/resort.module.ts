@@ -3,16 +3,18 @@ import { ResortService } from './resort.service';
 import { ResortController } from './resort.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { collectionNames } from '../common';
-import { ResortSchema } from './resort.model';
+import { default as ResortSchema } from './resort.model';
+import { SpaceModule } from '../space';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
-        name: collectionNames.Resort,
+        name: collectionNames.resort,
         schema: ResortSchema,
       },
     ]),
+    SpaceModule,
   ],
   controllers: [ResortController],
   providers: [ResortService],
