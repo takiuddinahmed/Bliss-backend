@@ -11,5 +11,5 @@ export {
   FileDataDocument,
   FileDataSchema,
 } from './models/fileData.model';
-export { SexualityEnum } from './enum/sexuality.enum';
+export { LifeStyleEnum as SexualityEnum } from './enum/life-style.enum';
 export { VisualityEnum } from './enum/visuality.enum';

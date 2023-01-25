@@ -1,14 +1,5 @@
 import { OmitType, PartialType } from '@nestjs/mapped-types';
-import { IsString } from 'class-validator';
+import { Category } from './category.model';
 
-export class CreateCategoryDto {
-    @IsString()
-    name: string;
-
-    @IsString()
-    permalink: string;
-}
-
-export class Partial extends PartialType(CreateCategoryDto) {}
-export class UpdateCategoryDto extends OmitType(Partial, ['permalink'] as const) {}
-
+export class CreateCategoryDto extends Category {}
+export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {}

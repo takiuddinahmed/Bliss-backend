@@ -1,31 +1,3 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsString,
-  MinLength,
-  ValidateIf,
-} from 'class-validator';
-import { ROLE } from '../user.model';
+import { User } from '../user.model';
 
-export class RegisterDto {
-  @IsString()
-  firstName: string;
-
-  @IsString()
-  lastName: string;
-
-  @IsString()
-  @IsEmail()
-  email: string;
-
-  @IsString()
-  phoneNumber: string;
-
-  @IsString()
-  @MinLength(6)
-  password: string;
-
-  @IsEnum(ROLE)
-  @ValidateIf((obj, value) => value != null)
-  role: ROLE;
-}
+export class RegisterDto extends User {}

@@ -18,6 +18,7 @@ import { RestaurantMenuModule } from './features/restaurant-menu/restaurant-menu
 import { RestaurantCategoryModule } from './features/restaurant-category/restaurant-category.module';
 import { ResortTypeModule } from './features/resort-type/resort-type.module';
 import * as mongooseAutopopulate from 'mongoose-autopopulate';
+import * as slug from 'mongoose-slug-updater';
 import { ResortModule } from './features/resort';
 
 @Module({
@@ -26,16 +27,12 @@ import { ResortModule } from './features/resort';
     MongooseModule.forRoot(process.env.MONGODB_URL || '', {
       connectionFactory: (connection) => {
         connection.plugin(mongooseAutopopulate);
+        connection.plugin(slug);
         return connection;
       },
     }),
     UserModule,
     AuthModule,
-    // GraphQLModule.forRoot<ApolloDriverConfig>({
-    //   driver: ApolloDriver,
-    //   autoSchemaFile: join(process.cwd(), 'src/features/schema.gql'),
-    //   sortSchema: true,
-    // }),
     CategoryModule,
     ContentModule,
     ContentTypeModule,

@@ -19,25 +19,27 @@ import { CategoryService } from './category.service';
 @ApiBearerAuth()
 @Controller('category')
 export class CategoryController {
-  constructor(private readonly categoryServicec: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard, RolesGuard)
   async getAll() {
-    return await this.categoryServicec.getCategories();
+    return await this.categoryService.getCategories();
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(ROLE.ADMIN)
   async getCategory(@Param('id') id: string) {
-    return await this.categoryServicec.getCategory(id);
+    return await this.categoryService.getCategory(id);
+  }
+
+  @Get('permalink/:permalink')
+  async getCategoryByPermalink(@Param('permalink') permalink: string) {
+    return await this.categoryService.getCategoryByPermalink(permalink);
   }
 
   @Post()
   @UseGuards(JwtAuthGuard)
   async create(@Body() createCategoryDto: CreateCategoryDto) {
-    return await this.categoryServicec.createCategory(createCategoryDto);
+    return await this.categoryService.createCategory(createCategoryDto);
   }
 
   @Patch(':id')
@@ -47,13 +49,14 @@ export class CategoryController {
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return await this.categoryServicec.updateCategory(id, updateCategoryDto);
+    console.log('Update');
+    return await this.categoryService.updateCategory(id, updateCategoryDto);
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(ROLE.ADMIN)
   async deleteCategory(@Param('id') id: string) {
-    return await this.categoryServicec.deleteCategory(id);
+    return await this.categoryService.deleteCategory(id);
   }
 }

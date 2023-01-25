@@ -1,0 +1,15 @@
+export enum LifeStyleEnum {
+  SIDECHICK = 'sidechick',
+  LITTLE_PEOPLE = 'little_people',
+  SENIOR = 'senior',
+  DISABLED = 'disabled',
+  CHRONIC_CONDITION = 'chronic_condition',
+  LESBIAN = 'lesbian',
+  GAY = 'gay',
+  BI_SEXUAL = 'bi_sexual',
+  TRANSGENDER = 'transgender',
+  QUEER = 'queer',
+  LGBTQ = 'lgbtq',
+  STRIGHT = 'stright',
+  COMMON = 'common',
+}

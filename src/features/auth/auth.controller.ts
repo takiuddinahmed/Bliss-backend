@@ -15,7 +15,7 @@ export class AuthController {
   @Get()
   @UseGuards(JwtAuthGuard)
   async verify(@AuthUser() user: IAuthUser) {
-    return await this.authService.verify(user._id);
+    return await this.authService.verify(user?._id?.toString());
   }
 
   @Post('login')

@@ -39,7 +39,7 @@ export class UserController {
   @Get('profile')
   @UseGuards(JwtAuthGuard)
   async getOne(@AuthUser() user: IAuthUser): Promise<User> {
-    return await this.userService.getOne(user._id);
+    return await this.userService.getOne(user._id.toString());
   }
 
   @UseInterceptors(FileInterceptor('proPic'))
@@ -51,7 +51,7 @@ export class UserController {
     @UploadedFile() proPicFile?: Express.Multer.File,
   ): Promise<User> {
     return await this.userService.editUser(
-      authUser._id,
+      authUser._id.toString(),
       editUserDto,
       proPicFile,
     );
@@ -63,12 +63,15 @@ export class UserController {
     @AuthUser() authUser: IAuthUser,
     @Body() editPassDto: EditPassDto,
   ): Promise<User> {
-    return await this.userService.editPassword(authUser._id, editPassDto);
+    return await this.userService.editPassword(
+      authUser._id.toString(),
+      editPassDto,
+    );
   }
 
   @Delete()
   @UseGuards(JwtAuthGuard)
   async delete(@AuthUser() authUser: IAuthUser) {
-    return await this.userService.deleteUser(authUser._id);
+    return await this.userService.deleteUser(authUser._id.toString());
   }
 }

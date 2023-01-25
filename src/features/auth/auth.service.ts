@@ -1,6 +1,5 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload, JwtPayloadWithToken } from 'src/features/security';
 import { UserService } from 'src/features/user';
 import { comparePassword } from 'src/features/utils/bcrypt.util';
 import { LoginDto } from './dto/login.dto';
@@ -15,21 +14,19 @@ export class AuthService {
     return await this.userService.getOne(id);
   }
 
-  async login(loginDto: LoginDto): Promise<JwtPayloadWithToken> {
+  async login(loginDto: LoginDto) {
     const user = await this.userService.getUserByEmail(loginDto.email);
     if (!user) throw new NotAcceptableException('Invalid credential');
     const passwordValid = comparePassword(user.password, loginDto.password);
     if (!passwordValid) throw new NotAcceptableException('Invalid credential');
 
-    const payload: JwtPayload = {
-      firstName: user.firstName,
-      lastName: user.lastName,
+    const payload = {
       _id: user.id,
-      email: user.email,
-      role: user.role,
     };
 
+    const { password, ...publicUserData } = user.toJSON();
+
     const accessToken = this.jwtService.sign(payload);
-    return { accessToken, ...payload };
+    return { accessToken, ...publicUserData };
   }
 }
