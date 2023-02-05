@@ -20,6 +20,7 @@ import { ResortTypeModule } from './features/resort-type/resort-type.module';
 import * as mongooseAutopopulate from 'mongoose-autopopulate';
 import * as slug from 'mongoose-slug-updater';
 import { ResortModule } from './features/resort';
+import { PaymentModule } from './features/payment/payment.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { ResortModule } from './features/resort';
     RestaurantCategoryModule,
     ResortTypeModule,
     ResortModule,
+    PaymentModule,
   ],
 })
 export class AppModule {}
