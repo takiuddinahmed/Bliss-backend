@@ -17,7 +17,7 @@ import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { NewsfeedFiles } from './newsfeed.model';
 
-@ApiTags('Content')
+@ApiTags('Newsfeed')
 @ApiBearerAuth()
 @Controller('newsfeed')
 export class NewsfeedController {
