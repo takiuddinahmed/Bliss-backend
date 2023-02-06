@@ -14,4 +14,5 @@ export const collectionNames = {
   restaurantCatogory: 'restaurant-categories',
   resortType: 'resort-types',
   resort: 'resorts',
+  newsfeed: 'newsfeeds',
 };
