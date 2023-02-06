@@ -22,7 +22,7 @@ import { User } from '../user';
 @Schema({ timestamps: true, toJSON: { virtuals: true } })
 export class Newsfeed {
   @Prop({ type: Types.ObjectId, required: true, ref: collectionNames.user })
-  userId: Types.ObjectId;
+  userId: Types.ObjectId | string;
 
   @IsOptional()
   @ApiProperty({ enum: ['true', 'false'] })
