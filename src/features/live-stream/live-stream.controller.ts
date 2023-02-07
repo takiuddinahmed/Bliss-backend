@@ -22,7 +22,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class LiveStreamController {
   constructor(private readonly liveStreamService: LiveStreamService) {}
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createLiveStreamDto: CreateLiveStreamDto) {
     try {
@@ -32,16 +32,19 @@ export class LiveStreamController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.liveStreamService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.liveStreamService.findOne(+id);
+    return this.liveStreamService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -50,8 +53,9 @@ export class LiveStreamController {
     return this.liveStreamService.update(+id, updateLiveStreamDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.liveStreamService.remove(+id);
+    return this.liveStreamService.remove(id);
   }
 }
