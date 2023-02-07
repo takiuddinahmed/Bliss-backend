@@ -33,10 +33,10 @@ export class Newsfeed {
   @Prop({ type: Boolean, default: false })
   anonymous?: boolean;
 
-  @ApiProperty({ enum: ContentTypeEnum, isArray: true })
-  @IsEnum(ContentTypeEnum, { each: true })
-  @Prop({ type: [String], enum: ContentTypeEnum, required: true })
-  contentType: ContentTypeEnum[];
+  @ApiProperty({ enum: ContentTypeEnum })
+  @IsEnum(ContentTypeEnum)
+  @Prop({ type: String, enum: ContentTypeEnum, required: true })
+  contentType: ContentTypeEnum;
 
   @ApiProperty({ enum: LifeStyleEnum, isArray: true })
   @IsEnum(LifeStyleEnum, { each: true })
@@ -49,9 +49,11 @@ export class Newsfeed {
   @Prop({ type: String, default: '' })
   description?: string;
 
+  @ApiProperty()
   @Prop({ type: [FileDataSchema] })
   files: FileData[];
 
+  @ApiProperty()
   @Prop({ type: [FileDataSchema], default: [] })
   thumbnails?: FileData[];
 
