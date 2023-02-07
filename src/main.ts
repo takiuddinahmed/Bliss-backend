@@ -14,7 +14,7 @@ async function bootstrap() {
       'https://honest-elite-eq9w37oiv-kmasalam.vercel.app',
     ],
   });
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('Honest Elite API Documentations')

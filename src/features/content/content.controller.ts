@@ -7,14 +7,17 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { SexualityEnum } from '../common';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
+import { ContentVideoQueryDto } from './content-video-query.dto';
 import { ContentFiles } from './content.model';
 import { ContentService } from './content.service';
 import { CreateContentDto } from './create-content.dto';
@@ -31,9 +34,43 @@ export class ContentController {
     return await this.contentService.getContents();
   }
 
+  @ApiQuery({
+    name: 'from',
+    type: Number,
+    required: false,
+    description: 'Return data from. Default 0',
+  })
+  @ApiQuery({
+    name: 'count',
+    type: Number,
+    required: false,
+    description: 'How many data requered. Default 10',
+  })
+  @ApiQuery({
+    name: 'categoryId',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'subCategoryId',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'channelId',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'sexuality',
+    type: String,
+    enum: SexualityEnum,
+    required: false,
+  })
   @Get('video')
-  async getVideo() {
-    return await this.contentService.getVideos();
+  async getVideo(@Query() query: ContentVideoQueryDto) {
+    const { from, count, ...filter } = query;
+    return await this.contentService.getVideos(filter, { from, count });
   }
 
   @Get('favorites')
