@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import {
   IsBoolean,
   IsEnum,
+  IsMongoId,
   IsOptional,
   IsString,
   ValidateIf,
@@ -21,7 +22,6 @@ enum Status {
 type AudienceDocument = Audience & Document;
 
 @Schema()
-
 class Audience {
   @Prop({ type: Types.ObjectId, ref: collectionNames.user })
   userId: Types.ObjectId | string;
@@ -38,6 +38,7 @@ const AudienceSchema = SchemaFactory.createForClass(Audience);
 export type LiveStreamDocument = LiveStream & Document;
 @Schema({ timestamps: true })
 export class LiveStream {
+  @IsMongoId()
   @Prop({
     type: Types.ObjectId,
     ref: collectionNames.user,
@@ -49,14 +50,15 @@ export class LiveStream {
   @Prop({ type: String, required: true })
   title: string;
 
-  @IsString()
-  @Prop({ type: String })
-  slug: string;
+  @IsOptional()
+  @Prop({ type: String, required: true, unique: true })
+  permalink: string;
 
   @IsString()
   @Prop({ type: String, required: true })
   description: string;
 
+  @IsMongoId()
   @Prop({
     type: Types.ObjectId,
     ref: collectionNames.category,
@@ -70,6 +72,7 @@ export class LiveStream {
   @Prop({ type: String, required: true })
   lifeStyle: LifeStyleEnum;
 
+  @IsOptional()
   @ApiProperty({ enum: ['true', 'false'] })
   @Transform(({ value }) =>
     typeof value === 'string' ? value === 'true' : value,

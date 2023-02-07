@@ -7,12 +7,29 @@ import {
 } from '@nestjs/common';
 import { CreateLiveStreamDto } from './dto/create-live-stream.dto';
 import { UpdateLiveStreamDto } from './dto/update-live-stream.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { collectionNames } from '../common';
+import { Model } from 'mongoose';
+import { LiveStreamDocument } from './live-stream.model';
+import { generatePermalink } from '../utils';
 
 @Injectable()
 export class LiveStreamService {
-  create(createLiveStreamDto: CreateLiveStreamDto) {
+  constructor(
+    @InjectModel(collectionNames.livestream)
+    private liveStreamModel: Model<LiveStreamDocument>,
+  ) {}
+
+  async create(createLiveStreamDto: CreateLiveStreamDto) {
     try {
-      return 'This action adds a new liveStream';
+      const permalink = await generatePermalink(
+        createLiveStreamDto.title,
+        this.liveStreamModel,
+      );
+      return await this.liveStreamModel.create({
+        ...createLiveStreamDto,
+        permalink,
+      });
     } catch (err) {
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
     }
