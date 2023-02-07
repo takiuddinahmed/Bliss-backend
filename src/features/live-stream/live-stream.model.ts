@@ -17,6 +17,11 @@ enum Status {
   INVITED = 'INVITED',
   LEFT = 'LEFT',
 }
+
+type AudienceDocument = Audience & Document;
+
+@Schema()
+
 class Audience {
   @Prop({ type: Types.ObjectId, ref: collectionNames.user })
   userId: Types.ObjectId | string;
@@ -27,6 +32,8 @@ class Audience {
   @Prop({ type: String, required: true })
   status: Status;
 }
+
+const AudienceSchema = SchemaFactory.createForClass(Audience);
 
 export type LiveStreamDocument = LiveStream & Document;
 @Schema({ timestamps: true })
@@ -73,10 +80,10 @@ export class LiveStream {
 
   @IsOptional()
   @Prop({
-    type: [Audience],
+    type: [AudienceSchema],
     default: [],
   })
-  audiences: Audience[];
+  audiences: AudienceDocument[];
 }
 
 export const LiveStreamSchema = SchemaFactory.createForClass(LiveStream);

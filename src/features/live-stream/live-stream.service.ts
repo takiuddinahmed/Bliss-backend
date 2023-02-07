@@ -1,11 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { CreateLiveStreamDto } from './dto/create-live-stream.dto';
 import { UpdateLiveStreamDto } from './dto/update-live-stream.dto';
 
 @Injectable()
 export class LiveStreamService {
   create(createLiveStreamDto: CreateLiveStreamDto) {
-    return 'This action adds a new liveStream';
+    try {
+      return 'This action adds a new liveStream';
+    } catch (err) {
+      throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
+    }
   }
 
   findAll() {
