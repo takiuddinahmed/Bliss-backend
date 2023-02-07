@@ -22,6 +22,7 @@ import * as slug from 'mongoose-slug-updater';
 import { ResortModule } from './features/resort';
 import { PaymentModule } from './features/payment/payment.module';
 import { NewsfeedModule } from './features/newsfeed';
+import { LiveStreamModule } from './features/live-stream/live-stream.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { NewsfeedModule } from './features/newsfeed';
     ResortModule,
     PaymentModule,
     NewsfeedModule,
+    LiveStreamModule,
   ],
 })
 export class AppModule {}
