@@ -39,8 +39,16 @@ export class LiveStreamService {
     return `This action returns all liveStream`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} liveStream`;
+  async findOne(id: string) {
+    try {
+      const record = await this.liveStreamModel.findById(id);
+      if (!record) {
+        return Promise.reject(new NotFoundException('Livestream not found'));
+      }
+      return record;
+    } catch (err) {
+      throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
+    }
   }
 
   update(id: number, updateLiveStreamDto: UpdateLiveStreamDto) {
