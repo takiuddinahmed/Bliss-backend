@@ -11,7 +11,7 @@ enum Status {
   INVITED = 'INVITED',
   LEFT = 'LEFT',
 }
-export class Audience {
+class Audience {
   @Prop({ type: Types.ObjectId, ref: collectionNames.user })
   userId: Types.ObjectId | string;
 
