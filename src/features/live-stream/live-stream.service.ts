@@ -55,7 +55,11 @@ export class LiveStreamService {
     return `This action updates a #${id} liveStream`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} liveStream`;
+  remove(id: string) {
+    try {
+      return this.liveStreamModel.findByIdAndDelete(id);
+    } catch (e) {
+      throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
+    }
   }
 }
