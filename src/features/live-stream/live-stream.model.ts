@@ -54,6 +54,10 @@ export class LiveStream {
   @Prop({ type: String, required: true, unique: true })
   permalink: string;
 
+  @IsOptional()
+  @Prop({ type: String, unique: true })
+  url: string;
+
   @IsString()
   @Prop({ type: String, required: true })
   description: string;
