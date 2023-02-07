@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { LiveStreamService } from './live-stream.service';
 import { CreateLiveStreamDto } from './dto/create-live-stream.dto';
 import { UpdateLiveStreamDto } from './dto/update-live-stream.dto';
@@ -23,7 +31,10 @@ export class LiveStreamController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLiveStreamDto: UpdateLiveStreamDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateLiveStreamDto: UpdateLiveStreamDto,
+  ) {
     return this.liveStreamService.update(+id, updateLiveStreamDto);
   }
 

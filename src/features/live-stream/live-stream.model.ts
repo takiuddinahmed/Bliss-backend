@@ -1,5 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsBoolean, IsEnum, IsString, ValidateIf } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsOptional,
+  IsString,
+  ValidateIf,
+} from 'class-validator';
 import { Types } from 'mongoose';
 import { collectionNames } from '../common';
 import { ApiProperty } from '@nestjs/swagger';
@@ -65,6 +71,7 @@ export class LiveStream {
   @Prop({ type: Boolean, default: false })
   isPrivate?: boolean;
 
+  @IsOptional()
   @Prop({
     type: [Audience],
     default: [],
