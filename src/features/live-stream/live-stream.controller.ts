@@ -9,12 +9,14 @@ import {
   UseGuards,
   HttpException,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { LiveStreamService } from './live-stream.service';
 import { CreateLiveStreamDto } from './dto/create-live-stream.dto';
 import { UpdateLiveStreamDto } from './dto/update-live-stream.dto';
 import { JwtAuthGuard, Roles, RolesGuard } from '../security';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { SearchLiveStreamDTO } from './dto/search-live-stream.dto';
 
 @ApiTags('LiveStream')
 @ApiBearerAuth()
@@ -34,8 +36,8 @@ export class LiveStreamController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.liveStreamService.findAll();
+  findAll(@Query() query: SearchLiveStreamDTO) {
+    return this.liveStreamService.findAll(query);
   }
 
   @UseGuards(JwtAuthGuard)

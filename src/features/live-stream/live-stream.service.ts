@@ -7,11 +7,12 @@ import {
 } from '@nestjs/common';
 import { CreateLiveStreamDto } from './dto/create-live-stream.dto';
 import { UpdateLiveStreamDto } from './dto/update-live-stream.dto';
+import { SearchLiveStreamDTO } from './dto/search-live-stream.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { collectionNames } from '../common';
 import { Model } from 'mongoose';
 import { LiveStreamDocument } from './live-stream.model';
-import { generatePermalink } from '../utils';
+import { generatePermalink, createSearchQuery } from '../utils';
 
 @Injectable()
 export class LiveStreamService {
@@ -35,8 +36,22 @@ export class LiveStreamService {
     }
   }
 
-  findAll() {
-    return `This action returns all liveStream`;
+  findAll(query: SearchLiveStreamDTO) {
+    try {
+      const searchQuery = createSearchQuery(query);
+      const limit: number = (query && query.limit) || 10;
+      const skip: number = (query && query.skip) || 0;
+      const cursor = this.liveStreamModel
+        .find(searchQuery)
+        .limit(limit)
+        .skip(skip);
+      if (query.hasOwnProperty('sort') && query.sort) {
+        cursor.sort(JSON.parse(query.sort));
+      }
+      return cursor.exec();
+    } catch (err) {
+      throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
+    }
   }
 
   async findOne(id: string) {
@@ -52,7 +67,10 @@ export class LiveStreamService {
   }
 
   update(id: number, updateLiveStreamDto: UpdateLiveStreamDto) {
-    return `This action updates a #${id} liveStream`;
+    try {
+    } catch (err) {
+      throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
+    }
   }
 
   remove(id: string) {
