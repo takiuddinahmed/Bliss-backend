@@ -58,7 +58,7 @@ export class LiveStreamService {
   remove(id: string) {
     try {
       return this.liveStreamModel.findByIdAndDelete(id);
-    } catch (e) {
+    } catch (err) {
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
     }
   }
