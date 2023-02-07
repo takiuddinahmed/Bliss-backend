@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
-import { collectionNames, FileData } from '../common';
+import { collectionNames, FileData, ContentTypeEnum } from '../common';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
@@ -43,6 +43,15 @@ export class ContentService {
 
   async getContents() {
     return await this.contentModel.find().sort({ updatedAt: -1 });
+  }
+
+  async getVideos(filter: FilterQuery<Content> = {}) {
+    return await this.contentModel
+      .find({
+        ...filter,
+        contentType: ContentTypeEnum.VIDEO,
+      })
+      .sort({ updatedAt: -1 });
   }
 
   async getContent(permalink: string) {

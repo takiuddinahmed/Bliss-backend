@@ -31,6 +31,11 @@ export class ContentController {
     return await this.contentService.getContents();
   }
 
+  @Get('video')
+  async getVideo() {
+    return await this.contentService.getVideos();
+  }
+
   @Get('favorites')
   @UseGuards(JwtAuthGuard)
   async getUsersFavorites(@AuthUser() user: IAuthUser) {
