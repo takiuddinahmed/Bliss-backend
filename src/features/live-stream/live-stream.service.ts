@@ -12,7 +12,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { collectionNames } from '../common';
 import { Model } from 'mongoose';
 import { LiveStreamDocument } from './live-stream.model';
-import { generatePermalink, createSearchQuery } from '../utils';
+import {
+  generatePermalink,
+  createSearchQuery,
+  subDocUpdateWithArray,
+} from '../utils';
 
 @Injectable()
 export class LiveStreamService {
@@ -69,10 +73,23 @@ export class LiveStreamService {
 
   async update(id: string, updateLiveStreamDto: UpdateLiveStreamDto) {
     try {
-      const livestream = await this.liveStreamModel.findById(id);
+      const livestream = await this.liveStreamModel.findOne({
+        _id: id,
+      });
       if (!livestream) {
         throw new NotFoundException('Livestream not found');
       }
+      if (
+        updateLiveStreamDto &&
+        updateLiveStreamDto.hasOwnProperty('audiences')
+      ) {
+        const audiences = livestream.get('audiences') || [];
+        updateLiveStreamDto.audiences = subDocUpdateWithArray(
+          audiences,
+          updateLiveStreamDto.audiences,
+        );
+      }
+      return await livestream.set(updateLiveStreamDto).save();
     } catch (err) {
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
     }

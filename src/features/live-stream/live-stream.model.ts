@@ -31,6 +31,15 @@ export class Audience {
   @ApiProperty()
   @Prop({ type: String, required: true })
   status: Status;
+
+  @IsOptional()
+  @ApiProperty({ enum: ['true', 'false'] })
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value === 'true' : value,
+  )
+  @IsBoolean()
+  @Prop({ type: Boolean, default: false })
+  isDeleted?: boolean;
 }
 
 const AudienceSchema = SchemaFactory.createForClass(Audience);
