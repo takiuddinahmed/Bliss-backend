@@ -25,7 +25,7 @@ export class NewsfeedController {
 
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'file', maxCount: 10 },
+      { name: 'files', maxCount: 10 },
       { name: 'thumbnails', maxCount: 5 },
     ]),
   )
@@ -57,7 +57,7 @@ export class NewsfeedController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'file', maxCount: 10 },
+      { name: 'files', maxCount: 10 },
       { name: 'thumbnails', maxCount: 5 },
     ]),
   )
