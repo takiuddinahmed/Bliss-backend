@@ -51,11 +51,11 @@ export class Newsfeed {
   description?: string;
 
   @ApiProperty()
-  @Prop({ type: [FileDataSchema] })
+  @Prop({ type: Array<FileData>, default: [] })
   files: FileData[];
 
   @ApiProperty()
-  @Prop({ type: [FileDataSchema], default: [] })
+  @Prop({ type: Array<FileData>, default: [] })
   thumbnails?: FileData[];
 
   @ApiProperty()
@@ -71,7 +71,7 @@ export class Newsfeed {
     type: String,
     enum: VisualityEnum,
     required: true,
-    default: VisualityEnum.PRIVATE,
+    default: VisualityEnum.PUBLIC,
   })
   visualiTy: VisualityEnum;
 
