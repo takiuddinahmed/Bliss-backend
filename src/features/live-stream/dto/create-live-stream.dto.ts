@@ -1,12 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-    IsArray,
-    IsBoolean,
-    IsEnum,
-    IsMongoId, IsOptional,
-    IsString,
-    ValidateIf,
-    ValidateNested,
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsMongoId,
+  IsOptional,
+  IsString,
+  ValidateIf,
+  ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Types } from 'mongoose';
