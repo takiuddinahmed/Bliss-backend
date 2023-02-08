@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
 import { HydratedDocument, Types } from 'mongoose';
+import { v4 as uuidV4 } from 'uuid';
 import {
   collectionNames,
   ContentTypeEnum,
@@ -76,8 +77,7 @@ export class Newsfeed {
 
   @Prop({
     type: String,
-    required: true,
-    unique: true,
+    default: () => uuidV4(),
   })
   permalink: string;
 

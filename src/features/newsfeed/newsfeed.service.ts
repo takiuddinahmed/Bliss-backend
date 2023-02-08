@@ -39,6 +39,12 @@ export class NewsfeedService {
     return newsfeed;
   }
 
+  async findByPermalink(permalink: string) {
+    const newsfeed = await this.newsfeedModel.findOne({ permalink });
+    if (!newsfeed) throw new NotFoundException('Newsfeed not found');
+    return newsfeed;
+  }
+
   async update(
     id: string,
     dto: UpdateNewsfeedDto,
@@ -56,13 +62,18 @@ export class NewsfeedService {
       ...newsfeed.thumbnails,
       ...(await this.multiUpload(files.thumbnails)),
     ];
-    newsfeed.updateOne(dto);
+    await newsfeed.updateOne(dto);
     return await this.findById(id);
   }
 
-  async remove(id: string) {
+  async remove(id: string, user: IAuthUser) {
     const newsfeed = await this.findById(id);
-    newsfeed.remove();
+    if (
+      user?.role !== ROLE.ADMIN ||
+      user?.id?.toString() !== newsfeed?.userId?.toString()
+    )
+      throw new UnauthorizedException('unauthorise');
+    await newsfeed.remove();
     return newsfeed;
   }
 

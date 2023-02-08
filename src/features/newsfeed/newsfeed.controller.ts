@@ -49,6 +49,12 @@ export class NewsfeedController {
     return await this.newsfeedService.findById(id);
   }
 
+  @Get('permalink/:permalink')
+  async findByPermalink(@Param('permalink') permalink: string) {
+    return await this.newsfeedService.findByPermalink(permalink);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'file', maxCount: 10 },
@@ -65,8 +71,9 @@ export class NewsfeedController {
     return this.newsfeedService.update(id, updateNewsfeedDto, user, files);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.newsfeedService.remove(id);
+  remove(@Param('id') id: string, @AuthUser() user: IAuthUser) {
+    return this.newsfeedService.remove(id, user);
   }
 }
