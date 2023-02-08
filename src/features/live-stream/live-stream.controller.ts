@@ -17,6 +17,7 @@ import { UpdateLiveStreamDto } from './dto/update-live-stream.dto';
 import { JwtAuthGuard, Roles, RolesGuard } from '../security';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SearchLiveStreamDTO } from './dto/search-live-stream.dto';
+import { AuthUser } from '../security/get-user.decorator';
 
 @ApiTags('LiveStream')
 @ApiBearerAuth()
@@ -26,9 +27,9 @@ export class LiveStreamController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createLiveStreamDto: CreateLiveStreamDto) {
+  create(@AuthUser() user, @Body() createLiveStreamDto: CreateLiveStreamDto) {
     try {
-      return this.liveStreamService.create(createLiveStreamDto);
+      return this.liveStreamService.create(user, createLiveStreamDto);
     } catch (err) {
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
     }
@@ -52,7 +53,7 @@ export class LiveStreamController {
     @Param('id') id: string,
     @Body() updateLiveStreamDto: UpdateLiveStreamDto,
   ) {
-    return this.liveStreamService.update(+id, updateLiveStreamDto);
+    return this.liveStreamService.update(id, updateLiveStreamDto);
   }
 
   @UseGuards(JwtAuthGuard)

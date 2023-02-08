@@ -13,7 +13,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { LifeStyleEnum } from '../common/enum';
 import { Transform } from 'class-transformer';
 
-enum Status {
+export enum Status {
   JOINED = 'JOINED',
   INVITED = 'INVITED',
   LEFT = 'LEFT',
@@ -22,7 +22,7 @@ enum Status {
 type AudienceDocument = Audience & Document;
 
 @Schema()
-class Audience {
+export class Audience {
   @Prop({ type: Types.ObjectId, ref: collectionNames.user })
   userId: Types.ObjectId | string;
 

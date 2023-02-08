@@ -21,7 +21,7 @@ export class LiveStreamService {
     private liveStreamModel: Model<LiveStreamDocument>,
   ) {}
 
-  async create(createLiveStreamDto: CreateLiveStreamDto) {
+  async create(user, createLiveStreamDto: CreateLiveStreamDto) {
     try {
       const permalink = await generatePermalink(
         createLiveStreamDto.title,
@@ -29,6 +29,7 @@ export class LiveStreamService {
       );
       return await this.liveStreamModel.create({
         ...createLiveStreamDto,
+        userId: user._id,
         permalink,
       });
     } catch (err) {
@@ -66,8 +67,12 @@ export class LiveStreamService {
     }
   }
 
-  update(id: number, updateLiveStreamDto: UpdateLiveStreamDto) {
+  async update(id: string, updateLiveStreamDto: UpdateLiveStreamDto) {
     try {
+      const livestream = await this.liveStreamModel.findById(id);
+      if (!livestream) {
+        throw new NotFoundException('Livestream not found');
+      }
     } catch (err) {
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
     }
