@@ -5,13 +5,18 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { collectionNames, FileData } from '../common';
+import { FilterQuery, Model } from 'mongoose';
+import {
+  collectionNames,
+  FileData,
+  PaginationQuery,
+  VisualityEnum,
+} from '../common';
 import { IAuthUser } from '../security';
 import { SpaceService } from '../space/space.service';
 import { ROLE } from '../user/user.model';
 import { CreateNewsfeedDto, UpdateNewsfeedDto } from './newsfeed.dto';
-import { NewsfeedDocument, NewsfeedFiles } from './newsfeed.model';
+import { Newsfeed, NewsfeedDocument, NewsfeedFiles } from './newsfeed.model';
 
 @Injectable()
 export class NewsfeedService {
@@ -27,6 +32,20 @@ export class NewsfeedService {
     dto.thumbnails = await this.multiUpload(files?.thumbnails);
     const newsfeed = await this.newsfeedModel.create(dto);
     return await this.newsfeedModel.findById(newsfeed?._id);
+  }
+
+  async findByFilter(
+    filter: FilterQuery<NewsfeedDocument> = {},
+    pagination: PaginationQuery = {},
+  ) {
+    return await this.newsfeedModel
+      .find({
+        ...filter,
+        visualiTy: VisualityEnum.PUBLIC,
+      })
+      .skip(pagination?.from || 0)
+      .limit(pagination?.count || 10)
+      .sort({ updatedAt: -1 });
   }
 
   async findAll() {

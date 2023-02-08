@@ -1,21 +1,32 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
-  UploadedFiles,
 } from '@nestjs/common';
-import { NewsfeedService } from './newsfeed.service';
-import { CreateNewsfeedDto, UpdateNewsfeedDto } from './newsfeed.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ContentTypeEnum } from '../common';
+import { LifeStyleEnum } from '../common/enum';
+import {
+  AuthUser,
+  IAuthUser,
+  JwtAuthGuard,
+  Roles,
+  RolesGuard,
+} from '../security';
+import { ROLE } from '../user/user.model';
+import { NewsfeedHomepageQuery } from './newsfeed-homepage-query.dto';
+import { CreateNewsfeedDto, UpdateNewsfeedDto } from './newsfeed.dto';
 import { NewsfeedFiles } from './newsfeed.model';
+import { NewsfeedService } from './newsfeed.service';
 
 @ApiTags('Newsfeed')
 @ApiBearerAuth()
@@ -39,7 +50,44 @@ export class NewsfeedController {
     return await this.newsfeedService.create(createNewsfeedDto, user, files);
   }
 
+  @ApiQuery({
+    name: 'from',
+    type: Number,
+    required: false,
+    description: 'Return data from. Default 0',
+  })
+  @ApiQuery({
+    name: 'count',
+    type: Number,
+    required: false,
+    description: 'How many data requered. Default 10',
+  })
+  @ApiQuery({
+    name: 'anonymous',
+    type: Boolean,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'contentType',
+    type: String,
+    enum: ContentTypeEnum,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'lifeStyle',
+    type: String,
+    enum: LifeStyleEnum,
+    required: false,
+  })
   @Get()
+  async findFiltered(@Query() query: NewsfeedHomepageQuery) {
+    const { from, count, ...filter } = query;
+    return await this.newsfeedService.findByFilter(filter, { from, count });
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ROLE.ADMIN)
+  @Get('all')
   async findAll() {
     return await this.newsfeedService.findAll();
   }
