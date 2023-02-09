@@ -122,6 +122,7 @@ export class NewsfeedController {
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string, @AuthUser() user: IAuthUser) {
+    console.log('calling');
     return this.newsfeedService.remove(id, user);
   }
 }

@@ -87,13 +87,15 @@ export class NewsfeedService {
 
   async remove(id: string, user: IAuthUser) {
     const newsfeed = await this.findById(id);
+
     if (
       user?.role !== ROLE.ADMIN ||
-      user?.id?.toString() !== newsfeed?.userId?.toString()
+      (user?.role !== ROLE.ADMIN &&
+        user?.id?.toString() !== newsfeed?.userId?.toString())
     ) {
       throw new UnauthorizedException('unauthorise');
     }
-
+    console.log('user', user);
     await newsfeed.remove();
     return newsfeed;
   }
