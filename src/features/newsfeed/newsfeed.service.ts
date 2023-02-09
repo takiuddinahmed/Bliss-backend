@@ -90,8 +90,10 @@ export class NewsfeedService {
     if (
       user?.role !== ROLE.ADMIN ||
       user?.id?.toString() !== newsfeed?.userId?.toString()
-    )
+    ) {
       throw new UnauthorizedException('unauthorise');
+    }
+
     await newsfeed.remove();
     return newsfeed;
   }
