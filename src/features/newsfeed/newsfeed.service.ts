@@ -95,7 +95,6 @@ export class NewsfeedService {
     ) {
       throw new UnauthorizedException('unauthorise');
     }
-    console.log('user', user);
     await newsfeed.remove();
     return newsfeed;
   }
