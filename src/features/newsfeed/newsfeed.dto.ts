@@ -3,7 +3,6 @@ import { FileData } from '../common';
 import { Newsfeed } from './newsfeed.model';
 
 export class CreateNewsfeedDto extends Newsfeed {}
-export class UpdateNewsfeedDto extends PartialType(CreateNewsfeedDto) {}
-export type NewUpdateNewstDto = UpdateNewsfeedDto & {
-  oldAttachment?: FileData[];
-};
+export class UpdateNewsfeedDto extends PartialType(CreateNewsfeedDto) {
+  oldFiles?: FileData[];
+}

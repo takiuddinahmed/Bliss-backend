@@ -76,7 +76,7 @@ export class NewsfeedService {
       user?.id?.toString() !== newsfeed?.userId?.toString()
     )
       throw new UnauthorizedException('unauthorise');
-    dto.files = [...newsfeed.files, ...(await this.multiUpload(files.files))];
+    dto.files = [...dto.oldFiles, ...(await this.multiUpload(files.files))];
     dto.thumbnails = [
       ...newsfeed.thumbnails,
       ...(await this.multiUpload(files.thumbnails)),
