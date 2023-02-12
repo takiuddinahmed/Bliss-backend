@@ -37,8 +37,8 @@ export class NewsfeedController {
 
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'files', maxCount: 10 },
-      { name: 'thumbnails', maxCount: 5 },
+      { name: 'files[]', maxCount: 10 },
+      { name: 'thumbnails[]', maxCount: 5 },
     ]),
   )
   @Post()
@@ -120,8 +120,8 @@ export class NewsfeedController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'files', maxCount: 10 },
-      { name: 'thumbnails', maxCount: 5 },
+      { name: 'files[]', maxCount: 10 },
+      { name: 'thumbnails[]', maxCount: 5 },
     ]),
   )
   @Patch(':id')
