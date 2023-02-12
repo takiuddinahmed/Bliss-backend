@@ -72,7 +72,6 @@ export class NewsfeedService {
     user: IAuthUser,
     files?: NewsfeedFiles,
   ) {
-    console.log({ oldFiles: dto.oldFiles });
     const newsfeed = await this.findById(id);
     if (
       !(
@@ -89,6 +88,7 @@ export class NewsfeedService {
       ...newsfeed.thumbnails,
       ...(await this.multiUpload(files['thumbnails[]'])),
     ];
+    console.log({ dto });
     await newsfeed.updateOne(dto);
     return await this.findById(id);
   }
