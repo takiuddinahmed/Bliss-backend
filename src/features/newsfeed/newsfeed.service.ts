@@ -72,6 +72,7 @@ export class NewsfeedService {
     user: IAuthUser,
     files?: NewsfeedFiles,
   ) {
+    console.log({ oldFiles: dto.oldFiles });
     const newsfeed = await this.findById(id);
     if (
       !(

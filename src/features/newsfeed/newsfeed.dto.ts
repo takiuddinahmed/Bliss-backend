@@ -6,6 +6,6 @@ import { Newsfeed } from './newsfeed.model';
 export class CreateNewsfeedDto extends Newsfeed {}
 export class UpdateNewsfeedDto extends PartialType(CreateNewsfeedDto) {
   @IsOptional()
-  @IsArray()
+  // @IsArray()
   oldFiles?: FileData[];
 }
