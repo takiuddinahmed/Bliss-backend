@@ -15,6 +15,7 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ContentTypeEnum } from '../common';
 import { LifeStyleEnum } from '../common/enum';
+import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import {
   AuthUser,
   IAuthUser,
@@ -109,6 +110,22 @@ export class NewsfeedController {
       { name: 'thumbnails', maxCount: 5 },
     ]),
   )
+
+
+  @Get('/like-dislike/:id/:likeDislike')
+  @UseGuards(JwtAuthGuard)
+  async likeComment(
+    @Param('id') id: string,
+    @Param('likeDislike') likeDislike: LikeDislikeEnum | 'cancel',
+    @AuthUser() user: IAuthUser,
+  ) {
+    return this.newsfeedService.likeDislikeContent(
+      id,
+      user._id.toString(),
+      likeDislike,
+    );
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -12,6 +13,7 @@ import {
   PaginationQuery,
   VisualityEnum,
 } from '../common';
+import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { IAuthUser } from '../security';
 import { SpaceService } from '../space/space.service';
 import { ROLE } from '../user/user.model';
@@ -83,6 +85,62 @@ export class NewsfeedService {
     ];
     await newsfeed.updateOne(dto);
     return await this.findById(id);
+  }
+
+  async likeDislikeContent(
+    id: string,
+    userId: string,
+    likeDislike: LikeDislikeEnum | 'cancel',
+  ) {
+    if (
+      !(
+        likeDislike === LikeDislikeEnum.LIKE ||
+        likeDislike === LikeDislikeEnum.DISLIKE ||
+        likeDislike === 'cancel'
+      )
+    )
+      throw new BadRequestException(
+        `You have to select ${LikeDislikeEnum.LIKE} or ${LikeDislikeEnum.DISLIKE}`,
+      );
+
+    // TODO check comment and content is available
+
+    const comment = await this.newsfeedModel.findById(id);
+    if (likeDislike === 'cancel') {
+      return await this.newsfeedModel.findByIdAndUpdate(
+        id,
+        {
+          $pull: {
+            likeDislikes: { userId },
+          },
+        },
+        { new: true },
+      );
+    }
+    if (comment.likeDislikes.some((ld) => ld.userId.toString() === userId)) {
+      return await this.newsfeedModel.findOneAndUpdate(
+        {
+          '_id': id,
+          'likeDislikes.userId': userId,
+        },
+        {
+          $set: { 'likeDislikes.$.likeDislike': likeDislike },
+        },
+        {
+          new: true,
+        },
+      );
+    } else {
+      return await this.newsfeedModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            likeDislikes: { userId, likeDislike },
+          },
+        },
+        { new: true },
+      );
+    }
   }
 
   async remove(id: string, user: IAuthUser) {
