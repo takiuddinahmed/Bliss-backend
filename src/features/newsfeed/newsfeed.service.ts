@@ -74,11 +74,16 @@ export class NewsfeedService {
   ) {
     const newsfeed = await this.findById(id);
     if (
-      user?.role !== ROLE.ADMIN ||
-      user?.id?.toString() !== newsfeed?.userId?.toString()
+      !(
+        user?.role === ROLE.ADMIN ||
+        user?.id?.toString() === newsfeed?.userId?.toString()
+      )
     )
       throw new UnauthorizedException('unauthorise');
-    dto.files = [...dto.oldFiles, ...(await this.multiUpload(files.files))];
+    dto.files = [
+      ...(dto?.oldFiles || []),
+      ...(await this.multiUpload(files.files)),
+    ];
     dto.thumbnails = [
       ...newsfeed.thumbnails,
       ...(await this.multiUpload(files.thumbnails)),

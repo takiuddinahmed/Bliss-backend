@@ -76,6 +76,10 @@ export class RestaurantMenuService {
       .populate('restaurantCategoryId');
   }
 
+  async getTrending() {
+    return [];
+  }
+
   async findByRestaurant(restaurantId: string) {
     return await this.restaurantMenuModel
       .find({ restaurantId })
