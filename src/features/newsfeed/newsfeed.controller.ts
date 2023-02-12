@@ -103,15 +103,6 @@ export class NewsfeedController {
     return await this.newsfeedService.findByPermalink(permalink);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: 'files', maxCount: 10 },
-      { name: 'thumbnails', maxCount: 5 },
-    ]),
-  )
-
-
   @Get('/like-dislike/:id/:likeDislike')
   @UseGuards(JwtAuthGuard)
   async likeComment(
@@ -126,6 +117,13 @@ export class NewsfeedController {
     );
   }
 
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'files', maxCount: 10 },
+      { name: 'thumbnails', maxCount: 5 },
+    ]),
+  )
   @Patch(':id')
   update(
     @Param('id') id: string,
