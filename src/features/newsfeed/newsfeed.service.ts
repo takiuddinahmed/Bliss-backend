@@ -30,8 +30,8 @@ export class NewsfeedService {
 
   async create(dto: CreateNewsfeedDto, user: IAuthUser, files?: NewsfeedFiles) {
     dto.userId = user?._id?.toString();
-    dto.files = await this.multiUpload(files?.files);
-    dto.thumbnails = await this.multiUpload(files?.thumbnails);
+    dto.files = await this.multiUpload(files['files[]']);
+    dto.thumbnails = await this.multiUpload(files['thumbnails[]']);
     const newsfeed = await this.newsfeedModel.create(dto);
     return await this.newsfeedModel.findById(newsfeed?._id);
   }
@@ -83,11 +83,11 @@ export class NewsfeedService {
       throw new UnauthorizedException('unauthorise');
     dto.files = [
       ...(dto?.oldFiles || []),
-      ...(await this.multiUpload(files.files)),
+      ...(await this.multiUpload(files['files[]'])),
     ];
     dto.thumbnails = [
       ...newsfeed.thumbnails,
-      ...(await this.multiUpload(files.thumbnails)),
+      ...(await this.multiUpload(files['thumbnails[]'])),
     ];
     await newsfeed.updateOne(dto);
     return await this.findById(id);
