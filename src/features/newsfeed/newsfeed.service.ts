@@ -18,7 +18,7 @@ import { IAuthUser } from '../security';
 import { SpaceService } from '../space/space.service';
 import { ROLE } from '../user/user.model';
 import { CreateNewsfeedDto, UpdateNewsfeedDto } from './newsfeed.dto';
-import { Newsfeed, NewsfeedDocument, NewsfeedFiles } from './newsfeed.model';
+import { NewsfeedDocument, NewsfeedFiles } from './newsfeed.model';
 
 @Injectable()
 export class NewsfeedService {
@@ -85,10 +85,9 @@ export class NewsfeedService {
       ...(await this.multiUpload(files['files[]'])),
     ];
     dto.thumbnails = [
-      ...newsfeed.thumbnails,
+      ...(newsfeed.thumbnails || []),
       ...(await this.multiUpload(files['thumbnails[]'])),
     ];
-    console.log({ dto });
     await newsfeed.updateOne(dto);
     return await this.findById(id);
   }
