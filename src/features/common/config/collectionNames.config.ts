@@ -15,4 +15,5 @@ export const collectionNames = {
   resortType: 'resort-types',
   resort: 'resorts',
   newsfeed: 'newsfeeds',
+  newsfeedComment: 'newsfeed-comments',
 };
