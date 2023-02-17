@@ -6,8 +6,11 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard, Roles, RolesGuard } from '../security';
 import { ROLE } from '../user/user.model';
@@ -38,19 +41,28 @@ export class CategoryController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async create(@Body() createCategoryDto: CreateCategoryDto) {
-    return await this.categoryService.createCategory(createCategoryDto);
+  @UseInterceptors(FileInterceptor('image'))
+  async create(
+    @Body() createCategoryDto: CreateCategoryDto,
+    @UploadedFile('image') image?: Express.Multer.File,
+  ) {
+    return await this.categoryService.createCategory(createCategoryDto, image);
   }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(ROLE.ADMIN)
+  @UseInterceptors(FileInterceptor('image'))
   async update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
+    @UploadedFile('image') image?: Express.Multer.File,
   ) {
-    console.log('Update');
-    return await this.categoryService.updateCategory(id, updateCategoryDto);
+    return await this.categoryService.updateCategory(
+      id,
+      updateCategoryDto,
+      image,
+    );
   }
 
   @Delete(':id')
