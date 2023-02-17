@@ -38,7 +38,7 @@ export class SubCategoryService {
   }
 
   async findAll() {
-    return this.subCategoryModel.find();
+    return this.subCategoryModel.find().populate('categoryId');
   }
 
   async findByCategory(categoryId: string) {
