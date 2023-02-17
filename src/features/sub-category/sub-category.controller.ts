@@ -43,7 +43,7 @@ export class SubCategoryController {
 
   @Get('find-by-category:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(ROLE.ADMIN)
+  @Roles(ROLE.ADMIN, ROLE.USER)
   async findByCategory(@Param('id') id: string) {
     return await this.subcategoryService.findByCategory(id);
   }
