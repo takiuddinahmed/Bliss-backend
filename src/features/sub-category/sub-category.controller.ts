@@ -41,7 +41,7 @@ export class SubCategoryController {
     return await this.subcategoryService.create(createSubcategoryDto, image);
   }
 
-  @Get('find-by-category:id')
+  @Get('find-by-category/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(ROLE.ADMIN, ROLE.USER)
   async findByCategory(@Param('id') id: string) {

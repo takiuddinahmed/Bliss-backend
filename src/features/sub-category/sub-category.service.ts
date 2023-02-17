@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { collectionNames } from '../common';
 import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
@@ -42,7 +42,9 @@ export class SubCategoryService {
   }
 
   async findByCategory(categoryId: string) {
-    return await this.subCategoryModel.find({ categoryId });
+    return await this.subCategoryModel.find({
+      categoryId,
+    });
   }
 
   async findOne(id: string) {
