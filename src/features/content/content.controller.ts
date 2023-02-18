@@ -90,6 +90,11 @@ export class ContentController {
     return await this.contentService.getPopular();
   }
 
+  @Get('trending')
+  async getTrending() {
+    return await this.contentService.getTrending();
+  }
+
   @Get('library')
   @UseGuards(JwtAuthGuard)
   async getUsersLibrary(@AuthUser() user: IAuthUser) {

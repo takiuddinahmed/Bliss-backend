@@ -15,7 +15,10 @@ import {
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
-import { FAVORITE_THRESHOLD_FOR_POPULAR } from './contants';
+import {
+  FAVORITE_THRESHOLD_FOR_POPULAR,
+  TOTAL_VIEW_THRESHOLD_FOR_TRENDING,
+} from './contants';
 import { Content, ContentFiles } from './content.model';
 import { CreateContentDto } from './create-content.dto';
 import { UpdateContentDto } from './update-content.dto';
@@ -78,6 +81,40 @@ export class ContentService {
       { $match: { favoriteCount: { $gte: FAVORITE_THRESHOLD_FOR_POPULAR } } },
       { $sort: { favoriteCount: -1 } },
       { $project: { favoriteCount: 0 } },
+    ]);
+  }
+
+  async getTrending() {
+    return await this.contentModel.aggregate([
+      { $match: { views: { $exists: true, $ne: [] } } },
+      { $unwind: { path: '$views' } },
+      {
+        $group: {
+          _id: '$_id',
+          userId: { $first: '$userId' },
+          categoryId: { $first: '$categoryId' },
+          subCategoryId: { $first: '$subCategoryId' },
+          channelId: { $first: '$channelId' },
+          sexuality: { $first: '$sexuality' },
+          contentType: { $first: '$contentType' },
+          description: { $first: '$description' },
+          isFunVideo: { $first: '$isFunVideo' },
+          file: { $first: '$file' },
+          url: { $first: '$url' },
+          visualiTy: { $first: '$visualiTy' },
+          permalink: { $first: '$permalink' },
+          likeDislikes: { $first: '$likeDislikes' },
+          favorites: { $first: '$favorites' },
+          views: { $push: '$views' },
+          totalViewCount: {
+            $sum: '$views.viewCount',
+          },
+        },
+      },
+      {
+        $match: { totalViewCount: { $gte: TOTAL_VIEW_THRESHOLD_FOR_TRENDING } },
+      },
+      { $sort: { totalViewCount: -1 } },
     ]);
   }
 
