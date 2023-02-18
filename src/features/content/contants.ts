@@ -1,0 +1,1 @@
+export const FAVORITE_THRESHOLD_FOR_POPULAR = 1;

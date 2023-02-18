@@ -15,6 +15,7 @@ import {
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
+import { FAVORITE_THRESHOLD_FOR_POPULAR } from './contants';
 import { Content, ContentFiles } from './content.model';
 import { CreateContentDto } from './create-content.dto';
 import { UpdateContentDto } from './update-content.dto';
@@ -68,6 +69,16 @@ export class ContentService {
     const content = await this.contentModel.findOne({ permalink });
     if (!content) throw new NotFoundException('Content not found');
     return content;
+  }
+
+  async getPopular() {
+    return await this.contentModel.aggregate([
+      { $match: { favorites: { $elemMatch: { $exists: true, $ne: [] } } } },
+      { $addFields: { favoriteCount: { $size: '$favorites' } } },
+      { $match: { favoriteCount: { $gte: FAVORITE_THRESHOLD_FOR_POPULAR } } },
+      { $sort: { favoriteCount: -1 } },
+      { $project: { favoriteCount: 0 } },
+    ]);
   }
 
   async getContentByUser(userId: string) {

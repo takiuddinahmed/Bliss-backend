@@ -84,6 +84,12 @@ export class ContentController {
       user._id.toString(),
     );
   }
+
+  @Get('popular')
+  async getPopular() {
+    return await this.contentService.getPopular();
+  }
+
   @Get('library')
   @UseGuards(JwtAuthGuard)
   async getUsersLibrary(@AuthUser() user: IAuthUser) {
