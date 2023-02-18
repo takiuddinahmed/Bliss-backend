@@ -16,12 +16,14 @@ import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
 import {
+  DAY_THRESHOLD_FOR_NEW,
   FAVORITE_THRESHOLD_FOR_POPULAR,
   TOTAL_VIEW_THRESHOLD_FOR_TRENDING,
 } from './contants';
 import { Content, ContentFiles } from './content.model';
 import { CreateContentDto } from './create-content.dto';
 import { UpdateContentDto } from './update-content.dto';
+import * as moment from 'moment';
 
 @Injectable()
 export class ContentService {
@@ -105,6 +107,8 @@ export class ContentService {
           permalink: { $first: '$permalink' },
           likeDislikes: { $first: '$likeDislikes' },
           favorites: { $first: '$favorites' },
+          createdAt: { $first: '$createdAt' },
+          updatedAt: { $first: '$updatedAt' },
           views: { $push: '$views' },
           totalViewCount: {
             $sum: '$views.viewCount',
@@ -116,6 +120,14 @@ export class ContentService {
       },
       { $sort: { totalViewCount: -1 } },
     ]);
+  }
+
+  async getNew() {
+    const date = moment().subtract(DAY_THRESHOLD_FOR_NEW, 'days').toISOString();
+
+    return await this.contentModel
+      .find({ updatedAt: { $gte: date } })
+      .sort({ updatedAt: -1 });
   }
 
   async getContentByUser(userId: string) {
