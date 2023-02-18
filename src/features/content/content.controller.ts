@@ -12,7 +12,11 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+  FilesInterceptor,
+} from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { SexualityEnum } from '../common';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
@@ -183,11 +187,17 @@ export class ContentController {
 
   @Patch(':permalink')
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FilesInterceptor('thumbnails[]'))
   async update(
     @Param('permalink') permalink: string,
     @Body() updateContentDto: UpdateContentDto,
+    @UploadedFiles() thumbnails: Express.Multer.File[],
   ) {
-    return await this.contentService.updateContent(permalink, updateContentDto);
+    return await this.contentService.updateContent(
+      permalink,
+      updateContentDto,
+      thumbnails,
+    );
   }
 
   @Delete(':permalink')

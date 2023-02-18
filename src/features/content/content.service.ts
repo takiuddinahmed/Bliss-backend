@@ -105,9 +105,26 @@ export class ContentService {
     }
     return await this.contentModel.create(createContentDto);
   }
-  async updateContent(permalink: string, updateContentDto: UpdateContentDto) {
+  async updateContent(
+    permalink: string,
+    updateContentDto: UpdateContentDto,
+    thumbnails?: Express.Multer.File[],
+  ) {
     const found = await this.contentModel.findOne({ permalink });
     if (!found) throw new BadRequestException('Content not found');
+
+    const thumbnailsFileData: FileData[] = [];
+    if (thumbnails.length) {
+      for await (const file of thumbnails) {
+        const fileData = await this.spaceService.uploadFile(file);
+        if (fileData) thumbnailsFileData.push(fileData);
+      }
+    }
+
+    updateContentDto.thumbnails = [
+      ...thumbnailsFileData,
+      ...(updateContentDto.oldThumbnails || []),
+    ];
 
     return await this.contentModel.findOne({ permalink }, updateContentDto, {
       new: true,
