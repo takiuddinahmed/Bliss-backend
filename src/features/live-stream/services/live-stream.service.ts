@@ -4,36 +4,46 @@ import {
   HttpStatus,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateLiveStreamDto } from './dto/create-live-stream.dto';
-import { UpdateLiveStreamDto } from './dto/update-live-stream.dto';
-import { SearchLiveStreamDTO } from './dto/search-live-stream.dto';
+import {
+  CreateLiveStreamDto,
+  UpdateLiveStreamDto,
+  SearchLiveStreamDTO,
+  CreateRoomDto,
+} from '../dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { collectionNames } from '../common';
+import { collectionNames } from '../../common';
 import { Model } from 'mongoose';
-import { LiveStreamDocument } from './live-stream.model';
+import { LiveStreamDocument } from '../live-stream.model';
 import {
   generatePermalink,
   createSearchQuery,
   subDocUpdateWithArray,
-} from '../utils';
+} from '../../utils';
+import { LiveKitService } from './livekit.services';
 
 @Injectable()
 export class LiveStreamService {
   constructor(
     @InjectModel(collectionNames.livestream)
     private liveStreamModel: Model<LiveStreamDocument>,
+    private readonly liveKitService: LiveKitService,
   ) {}
 
   async create(user, createLiveStreamDto: CreateLiveStreamDto) {
     try {
-      const permalink = await generatePermalink(
+      const roomName = await generatePermalink(
         createLiveStreamDto.title,
         this.liveStreamModel,
       );
+      const roomDTO = new CreateRoomDto();
+      roomDTO.roomName = roomName;
+      roomDTO.participant = user._id;
+      const accessToken = this.liveKitService.createToken(roomDTO);
       return await this.liveStreamModel.create({
         ...createLiveStreamDto,
         userId: user._id,
-        permalink,
+        roomName,
+        accessToken,
       });
     } catch (err) {
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);

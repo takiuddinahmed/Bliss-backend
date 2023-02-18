@@ -61,7 +61,11 @@ export class LiveStream {
 
   @IsOptional()
   @Prop({ type: String, required: true, unique: true })
-  permalink: string;
+  roomName: string;
+
+  @IsOptional()
+  @Prop({ type: String, required: true, unique: true })
+  accessToken: string;
 
   @IsOptional()
   @Prop({ type: String })

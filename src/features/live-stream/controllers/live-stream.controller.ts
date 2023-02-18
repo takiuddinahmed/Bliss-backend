@@ -11,13 +11,12 @@ import {
   HttpStatus,
   Query,
 } from '@nestjs/common';
-import { LiveStreamService } from './live-stream.service';
-import { CreateLiveStreamDto } from './dto/create-live-stream.dto';
-import { UpdateLiveStreamDto } from './dto/update-live-stream.dto';
-import { JwtAuthGuard, Roles, RolesGuard } from '../security';
+import { LiveStreamService } from '../services/live-stream.service';
+import { CreateLiveStreamDto, UpdateLiveStreamDto } from '../dto';
+import { JwtAuthGuard, Roles, RolesGuard } from '../../security';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { SearchLiveStreamDTO } from './dto/search-live-stream.dto';
-import { AuthUser } from '../security/get-user.decorator';
+import { SearchLiveStreamDTO } from '../dto/live-stream/search-live-stream.dto';
+import { AuthUser } from '../../security/get-user.decorator';
 
 @ApiTags('LiveStream')
 @ApiBearerAuth()

@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { LiveStreamService } from './live-stream.service';
-import { LiveStreamController } from './live-stream.controller';
+import { LiveStreamController } from './controllers/live-stream.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { collectionNames } from '../common';
 import { LiveStreamSchema } from './live-stream.model';
+import { LiveKitController } from './controllers/livekit.controller';
+import { LiveStreamService, LiveKitService } from './services';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { LiveStreamSchema } from './live-stream.model';
       },
     ]),
   ],
-  controllers: [LiveStreamController],
-  providers: [LiveStreamService],
+  controllers: [LiveStreamController, LiveKitController],
+  providers: [LiveStreamService, LiveKitService],
 })
 export class LiveStreamModule {}

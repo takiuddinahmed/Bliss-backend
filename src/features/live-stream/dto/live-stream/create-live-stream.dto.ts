@@ -11,8 +11,8 @@ import {
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { Types } from 'mongoose';
-import { LifeStyleEnum } from '../../common/enum';
-import { Audience, Status } from '../live-stream.model';
+import { LifeStyleEnum } from '../../../common/enum';
+import { Audience, Status } from '../../live-stream.model';
 import { Prop } from '@nestjs/mongoose';
 
 export class AudienceDto implements Readonly<AudienceDto> {
