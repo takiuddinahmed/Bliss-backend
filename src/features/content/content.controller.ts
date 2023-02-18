@@ -84,6 +84,13 @@ export class ContentController {
       user._id.toString(),
     );
   }
+  @Get('library')
+  @UseGuards(JwtAuthGuard)
+  async getUsersLibrary(@AuthUser() user: IAuthUser) {
+    return await this.contentService.getUserLibraryContents(
+      user._id.toString(),
+    );
+  }
 
   @Get('user')
   @UseGuards(JwtAuthGuard)
@@ -172,6 +179,27 @@ export class ContentController {
       );
     } else if (state === 'remove') {
       return await this.contentService.removeUserFromFavorite(
+        id,
+        user._id.toString(),
+      );
+    }
+    return await this.contentService.getById(id);
+  }
+
+  @Put('library/:id/:state')
+  @UseGuards(JwtAuthGuard)
+  async userLibrary(
+    @Param('id') id: string,
+    @Param('state') state: string,
+    @AuthUser() user: IAuthUser,
+  ) {
+    if (state === 'add') {
+      return await this.contentService.addUserToLibrary(
+        id,
+        user._id.toString(),
+      );
+    } else if (state === 'remove') {
+      return await this.contentService.removeUserFromLibrary(
         id,
         user._id.toString(),
       );

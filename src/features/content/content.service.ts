@@ -216,6 +216,41 @@ export class ContentService {
     }
   }
 
+  async addUserToLibrary(id: string, userId: string) {
+    const content = await this.getById(id);
+    if (content?.library?.some((uId) => uId.toString() === userId)) {
+      return content;
+    } else {
+      return await this.contentModel.findByIdAndUpdate(
+        id,
+        {
+          $push: { library: userId },
+        },
+        { new: true },
+      );
+    }
+  }
+  async removeUserFromLibrary(id: string, userId: string) {
+    const content = await this.getById(id);
+    if (content?.library?.some((uId) => uId.toString() === userId)) {
+      return await this.contentModel.findByIdAndUpdate(
+        id,
+        {
+          $pull: { library: userId },
+        },
+        { new: true },
+      );
+    } else {
+      return content;
+    }
+  }
+
+  async getUserLibraryContents(userId: string) {
+    return await this.contentModel
+      .find({ library: userId })
+      .sort({ updatedAt: -1 });
+  }
+
   async getById(id: string) {
     const content = await this.contentModel.findById(id);
     if (!content) throw new NotFoundException('Content not found');
