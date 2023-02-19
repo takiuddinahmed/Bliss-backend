@@ -186,9 +186,13 @@ export class ContentService {
       ...(updateContentDto.oldThumbnails || []),
     ];
 
-    return await this.contentModel.findOne({ permalink }, updateContentDto, {
-      new: true,
-    });
+    return await this.contentModel.findOneAndUpdate(
+      { permalink },
+      updateContentDto,
+      {
+        new: true,
+      },
+    );
   }
 
   async likeDislikeContent(

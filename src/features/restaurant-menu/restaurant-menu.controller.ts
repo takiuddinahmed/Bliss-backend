@@ -56,6 +56,11 @@ export class RestaurantMenuController {
     return await this.restaurantMenuService.getTrending();
   }
 
+  @Get('popular')
+  async getPopular() {
+    return await this.restaurantMenuService.getPopular();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.restaurantMenuService.findOne(id);

@@ -1,0 +1,1 @@
+export const RATING_COUNT_THRESHOLD_FOR_POPULAR = 3;

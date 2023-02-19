@@ -13,6 +13,7 @@ import { RestaurantsService } from '../restaurants/restaurants.service';
 import { IAuthUser } from '../security';
 import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
+import { RATING_COUNT_THRESHOLD_FOR_POPULAR } from './constant';
 import {
   CreateRestaurantMenuDto,
   UpdateRestaurantMenuDto,
@@ -78,6 +79,35 @@ export class RestaurantMenuService {
 
   async getTrending() {
     return [];
+  }
+
+  async getPopular() {
+    return await this.restaurantMenuModel.aggregate([
+      { $match: { ratingReviews: { $exists: true, $ne: [] } } },
+      { $unwind: { path: '$ratingReviews' } },
+      {
+        $group: {
+          _id: '$_id',
+          ratingCount: { $sum: 1 },
+          userId: { $first: '$userId' },
+          restaurantId: { $first: '$restaurantId' },
+          name: { $first: '$name' },
+          quantity: { $first: '$quantity' },
+          restaurantCategoryId: { $first: '$restaurantCategoryId' },
+          price: { $first: '$price' },
+          description: { $first: '$description' },
+          featured: { $first: '$featured' },
+          popular: { $first: '$popular' },
+          image: { $first: '$image' },
+          thumbnails: { $first: '$thumbnails' },
+          permalink: { $first: '$permalink' },
+          likeDislikes: { $first: '$likeDislikes' },
+          ratingReviews: { $push: '$ratingReviews' },
+        },
+      },
+      { $match: { ratingCount: { $gte: RATING_COUNT_THRESHOLD_FOR_POPULAR } } },
+      { $sort: { ratingCount: -1 } },
+    ]);
   }
 
   async findByRestaurant(restaurantId: string) {

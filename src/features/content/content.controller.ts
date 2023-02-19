@@ -96,7 +96,7 @@ export class ContentController {
   }
 
   @Get('new')
-  async getNew(){
+  async getNew() {
     return await this.contentService.getNew();
   }
 
