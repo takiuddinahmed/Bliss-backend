@@ -13,7 +13,10 @@ import { RestaurantsService } from '../restaurants/restaurants.service';
 import { IAuthUser } from '../security';
 import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
-import { RATING_COUNT_THRESHOLD_FOR_POPULAR } from './constant';
+import {
+  DAY_THRESHOLD_FOR_TRENDING,
+  RATING_COUNT_THRESHOLD_FOR_POPULAR,
+} from './constant';
 import {
   CreateRestaurantMenuDto,
   UpdateRestaurantMenuDto,
@@ -22,6 +25,7 @@ import {
   RestaurantMenuDocument,
   RestaurantMenuFiles,
 } from './restaurant-menu.model';
+import * as moment from 'moment';
 
 @Injectable()
 export class RestaurantMenuService {
@@ -78,7 +82,44 @@ export class RestaurantMenuService {
   }
 
   async getTrending() {
-    return [];
+    const date = moment()
+      .subtract(DAY_THRESHOLD_FOR_TRENDING, 'days')
+      .toISOString();
+
+    return await this.restaurantMenuModel.aggregate([
+      {
+        $match: {
+          'ratingReviews': {
+            $exists: true,
+            $ne: [],
+          },
+          'ratingReviews.updatedAt': { $gte: date },
+        },
+      },
+      { $unwind: { path: '$ratingReviews' } },
+      {
+        $group: {
+          _id: '$_id',
+          ratingCount: { $sum: 1 },
+          userId: { $first: '$userId' },
+          restaurantId: { $first: '$restaurantId' },
+          name: { $first: '$name' },
+          quantity: { $first: '$quantity' },
+          restaurantCategoryId: { $first: '$restaurantCategoryId' },
+          price: { $first: '$price' },
+          description: { $first: '$description' },
+          featured: { $first: '$featured' },
+          popular: { $first: '$popular' },
+          image: { $first: '$image' },
+          thumbnails: { $first: '$thumbnails' },
+          permalink: { $first: '$permalink' },
+          likeDislikes: { $first: '$likeDislikes' },
+          ratingReviews: { $push: '$ratingReviews' },
+        },
+      },
+      { $match: { ratingCount: { $gte: RATING_COUNT_THRESHOLD_FOR_POPULAR } } },
+      { $sort: { ratingCount: -1 } },
+    ]);
   }
 
   async getPopular() {
