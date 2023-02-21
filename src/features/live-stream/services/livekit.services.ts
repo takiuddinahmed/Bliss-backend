@@ -8,7 +8,7 @@ export class LiveKitService {
       const roomName = createRoomDTO.roomName;
       const participantName = createRoomDTO.participant;
 
-      const at = new AccessToken('dev', 'secret', {
+      const at = new AccessToken('devkey', 'secret', {
         identity: participantName,
       });
       at.addGrant({ roomJoin: true, room: roomName });
