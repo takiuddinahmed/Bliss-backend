@@ -36,7 +36,7 @@ export class SubCategoryController {
   @UseInterceptors(FileInterceptor('image'))
   async create(
     @Body() createSubcategoryDto: CreateSubCategoryDto,
-    @UploadedFile('image') image?: Express.Multer.File,
+    @UploadedFile() image?: Express.Multer.File,
   ) {
     return await this.subcategoryService.create(createSubcategoryDto, image);
   }
@@ -62,7 +62,7 @@ export class SubCategoryController {
   async update(
     @Param('id') id: string,
     @Body() updateSubcategoryDto: UpdateSubCategoryDto,
-    @UploadedFile('image') image?: Express.Multer.File,
+    @UploadedFile() image?: Express.Multer.File,
   ) {
     return await this.subcategoryService.update(
       id,

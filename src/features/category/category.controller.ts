@@ -39,12 +39,12 @@ export class CategoryController {
     return await this.categoryService.getCategoryByPermalink(permalink);
   }
 
+  @UseInterceptors(FileInterceptor('image'))
   @Post()
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileInterceptor('image'))
   async create(
     @Body() createCategoryDto: CreateCategoryDto,
-    @UploadedFile('image') image?: Express.Multer.File,
+    @UploadedFile() image?: Express.Multer.File,
   ) {
     return await this.categoryService.createCategory(createCategoryDto, image);
   }
@@ -56,7 +56,7 @@ export class CategoryController {
   async update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
-    @UploadedFile('image') image?: Express.Multer.File,
+    @UploadedFile() image?: Express.Multer.File,
   ) {
     return await this.categoryService.updateCategory(
       id,
