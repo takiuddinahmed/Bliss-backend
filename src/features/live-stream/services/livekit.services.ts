@@ -8,7 +8,7 @@ export class LiveKitService {
       const roomName = createRoomDTO.roomName;
       const participantName = createRoomDTO.participant;
 
-      const at = new AccessToken('devkey', 'secret', {
+      const at = new AccessToken(process.env.LIVEKIT_API_KEY, process.env.LIVEKIT_SECRET, {
         identity: participantName,
       });
       const grantPermission = {
