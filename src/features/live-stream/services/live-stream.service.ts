@@ -13,7 +13,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { collectionNames } from '../../common';
 import { Model } from 'mongoose';
-import { LiveStreamDocument } from '../live-stream.model';
+import { LiveStreamDocument } from '../models/live-stream.model';
 import {
   generatePermalink,
   createSearchQuery,

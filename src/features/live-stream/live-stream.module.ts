@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { LiveStreamController } from './controllers/live-stream.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { collectionNames } from '../common';
-import { LiveStreamSchema } from './live-stream.model';
+import { LiveStreamSchema } from './models/live-stream.model';
 import { LiveKitController } from './controllers/livekit.controller';
 import { LiveStreamService, LiveKitService } from './services';
 
