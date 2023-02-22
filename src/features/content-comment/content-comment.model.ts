@@ -21,7 +21,7 @@ export class ContentComment {
     type: Types.ObjectId,
     required: true,
     ref: collectionNames.contentComment,
-    autopopulate: userVirtualOptions,
+    // autopopulate: userVirtualOptions,
   })
   contentId: Types.ObjectId | string | PopulatedUser;
 
@@ -32,6 +32,7 @@ export class ContentComment {
   })
   userId: Types.ObjectId | string;
 
+  @IsOptional()
   @IsEnum(CommentContentTypeEnum)
   @Prop({
     type: String,

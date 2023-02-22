@@ -13,3 +13,4 @@ export {
 } from './models/fileData.model';
 export { LifeStyleEnum as SexualityEnum } from './enum/life-style.enum';
 export { VisualityEnum } from './enum/visuality.enum';
+export { PaginationQuery } from './interface/paginationQuery.interface';

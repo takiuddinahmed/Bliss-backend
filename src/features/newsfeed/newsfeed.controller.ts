@@ -1,21 +1,33 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
-  UploadedFiles,
 } from '@nestjs/common';
-import { NewsfeedService } from './newsfeed.service';
-import { CreateNewsfeedDto, UpdateNewsfeedDto } from './newsfeed.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ContentTypeEnum } from '../common';
+import { LifeStyleEnum } from '../common/enum';
+import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
+import {
+  AuthUser,
+  IAuthUser,
+  JwtAuthGuard,
+  Roles,
+  RolesGuard,
+} from '../security';
+import { ROLE } from '../user/user.model';
+import { NewsfeedHomepageQuery } from './newsfeed-homepage-query.dto';
+import { CreateNewsfeedDto, UpdateNewsfeedDto } from './newsfeed.dto';
 import { NewsfeedFiles } from './newsfeed.model';
+import { NewsfeedService } from './newsfeed.service';
 
 @ApiTags('Newsfeed')
 @ApiBearerAuth()
@@ -25,8 +37,8 @@ export class NewsfeedController {
 
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'file', maxCount: 10 },
-      { name: 'thumbnails', maxCount: 5 },
+      { name: 'files[]', maxCount: 10 },
+      { name: 'thumbnails[]', maxCount: 5 },
     ]),
   )
   @Post()
@@ -36,10 +48,48 @@ export class NewsfeedController {
     @AuthUser() user: IAuthUser,
     @UploadedFiles() files: NewsfeedFiles,
   ) {
+    console.log('files', files);
     return await this.newsfeedService.create(createNewsfeedDto, user, files);
   }
 
+  @ApiQuery({
+    name: 'from',
+    type: Number,
+    required: false,
+    description: 'Return data from. Default 0',
+  })
+  @ApiQuery({
+    name: 'count',
+    type: Number,
+    required: false,
+    description: 'How many data requered. Default 10',
+  })
+  @ApiQuery({
+    name: 'anonymous',
+    type: Boolean,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'contentType',
+    type: String,
+    enum: ContentTypeEnum,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'lifeStyle',
+    type: String,
+    enum: LifeStyleEnum,
+    required: false,
+  })
   @Get()
+  async findFiltered(@Query() query: NewsfeedHomepageQuery) {
+    const { from, count, ...filter } = query;
+    return await this.newsfeedService.findByFilter(filter, { from, count });
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ROLE.ADMIN)
+  @Get('all')
   async findAll() {
     return await this.newsfeedService.findAll();
   }
@@ -49,10 +99,30 @@ export class NewsfeedController {
     return await this.newsfeedService.findById(id);
   }
 
+  @Get('permalink/:permalink')
+  async findByPermalink(@Param('permalink') permalink: string) {
+    return await this.newsfeedService.findByPermalink(permalink);
+  }
+
+  @Get('/like-dislike/:id/:likeDislike')
+  @UseGuards(JwtAuthGuard)
+  async likeComment(
+    @Param('id') id: string,
+    @Param('likeDislike') likeDislike: LikeDislikeEnum | 'cancel',
+    @AuthUser() user: IAuthUser,
+  ) {
+    return this.newsfeedService.likeDislikeContent(
+      id,
+      user._id.toString(),
+      likeDislike,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'file', maxCount: 10 },
-      { name: 'thumbnails', maxCount: 5 },
+      { name: 'files[]', maxCount: 10 },
+      { name: 'thumbnails[]', maxCount: 5 },
     ]),
   )
   @Patch(':id')
@@ -65,8 +135,10 @@ export class NewsfeedController {
     return this.newsfeedService.update(id, updateNewsfeedDto, user, files);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.newsfeedService.remove(id);
+  remove(@Param('id') id: string, @AuthUser() user: IAuthUser) {
+    console.log('calling');
+    return this.newsfeedService.remove(id, user);
   }
 }

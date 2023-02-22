@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { HydratedDocument } from 'mongoose';
+import { FileData } from '../common';
 import { ContentTypeEnum, LifeStyleEnum } from '../common/enum';
 
 export type CategoryDocument = HydratedDocument<Category>;
@@ -28,6 +29,10 @@ export class Category {
   @IsEnum(ContentTypeEnum, { each: true })
   @Prop({ type: [String], enum: ContentTypeEnum, required: true })
   contentType: ContentTypeEnum[];
+
+  @ApiProperty({ required: false })
+  @Prop({ type: FileData, default: {} })
+  image?: FileData;
 
   @Prop({
     type: String,

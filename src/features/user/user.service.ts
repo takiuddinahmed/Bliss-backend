@@ -120,8 +120,9 @@ export class UserService {
 
     if (!comparePassword(user.password, editPassDto.oldPassword))
       throw new HttpException('Invalid credential provided', 401);
+    const password = hashPassword(editPassDto.password);
     return await this.userModel
-      .findByIdAndUpdate(id, editPassDto, { new: true })
+      .findByIdAndUpdate(id, { password }, { new: true })
       .select('firstName lastName email phoneNumber role');
   }
 
@@ -131,5 +132,18 @@ export class UserService {
     return await this.userModel
       .findByIdAndDelete(id)
       .select('firstName lastName email phoneNumber role');
+  }
+
+  async hashMissed() {
+    const userList = await this.userModel.find();
+    for (const user of userList) {
+      if (user.password.length < 10) {
+        const hash = hashPassword(user?.password);
+        await user.updateOne({ password: hash });
+        console.log({ password: user.password, hash: false, newhash: hash });
+      } else {
+        console.log({ password: user.password, hash: true });
+      }
+    }
   }
 }

@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
 import { HydratedDocument, Types } from 'mongoose';
+import { v4 as uuidV4 } from 'uuid';
 import {
   collectionNames,
   ContentTypeEnum,
@@ -33,10 +34,10 @@ export class Newsfeed {
   @Prop({ type: Boolean, default: false })
   anonymous?: boolean;
 
-  @ApiProperty({ enum: ContentTypeEnum, isArray: true })
-  @IsEnum(ContentTypeEnum, { each: true })
-  @Prop({ type: [String], enum: ContentTypeEnum, required: true })
-  contentType: ContentTypeEnum[];
+  @ApiProperty({ enum: ContentTypeEnum })
+  @IsEnum(ContentTypeEnum)
+  @Prop({ type: String, enum: ContentTypeEnum, required: true })
+  contentType: ContentTypeEnum;
 
   @ApiProperty({ enum: LifeStyleEnum, isArray: true })
   @IsEnum(LifeStyleEnum, { each: true })
@@ -49,10 +50,12 @@ export class Newsfeed {
   @Prop({ type: String, default: '' })
   description?: string;
 
-  @Prop({ type: [FileDataSchema] })
+  @ApiProperty()
+  @Prop({ type: Array<FileData>, default: [] })
   files: FileData[];
 
-  @Prop({ type: [FileDataSchema], default: [] })
+  @ApiProperty()
+  @Prop({ type: Array<FileData>, default: [] })
   thumbnails?: FileData[];
 
   @ApiProperty()
@@ -68,14 +71,13 @@ export class Newsfeed {
     type: String,
     enum: VisualityEnum,
     required: true,
-    default: VisualityEnum.PRIVATE,
+    default: VisualityEnum.PUBLIC,
   })
   visualiTy: VisualityEnum;
 
   @Prop({
     type: String,
-    required: true,
-    unique: true,
+    default: () => uuidV4(),
   })
   permalink: string;
 

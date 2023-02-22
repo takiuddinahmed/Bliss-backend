@@ -141,7 +141,7 @@ export class ContentCommentService {
     if (contentComment.file && contentComment?.file?.spaceKey) {
       await this.spaceService.deleteFile(contentComment.file);
     }
-    return this.contentCommentModel.findByIdAndDelete(id);
+    return await this.contentCommentModel.findByIdAndDelete(id);
   }
 
   async deleteDeletedUserComment() {
