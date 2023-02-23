@@ -96,7 +96,7 @@ export class ContentService {
           userId: { $first: '$userId' },
           categoryId: { $first: '$categoryId' },
           subCategoryId: { $first: '$subCategoryId' },
-          channelId: { $first: '$channelId' },
+          channelId: { $first: { $toObjectId: '$channelId' } },
           sexuality: { $first: '$sexuality' },
           contentType: { $first: '$contentType' },
           description: { $first: '$description' },
@@ -110,6 +110,8 @@ export class ContentService {
           createdAt: { $first: '$createdAt' },
           updatedAt: { $first: '$updatedAt' },
           views: { $push: '$views' },
+          thumbnails: { $push: '$thumbnails' },
+          duration: { $push: '$duration' },
           totalViewCount: {
             $sum: '$views.viewCount',
           },
@@ -119,6 +121,20 @@ export class ContentService {
         $match: { totalViewCount: { $gte: TOTAL_VIEW_THRESHOLD_FOR_TRENDING } },
       },
       { $sort: { totalViewCount: -1 } },
+      {
+        $lookup: {
+          from: collectionNames.channel,
+          localField: 'channelId',
+          foreignField: '_id',
+          as: 'channels',
+        },
+      },
+      {
+        $addFields: {
+          channel: { $arrayElemAt: ['$channels', 0] },
+        },
+      },
+      { $project: { channels: 0 } },
     ]);
   }
 

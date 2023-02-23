@@ -8,9 +8,10 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ModelGalleryService } from './model-gallery.service';
-import { CreateModelGalleryDto } from './model-gallery.dto';
-import { UpdateModelGalleryDto } from './dto/update-model-gallery.dto';
-
+import {
+  CreateModelGalleryDto,
+  UpdateModelGalleryDto,
+} from './model-gallery.dto';
 @Controller('model-gallery')
 export class ModelGalleryController {
   constructor(private readonly modelGalleryService: ModelGalleryService) {}

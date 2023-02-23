@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateModelGalleryDto } from './model-gallery.dto';
-import { UpdateModelGalleryDto } from './dto/update-model-gallery.dto';
-
+import {
+  CreateModelGalleryDto,
+  UpdateModelGalleryDto,
+} from './model-gallery.dto';
 @Injectable()
 export class ModelGalleryService {
   create(createModelGalleryDto: CreateModelGalleryDto) {

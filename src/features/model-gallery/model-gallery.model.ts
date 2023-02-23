@@ -34,4 +34,3 @@ export class ModelGallery {
 
 export type ModelGalleryDocument = HydratedDocument<ModelGallery>;
 export const ModelGallerySchema = SchemaFactory.createForClass(ModelGallery);
-
