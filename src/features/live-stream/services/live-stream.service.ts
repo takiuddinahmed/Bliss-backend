@@ -81,6 +81,20 @@ export class LiveStreamService {
     }
   }
 
+  async findOneByRoom(room: string) {
+    try {
+      const record = await this.liveStreamModel.findOne({
+        roomName: room
+      });
+      if (!record) {
+        return Promise.reject(new NotFoundException('Livestream not found'));
+      }
+      return record;
+    } catch (err) {
+      throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
+    }
+  }
+
   async update(id: string, updateLiveStreamDto: UpdateLiveStreamDto) {
     try {
       const livestream = await this.liveStreamModel.findOne({
