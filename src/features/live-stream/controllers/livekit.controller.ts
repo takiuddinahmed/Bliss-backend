@@ -22,7 +22,7 @@ import { AuthUser } from '../../security/get-user.decorator';
 export class LiveKitController {
   constructor(private readonly liveKitService: LiveKitService) {}
 
-  @Get('token/create')
+  @Post('token/create')
   createToken(@AuthUser() user, @Body() createRoomDto: CreateRoomDto) {
     try {
       return this.liveKitService.createToken(createRoomDto);
