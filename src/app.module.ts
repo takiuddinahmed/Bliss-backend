@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from 'src/features/auth/auth.module';
 import { UserModule } from 'src/features/user/user.module';
@@ -25,6 +26,7 @@ import { NewsfeedModule } from './features/newsfeed';
 import { LiveStreamModule } from './features/live-stream/live-stream.module';
 import { NewsfeedCommentModule } from './features/newsfeed-comment/newsfeed-comment.module';
 import { ModelGalleryModule } from './features/model-gallery/model-gallery.module';
+import { LoggingInterceptor } from './features/common/interceptors/logging.interceptor';
 
 @Module({
   imports: [
@@ -58,6 +60,12 @@ import { ModelGalleryModule } from './features/model-gallery/model-gallery.modul
     LiveStreamModule,
     NewsfeedCommentModule,
     ModelGalleryModule,
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
   ],
 })
 export class AppModule {}

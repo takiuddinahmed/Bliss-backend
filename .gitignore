@@ -37,3 +37,5 @@ lerna-debug.log*
 .env
 notes.txt
 scripts
+
+swagger-spec.json
