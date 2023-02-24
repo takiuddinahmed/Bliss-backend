@@ -116,8 +116,8 @@ export class ContentService {
           createdAt: { $first: '$createdAt' },
           updatedAt: { $first: '$updatedAt' },
           views: { $push: '$views' },
-          thumbnails: { $push: '$thumbnails' },
-          duration: { $push: '$duration' },
+          thumbnails: { $first: '$thumbnails' },
+          duration: { $first: '$duration' },
           totalViewCount: {
             $sum: '$views.viewCount',
           },
