@@ -8,14 +8,18 @@ export class LiveKitService {
       const roomName = createRoomDTO.roomName;
       const participantName = createRoomDTO.participant;
 
-      const at = new AccessToken(process.env.LIVEKIT_API_KEY, process.env.LIVEKIT_SECRET, {
-        identity: participantName,
-      });
+      const at = new AccessToken(
+        process.env.LIVEKIT_API_KEY,
+        process.env.LIVEKIT_SECRET,
+        {
+          identity: participantName,
+        },
+      );
       const grantPermission = {
         ...createRoomDTO,
         room: roomName,
-        roomJoin: true
-      }
+        roomJoin: true,
+      };
       delete grantPermission.roomName;
       delete grantPermission.participant;
       at.addGrant(grantPermission);

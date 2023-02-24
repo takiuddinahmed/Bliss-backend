@@ -25,6 +25,10 @@ export class AudienceDto implements Readonly<AudienceDto> {
   @IsMongoId()
   userId: Types.ObjectId | string;
 
+  @IsOptional()
+  @IsString()
+  accessToken: string;
+
   @IsEnum(Status)
   @ValidateIf((obj, value) => value != null)
   @ApiProperty()

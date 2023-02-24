@@ -57,8 +57,9 @@ export class LiveStreamController {
   update(
     @Param('id') id: string,
     @Body() updateLiveStreamDto: UpdateLiveStreamDto,
+    @AuthUser() user,
   ) {
-    return this.liveStreamService.update(id, updateLiveStreamDto);
+    return this.liveStreamService.update(id, updateLiveStreamDto, user);
   }
 
   @UseGuards(JwtAuthGuard)

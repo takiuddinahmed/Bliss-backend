@@ -9,6 +9,7 @@ import {
   UpdateLiveStreamDto,
   SearchLiveStreamDTO,
   CreateRoomDto,
+  AudienceDto,
 } from '../dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { collectionNames } from '../../common';
@@ -37,7 +38,7 @@ export class LiveStreamService {
       );
       const roomDTO = new CreateRoomDto();
       roomDTO.roomName = roomName;
-      roomDTO.participant = user.firstName + " " + user.lastName;
+      roomDTO.participant = user.firstName + ' ' + user.lastName;
       const accessToken = this.liveKitService.createToken(roomDTO);
       return await this.liveStreamModel.create({
         ...createLiveStreamDto,
@@ -46,7 +47,7 @@ export class LiveStreamService {
         accessToken,
       });
     } catch (err) {
-      console.log(err)
+      console.log(err);
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
     }
   }
@@ -84,7 +85,7 @@ export class LiveStreamService {
   async findOneByRoom(room: string) {
     try {
       const record = await this.liveStreamModel.findOne({
-        roomName: room
+        roomName: room,
       });
       if (!record) {
         return Promise.reject(new NotFoundException('Livestream not found'));
@@ -95,7 +96,7 @@ export class LiveStreamService {
     }
   }
 
-  async update(id: string, updateLiveStreamDto: UpdateLiveStreamDto) {
+  async update(id: string, updateLiveStreamDto: UpdateLiveStreamDto, user) {
     try {
       const livestream = await this.liveStreamModel.findOne({
         _id: id,
@@ -108,6 +109,13 @@ export class LiveStreamService {
         updateLiveStreamDto.hasOwnProperty('audiences')
       ) {
         const audiences = livestream.get('audiences') || [];
+        updateLiveStreamDto.audiences.map((audience) => {
+          const roomDTO = new CreateRoomDto();
+          roomDTO.roomName = livestream.roomName;
+          roomDTO.participant = user.firstName + ' ' + user.lastName;
+          const accessToken = this.liveKitService.createToken(roomDTO);
+          audience.accessToken = accessToken;
+        });
         updateLiveStreamDto.audiences = subDocUpdateWithArray(
           audiences,
           updateLiveStreamDto.audiences,

@@ -26,6 +26,9 @@ export class Audience {
   @Prop({ type: Types.ObjectId, ref: collectionNames.user })
   userId: Types.ObjectId | string;
 
+  @Prop({ type: String, required: true, unique: true })
+  accessToken: string;
+
   @IsEnum(Status)
   @ValidateIf((obj, value) => value != null)
   @ApiProperty()
