@@ -22,6 +22,7 @@ import { SexualityEnum } from '../common';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import { ContentVideoQueryDto } from './content-video-query.dto';
+import { ContentQueryDto } from './content.dto';
 import { ContentFiles } from './content.model';
 import { ContentService } from './content.service';
 import { CreateContentDto } from './create-content.dto';
@@ -85,19 +86,52 @@ export class ContentController {
     );
   }
 
+  @ApiQuery({
+    name: 'categoryId',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'subCategoryId',
+    type: String,
+    required: false,
+  })
   @Get('popular')
-  async getPopular() {
-    return await this.contentService.getPopular();
+  async getPopular(@Query() query: ContentQueryDto) {
+    const { ...filter } = query;
+    return await this.contentService.getPopular(filter);
   }
 
+  @ApiQuery({
+    name: 'categoryId',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'subCategoryId',
+    type: String,
+    required: false,
+  })
   @Get('trending')
-  async getTrending() {
-    return await this.contentService.getTrending();
+  async getTrending(@Query() query: ContentQueryDto) {
+    const { ...filter } = query;
+    return await this.contentService.getTrending(filter);
   }
 
+  @ApiQuery({
+    name: 'categoryId',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'subCategoryId',
+    type: String,
+    required: false,
+  })
   @Get('new')
-  async getNew() {
-    return await this.contentService.getNew();
+  async getNew(@Query() query: ContentQueryDto) {
+    const { ...filter } = query;
+    return await this.contentService.getNew(filter);
   }
 
   @Get('library')

@@ -41,8 +41,14 @@ export class LiveStreamController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/room/:room')
+  findOne(@Param('room') room: string) {
+    return this.liveStreamService.findOneByRoom(room);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOneByRoom(@Param('id') id: string) {
     return this.liveStreamService.findOne(id);
   }
 

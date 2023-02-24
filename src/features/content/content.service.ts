@@ -24,6 +24,7 @@ import { Content, ContentFiles } from './content.model';
 import { CreateContentDto } from './create-content.dto';
 import { UpdateContentDto } from './update-content.dto';
 import * as moment from 'moment';
+import { ContentQueryDto } from './content.dto';
 
 @Injectable()
 export class ContentService {
@@ -76,9 +77,14 @@ export class ContentService {
     return content;
   }
 
-  async getPopular() {
+  async getPopular(filter: FilterQuery<Content> = {}) {
     return await this.contentModel.aggregate([
-      { $match: { favorites: { $elemMatch: { $exists: true, $ne: [] } } } },
+      {
+        $match: {
+          favorites: { $elemMatch: { $exists: true, $ne: [] } },
+          ...filter,
+        },
+      },
       { $addFields: { favoriteCount: { $size: '$favorites' } } },
       { $match: { favoriteCount: { $gte: FAVORITE_THRESHOLD_FOR_POPULAR } } },
       { $sort: { favoriteCount: -1 } },
@@ -86,9 +92,9 @@ export class ContentService {
     ]);
   }
 
-  async getTrending() {
+  async getTrending(filter: FilterQuery<Content> = {}) {
     return await this.contentModel.aggregate([
-      { $match: { views: { $exists: true, $ne: [] } } },
+      { $match: { views: { $exists: true, $ne: [] }, ...filter } },
       { $unwind: { path: '$views' } },
       {
         $group: {
@@ -96,7 +102,7 @@ export class ContentService {
           userId: { $first: '$userId' },
           categoryId: { $first: '$categoryId' },
           subCategoryId: { $first: '$subCategoryId' },
-          channelId: { $first: '$channelId' },
+          channelId: { $first: { $toObjectId: '$channelId' } },
           sexuality: { $first: '$sexuality' },
           contentType: { $first: '$contentType' },
           description: { $first: '$description' },
@@ -110,6 +116,8 @@ export class ContentService {
           createdAt: { $first: '$createdAt' },
           updatedAt: { $first: '$updatedAt' },
           views: { $push: '$views' },
+          thumbnails: { $push: '$thumbnails' },
+          duration: { $push: '$duration' },
           totalViewCount: {
             $sum: '$views.viewCount',
           },
@@ -119,14 +127,31 @@ export class ContentService {
         $match: { totalViewCount: { $gte: TOTAL_VIEW_THRESHOLD_FOR_TRENDING } },
       },
       { $sort: { totalViewCount: -1 } },
+      {
+        $lookup: {
+          from: collectionNames.channel,
+          localField: 'channelId',
+          foreignField: '_id',
+          as: 'channels',
+        },
+      },
+      {
+        $addFields: {
+          channel: { $arrayElemAt: ['$channels', 0] },
+        },
+      },
+      { $project: { channels: 0 } },
     ]);
   }
 
-  async getNew() {
+  async getNew(dto: ContentQueryDto) {
     const date = moment().subtract(DAY_THRESHOLD_FOR_NEW, 'days').toISOString();
-
+    const filter: FilterQuery<Content> = {};
+    if (dto.categoryId) filter.categoryId = dto?.categoryId?.toString();
+    if (dto.subCategoryId)
+      filter.subCategoryId = dto?.subCategoryId?.toString();
     return await this.contentModel
-      .find({ updatedAt: { $gte: date } })
+      .find({ updatedAt: { $gte: date }, ...filter })
       .sort({ updatedAt: -1 });
   }
 

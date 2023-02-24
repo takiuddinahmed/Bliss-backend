@@ -24,6 +24,7 @@ import { PaymentModule } from './features/payment/payment.module';
 import { NewsfeedModule } from './features/newsfeed';
 import { LiveStreamModule } from './features/live-stream/live-stream.module';
 import { NewsfeedCommentModule } from './features/newsfeed-comment/newsfeed-comment.module';
+import { ModelGalleryModule } from './features/model-gallery/model-gallery.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { NewsfeedCommentModule } from './features/newsfeed-comment/newsfeed-comm
     NewsfeedModule,
     LiveStreamModule,
     NewsfeedCommentModule,
+    ModelGalleryModule,
   ],
 })
 export class AppModule {}
