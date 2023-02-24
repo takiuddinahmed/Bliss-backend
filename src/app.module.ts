@@ -23,6 +23,7 @@ import { ResortModule } from './features/resort';
 import { PaymentModule } from './features/payment/payment.module';
 import { NewsfeedModule } from './features/newsfeed';
 import { LiveStreamModule } from './features/live-stream/live-stream.module';
+import { NewsfeedCommentModule } from './features/newsfeed-comment/newsfeed-comment.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { LiveStreamModule } from './features/live-stream/live-stream.module';
     PaymentModule,
     NewsfeedModule,
     LiveStreamModule,
+    NewsfeedCommentModule,
   ],
 })
 export class AppModule {}

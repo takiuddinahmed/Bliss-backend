@@ -57,10 +57,6 @@ export class RestaurantMenu {
   @Transform(({ value }) =>
     typeof value === 'string' ? value === 'true' : value,
   )
-  @ApiProperty({ enum: ['true', 'false'] })
-  @Transform(({ value }) =>
-    typeof value === 'string' ? value === 'true' : value,
-  )
   @Prop({ type: Boolean })
   featured: boolean;
 

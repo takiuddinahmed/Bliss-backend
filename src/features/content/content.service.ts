@@ -6,13 +6,24 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
-import { collectionNames, FileData } from '../common';
+import {
+  collectionNames,
+  FileData,
+  ContentTypeEnum,
+  PaginationQuery,
+} from '../common';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { SpaceService } from '../space/space.service';
 import { generatePermalink } from '../utils';
+import {
+  DAY_THRESHOLD_FOR_NEW,
+  FAVORITE_THRESHOLD_FOR_POPULAR,
+  TOTAL_VIEW_THRESHOLD_FOR_TRENDING,
+} from './contants';
 import { Content, ContentFiles } from './content.model';
 import { CreateContentDto } from './create-content.dto';
 import { UpdateContentDto } from './update-content.dto';
+import * as moment from 'moment';
 
 @Injectable()
 export class ContentService {
@@ -45,10 +56,78 @@ export class ContentService {
     return await this.contentModel.find().sort({ updatedAt: -1 });
   }
 
+  async getVideos(
+    filter: FilterQuery<Content> = {},
+    pagination: PaginationQuery = {},
+  ) {
+    return await this.contentModel
+      .find({
+        ...filter,
+        contentType: ContentTypeEnum.VIDEO,
+      })
+      .skip(pagination?.from || 0)
+      .limit(pagination?.count || 10)
+      .sort({ updatedAt: -1 });
+  }
+
   async getContent(permalink: string) {
     const content = await this.contentModel.findOne({ permalink });
     if (!content) throw new NotFoundException('Content not found');
     return content;
+  }
+
+  async getPopular() {
+    return await this.contentModel.aggregate([
+      { $match: { favorites: { $elemMatch: { $exists: true, $ne: [] } } } },
+      { $addFields: { favoriteCount: { $size: '$favorites' } } },
+      { $match: { favoriteCount: { $gte: FAVORITE_THRESHOLD_FOR_POPULAR } } },
+      { $sort: { favoriteCount: -1 } },
+      { $project: { favoriteCount: 0 } },
+    ]);
+  }
+
+  async getTrending() {
+    return await this.contentModel.aggregate([
+      { $match: { views: { $exists: true, $ne: [] } } },
+      { $unwind: { path: '$views' } },
+      {
+        $group: {
+          _id: '$_id',
+          userId: { $first: '$userId' },
+          categoryId: { $first: '$categoryId' },
+          subCategoryId: { $first: '$subCategoryId' },
+          channelId: { $first: '$channelId' },
+          sexuality: { $first: '$sexuality' },
+          contentType: { $first: '$contentType' },
+          description: { $first: '$description' },
+          isFunVideo: { $first: '$isFunVideo' },
+          file: { $first: '$file' },
+          url: { $first: '$url' },
+          visualiTy: { $first: '$visualiTy' },
+          permalink: { $first: '$permalink' },
+          likeDislikes: { $first: '$likeDislikes' },
+          favorites: { $first: '$favorites' },
+          createdAt: { $first: '$createdAt' },
+          updatedAt: { $first: '$updatedAt' },
+          views: { $push: '$views' },
+          totalViewCount: {
+            $sum: '$views.viewCount',
+          },
+        },
+      },
+      {
+        $match: { totalViewCount: { $gte: TOTAL_VIEW_THRESHOLD_FOR_TRENDING } },
+      },
+      { $sort: { totalViewCount: -1 } },
+    ]);
+  }
+
+  async getNew() {
+    const date = moment().subtract(DAY_THRESHOLD_FOR_NEW, 'days').toISOString();
+
+    return await this.contentModel
+      .find({ updatedAt: { $gte: date } })
+      .sort({ updatedAt: -1 });
   }
 
   async getContentByUser(userId: string) {
@@ -86,13 +165,34 @@ export class ContentService {
     }
     return await this.contentModel.create(createContentDto);
   }
-  async updateContent(permalink: string, updateContentDto: UpdateContentDto) {
+  async updateContent(
+    permalink: string,
+    updateContentDto: UpdateContentDto,
+    thumbnails?: Express.Multer.File[],
+  ) {
     const found = await this.contentModel.findOne({ permalink });
     if (!found) throw new BadRequestException('Content not found');
 
-    return await this.contentModel.findOne({ permalink }, updateContentDto, {
-      new: true,
-    });
+    const thumbnailsFileData: FileData[] = [];
+    if (thumbnails.length) {
+      for await (const file of thumbnails) {
+        const fileData = await this.spaceService.uploadFile(file);
+        if (fileData) thumbnailsFileData.push(fileData);
+      }
+    }
+
+    updateContentDto.thumbnails = [
+      ...thumbnailsFileData,
+      ...(updateContentDto.oldThumbnails || []),
+    ];
+
+    return await this.contentModel.findOneAndUpdate(
+      { permalink },
+      updateContentDto,
+      {
+        new: true,
+      },
+    );
   }
 
   async likeDislikeContent(
@@ -178,6 +278,41 @@ export class ContentService {
     } else {
       return content;
     }
+  }
+
+  async addUserToLibrary(id: string, userId: string) {
+    const content = await this.getById(id);
+    if (content?.library?.some((uId) => uId.toString() === userId)) {
+      return content;
+    } else {
+      return await this.contentModel.findByIdAndUpdate(
+        id,
+        {
+          $push: { library: userId },
+        },
+        { new: true },
+      );
+    }
+  }
+  async removeUserFromLibrary(id: string, userId: string) {
+    const content = await this.getById(id);
+    if (content?.library?.some((uId) => uId.toString() === userId)) {
+      return await this.contentModel.findByIdAndUpdate(
+        id,
+        {
+          $pull: { library: userId },
+        },
+        { new: true },
+      );
+    } else {
+      return content;
+    }
+  }
+
+  async getUserLibraryContents(userId: string) {
+    return await this.contentModel
+      .find({ library: userId })
+      .sort({ updatedAt: -1 });
   }
 
   async getById(id: string) {

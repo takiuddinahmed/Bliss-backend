@@ -133,11 +133,14 @@ export class Content {
   @Prop({ type: [LikeDislikeSchema], default: [] })
   likeDislikes: LikeDislike[];
 
-  @Prop({ Type: [Types.ObjectId], ref: collectionNames.user })
+  @Prop({ Type: [Types.ObjectId], ref: collectionNames.user, default: [] })
   favorites: Types.ObjectId[] | string[];
 
   @Prop({ type: Array<ContentView>, default: [] })
   views: ContentView[];
+
+  @Prop({ Type: [Types.ObjectId], ref: collectionNames.user, default: [] })
+  library: Types.ObjectId[];
 }
 
 export interface ContentFiles {

@@ -7,14 +7,21 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+  FilesInterceptor,
+} from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { SexualityEnum } from '../common';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
+import { ContentVideoQueryDto } from './content-video-query.dto';
 import { ContentFiles } from './content.model';
 import { ContentService } from './content.service';
 import { CreateContentDto } from './create-content.dto';
@@ -31,10 +38,72 @@ export class ContentController {
     return await this.contentService.getContents();
   }
 
+  @ApiQuery({
+    name: 'from',
+    type: Number,
+    required: false,
+    description: 'Return data from. Default 0',
+  })
+  @ApiQuery({
+    name: 'count',
+    type: Number,
+    required: false,
+    description: 'How many data requered. Default 10',
+  })
+  @ApiQuery({
+    name: 'categoryId',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'subCategoryId',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'channelId',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'sexuality',
+    type: String,
+    enum: SexualityEnum,
+    required: false,
+  })
+  @Get('video')
+  async getVideo(@Query() query: ContentVideoQueryDto) {
+    const { from, count, ...filter } = query;
+    return await this.contentService.getVideos(filter, { from, count });
+  }
+
   @Get('favorites')
   @UseGuards(JwtAuthGuard)
   async getUsersFavorites(@AuthUser() user: IAuthUser) {
     return await this.contentService.getUserFavoriteContents(
+      user._id.toString(),
+    );
+  }
+
+  @Get('popular')
+  async getPopular() {
+    return await this.contentService.getPopular();
+  }
+
+  @Get('trending')
+  async getTrending() {
+    return await this.contentService.getTrending();
+  }
+
+  @Get('new')
+  async getNew() {
+    return await this.contentService.getNew();
+  }
+
+  @Get('library')
+  @UseGuards(JwtAuthGuard)
+  async getUsersLibrary(@AuthUser() user: IAuthUser) {
+    return await this.contentService.getUserLibraryContents(
       user._id.toString(),
     );
   }
@@ -133,6 +202,27 @@ export class ContentController {
     return await this.contentService.getById(id);
   }
 
+  @Put('library/:id/:state')
+  @UseGuards(JwtAuthGuard)
+  async userLibrary(
+    @Param('id') id: string,
+    @Param('state') state: string,
+    @AuthUser() user: IAuthUser,
+  ) {
+    if (state === 'add') {
+      return await this.contentService.addUserToLibrary(
+        id,
+        user._id.toString(),
+      );
+    } else if (state === 'remove') {
+      return await this.contentService.removeUserFromLibrary(
+        id,
+        user._id.toString(),
+      );
+    }
+    return await this.contentService.getById(id);
+  }
+
   @Put('views/:id')
   @UseGuards(JwtAuthGuard)
   async addViews(@Param('id') id: string, @AuthUser() user: IAuthUser) {
@@ -141,11 +231,17 @@ export class ContentController {
 
   @Patch(':permalink')
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FilesInterceptor('thumbnails[]'))
   async update(
     @Param('permalink') permalink: string,
     @Body() updateContentDto: UpdateContentDto,
+    @UploadedFiles() thumbnails: Express.Multer.File[],
   ) {
-    return await this.contentService.updateContent(permalink, updateContentDto);
+    return await this.contentService.updateContent(
+      permalink,
+      updateContentDto,
+      thumbnails,
+    );
   }
 
   @Delete(':permalink')

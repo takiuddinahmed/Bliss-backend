@@ -13,7 +13,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { collectionNames } from '../../common';
 import { Model } from 'mongoose';
-import { LiveStreamDocument } from '../live-stream.model';
+import { LiveStreamDocument } from '../models/live-stream.model';
 import {
   generatePermalink,
   createSearchQuery,
@@ -37,7 +37,7 @@ export class LiveStreamService {
       );
       const roomDTO = new CreateRoomDto();
       roomDTO.roomName = roomName;
-      roomDTO.participant = user._id;
+      roomDTO.participant = user.firstName + " " + user.lastName;
       const accessToken = this.liveKitService.createToken(roomDTO);
       return await this.liveStreamModel.create({
         ...createLiveStreamDto,
@@ -46,6 +46,7 @@ export class LiveStreamService {
         accessToken,
       });
     } catch (err) {
+      console.log(err)
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
     }
   }

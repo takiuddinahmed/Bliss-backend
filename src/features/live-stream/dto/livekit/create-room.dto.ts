@@ -1,5 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateRoomDto implements Readonly<CreateRoomDto> {
   @ApiProperty()
@@ -9,4 +13,29 @@ export class CreateRoomDto implements Readonly<CreateRoomDto> {
   @ApiProperty()
   @IsString()
   participant: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  canPublish: boolean;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  canPublishData: boolean;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  canSubscribe: boolean;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  hidden: boolean;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  recorder: boolean;
 }
