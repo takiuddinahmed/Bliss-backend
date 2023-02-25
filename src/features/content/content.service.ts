@@ -105,6 +105,7 @@ export class ContentService {
           channelId: { $first: { $toObjectId: '$channelId' } },
           sexuality: { $first: '$sexuality' },
           contentType: { $first: '$contentType' },
+          title: { $first: '$title' },
           description: { $first: '$description' },
           isFunVideo: { $first: '$isFunVideo' },
           file: { $first: '$file' },
