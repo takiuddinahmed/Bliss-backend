@@ -1,6 +1,7 @@
 import { Transform } from 'class-transformer';
-import { IsMongoId, IsOptional } from 'class-validator';
+import { IsEnum, IsMongoId, IsOptional } from 'class-validator';
 import { Types } from 'mongoose';
+import { ContentTypeEnum } from '../common';
 
 export class ContentQueryDto {
   @IsOptional()
@@ -10,4 +11,8 @@ export class ContentQueryDto {
   @IsOptional()
   @Transform(({ value }) => new Types.ObjectId(value))
   subCategoryId: Types.ObjectId;
+
+  @IsOptional()
+  @IsEnum(ContentTypeEnum)
+  contentType: ContentTypeEnum;
 }

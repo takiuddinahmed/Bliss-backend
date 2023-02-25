@@ -18,7 +18,7 @@ import {
   FilesInterceptor,
 } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { SexualityEnum } from '../common';
+import { ContentTypeEnum, SexualityEnum } from '../common';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
 import { ContentVideoQueryDto } from './content-video-query.dto';
@@ -96,6 +96,12 @@ export class ContentController {
     type: String,
     required: false,
   })
+  @ApiQuery({
+    name: 'contentType',
+    type: String,
+    required: false,
+    enum: ContentTypeEnum,
+  })
   @Get('popular')
   async getPopular(@Query() query: ContentQueryDto) {
     const { ...filter } = query;
@@ -112,6 +118,12 @@ export class ContentController {
     type: String,
     required: false,
   })
+  @ApiQuery({
+    name: 'contentType',
+    type: String,
+    required: false,
+    enum: ContentTypeEnum,
+  })
   @Get('trending')
   async getTrending(@Query() query: ContentQueryDto) {
     const { ...filter } = query;
@@ -127,6 +139,12 @@ export class ContentController {
     name: 'subCategoryId',
     type: String,
     required: false,
+  })
+  @ApiQuery({
+    name: 'contentType',
+    type: String,
+    required: false,
+    enum: ContentTypeEnum,
   })
   @Get('new')
   async getNew(@Query() query: ContentQueryDto) {
