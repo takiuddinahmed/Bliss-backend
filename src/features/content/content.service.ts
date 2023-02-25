@@ -116,8 +116,8 @@ export class ContentService {
           createdAt: { $first: '$createdAt' },
           updatedAt: { $first: '$updatedAt' },
           views: { $push: '$views' },
-          thumbnails: { $push: '$thumbnails' },
-          duration: { $push: '$duration' },
+          thumbnails: { $first: '$thumbnails' },
+          duration: { $first: '$duration' },
           totalViewCount: {
             $sum: '$views.viewCount',
           },
@@ -150,6 +150,7 @@ export class ContentService {
     if (dto.categoryId) filter.categoryId = dto?.categoryId?.toString();
     if (dto.subCategoryId)
       filter.subCategoryId = dto?.subCategoryId?.toString();
+    if (dto.contentType) filter.contentType = dto?.contentType;
     return await this.contentModel
       .find({ updatedAt: { $gte: date }, ...filter })
       .sort({ updatedAt: -1 });
