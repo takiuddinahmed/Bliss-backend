@@ -41,7 +41,8 @@ export class LiveStreamService {
       await this.liveKitService.createRoom(roomDTO);
       const tokenDTO = new CreateTokenDto();
       tokenDTO.roomName = roomName;
-      tokenDTO.participant = user.firstName + ' ' + user.lastName;
+      // tokenDTO.participant = user.firstName + ' ' + user.lastName;
+      tokenDTO.participant = user.email;
       const accessToken = this.liveKitService.createToken(tokenDTO);
       return await this.liveStreamModel.create({
         ...createLiveStreamDto,
@@ -115,7 +116,8 @@ export class LiveStreamService {
         updateLiveStreamDto.audiences.map((audience) => {
           const roomDTO = new CreateTokenDto();
           roomDTO.roomName = livestream.roomName;
-          roomDTO.participant = user.firstName + ' ' + user.lastName;
+          // roomDTO.participant = user.firstName + ' ' + user.lastName;
+          roomDTO.participant = user.email;
           const accessToken = this.liveKitService.createToken(roomDTO);
           audience.accessToken = accessToken;
         });
