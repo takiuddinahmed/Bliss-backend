@@ -9,7 +9,7 @@ import {
   UpdateLiveStreamDto,
   SearchLiveStreamDTO,
   CreateTokenDto,
-  AudienceDto,
+  CreateRoomDto,
 } from '../dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { collectionNames } from '../../common';
@@ -36,10 +36,13 @@ export class LiveStreamService {
         createLiveStreamDto.title,
         this.liveStreamModel,
       );
-      const roomDTO = new CreateTokenDto();
+      const roomDTO = new CreateRoomDto();
       roomDTO.roomName = roomName;
-      roomDTO.participant = user.firstName + ' ' + user.lastName;
-      const accessToken = this.liveKitService.createToken(roomDTO);
+      await this.liveKitService.createRoom(roomDTO);
+      const tokenDTO = new CreateTokenDto();
+      tokenDTO.roomName = roomName;
+      tokenDTO.participant = user.firstName + ' ' + user.lastName;
+      const accessToken = this.liveKitService.createToken(tokenDTO);
       return await this.liveStreamModel.create({
         ...createLiveStreamDto,
         userId: user._id,

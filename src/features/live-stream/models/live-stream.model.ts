@@ -26,7 +26,7 @@ export class Audience {
   @Prop({ type: Types.ObjectId, ref: collectionNames.user })
   userId: Types.ObjectId | string;
 
-  @Prop({ type: String, required: true, unique: true })
+  @Prop({ type: String, required: true })
   accessToken: string;
 
   @IsEnum(Status)
