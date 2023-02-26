@@ -42,8 +42,8 @@ export class ChannelController {
 
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'file', maxCount: 1 },
-      { name: 'thumbnails', maxCount: 5 },
+      { name: 'logo', maxCount: 1 },
+      { name: 'banner', maxCount: 1 },
     ]),
   )
   @Post()
@@ -60,8 +60,8 @@ export class ChannelController {
 
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'file', maxCount: 1 },
-      { name: 'thumbnails', maxCount: 5 },
+      { name: 'logo', maxCount: 1 },
+      { name: 'banner', maxCount: 1 },
     ]),
   )
   @Patch(':id')
