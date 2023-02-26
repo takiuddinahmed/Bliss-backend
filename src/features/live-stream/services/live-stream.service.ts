@@ -8,7 +8,7 @@ import {
   CreateLiveStreamDto,
   UpdateLiveStreamDto,
   SearchLiveStreamDTO,
-  CreateRoomDto,
+  CreateTokenDto,
   AudienceDto,
 } from '../dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -36,7 +36,7 @@ export class LiveStreamService {
         createLiveStreamDto.title,
         this.liveStreamModel,
       );
-      const roomDTO = new CreateRoomDto();
+      const roomDTO = new CreateTokenDto();
       roomDTO.roomName = roomName;
       roomDTO.participant = user.firstName + ' ' + user.lastName;
       const accessToken = this.liveKitService.createToken(roomDTO);
@@ -110,7 +110,7 @@ export class LiveStreamService {
       ) {
         const audiences = livestream.get('audiences') || [];
         updateLiveStreamDto.audiences.map((audience) => {
-          const roomDTO = new CreateRoomDto();
+          const roomDTO = new CreateTokenDto();
           roomDTO.roomName = livestream.roomName;
           roomDTO.participant = user.firstName + ' ' + user.lastName;
           const accessToken = this.liveKitService.createToken(roomDTO);
