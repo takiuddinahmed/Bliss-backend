@@ -1,11 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import {
-  IsMongoId,
-  IsString,
-} from 'class-validator';
+import { IsMongoId, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { collectionNames } from '../../common';
-
 
 export type LiveStreamChatDocument = LiveStreamChat & Document;
 
@@ -17,7 +13,7 @@ export class LiveStreamChat {
     ref: collectionNames.livestream,
     required: true,
   })
-  streamId: Types.ObjectId | string;   // here stream id will act as room in the chat
+  streamId: Types.ObjectId | string; // here stream id will act as room in the chat
 
   @IsMongoId()
   @Prop({
@@ -32,4 +28,5 @@ export class LiveStreamChat {
   message: string;
 }
 
-export const LiveStreamChatSchema = SchemaFactory.createForClass(LiveStreamChat);
+export const LiveStreamChatSchema =
+  SchemaFactory.createForClass(LiveStreamChat);

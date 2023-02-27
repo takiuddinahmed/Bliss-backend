@@ -16,5 +16,6 @@ export const collectionNames = {
   resort: 'resorts',
   newsfeed: 'newsfeeds',
   livestream: 'livestreams',
+  streamingChat: 'livestreamchats',
   newsfeedComment: 'newsfeed-comments',
 };
