@@ -18,4 +18,5 @@ export const collectionNames = {
   livestream: 'livestreams',
   streamingChat: 'livestreamchats',
   newsfeedComment: 'newsfeed-comments',
+  modelGallery: 'model-galleries',
 };
