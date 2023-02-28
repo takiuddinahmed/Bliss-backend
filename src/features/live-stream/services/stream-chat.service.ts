@@ -45,6 +45,7 @@ export class StreamChatService {
       const skip: number = (query && query.skip) || 0;
       const cursor = this.streamChatModel
         .find(searchQuery)
+        .populate('sender')
         .limit(limit)
         .skip(skip);
       if (query.hasOwnProperty('sort') && query.sort) {
