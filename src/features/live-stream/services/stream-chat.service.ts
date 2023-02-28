@@ -17,7 +17,6 @@ import { createSearchQuery } from '../../utils';
 import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 
-
 @WebSocketGateway({ cors: true })
 @Injectable()
 export class StreamChatService {
@@ -25,14 +24,14 @@ export class StreamChatService {
   constructor(
     @InjectModel(collectionNames.streamingChat)
     private streamChatModel: Model<LiveStreamChatDocument>,
-  ) { }
+  ) {}
 
   async create(user, createLiveStreamDto: CreateStreamChatDto) {
     try {
       createLiveStreamDto.streamId = user._id;
       const chat = await this.streamChatModel.create(createLiveStreamDto);
       this.server.emit(`stream-message-${chat.streamId}`, { chat });
-      return chat
+      return chat;
     } catch (err) {
       console.log(err);
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
