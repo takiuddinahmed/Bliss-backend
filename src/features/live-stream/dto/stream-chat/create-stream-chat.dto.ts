@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsMongoId, IsString } from 'class-validator';
+import { IsBoolean, IsMongoId, IsOptional, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 
 export class CreateStreamChatDto implements Readonly<CreateStreamChatDto> {
@@ -16,6 +16,7 @@ export class CreateStreamChatDto implements Readonly<CreateStreamChatDto> {
   message: string;
 
   @ApiProperty()
+  @IsOptional()
   @IsBoolean()
   isAnonymous: boolean;
 }
