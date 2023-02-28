@@ -48,7 +48,6 @@ export class NewsfeedController {
     @AuthUser() user: IAuthUser,
     @UploadedFiles() files: NewsfeedFiles,
   ) {
-    console.log('files', files);
     return await this.newsfeedService.create(createNewsfeedDto, user, files);
   }
 

@@ -86,3 +86,10 @@ export class ModelGallery {
 
 export type ModelGalleryDocument = HydratedDocument<ModelGallery>;
 export const ModelGallerySchema = SchemaFactory.createForClass(ModelGallery);
+
+export interface ModelGalleryFiles {
+  basicImages?: Express.Multer.File[];
+  specialImages?: Express.Multer.File[];
+  archiveImages?: Express.Multer.File[];
+  video?: Express.Multer.File[];
+}
