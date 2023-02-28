@@ -23,7 +23,7 @@ import { StreamChatService } from '../services';
 
 @ApiTags('LiveStream')
 @ApiBearerAuth()
-@Controller('livestream/chat')
+@Controller('chat/livestream')
 export class StreamChatController {
   constructor(private readonly liveStreamChatService: StreamChatService) {}
 
