@@ -28,12 +28,9 @@ export class StreamChatService {
 
   async create(user, createLiveStreamDto: CreateStreamChatDto) {
     try {
-      createLiveStreamDto.sender = user._id;
+      createLiveStreamDto.streamId = user._id;
       const chat = await this.streamChatModel.create(createLiveStreamDto);
-      this.server.emit(`liveStream-message-${chat.streamId}`, {
-        roomId: chat.streamId,
-        chat: chat,
-      });
+      this.server.emit(`stream-message-${chat.streamId}`, { chat });
       return chat;
     } catch (err) {
       console.log(err);

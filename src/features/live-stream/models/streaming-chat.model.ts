@@ -1,7 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsMongoId, IsString } from 'class-validator';
+import { IsBoolean, IsMongoId, IsOptional, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { collectionNames } from '../../common';
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
 export type LiveStreamChatDocument = LiveStreamChat & Document;
 
@@ -26,6 +28,15 @@ export class LiveStreamChat {
   @IsString()
   @Prop({ type: String, required: true })
   message: string;
+
+  @IsOptional()
+  @ApiProperty({ enum: ['true', 'false'] })
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value === 'true' : value,
+  )
+  @IsBoolean()
+  @Prop({ type: Boolean, default: false })
+  isAnonymous?: boolean;
 }
 
 export const LiveStreamChatSchema =

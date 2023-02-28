@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
-import { LiveStreamController } from './controllers/live-stream.controller';
+import {
+  LiveStreamController,
+  LiveKitController,
+  StreamChatController,
+} from './controllers';
 import { MongooseModule } from '@nestjs/mongoose';
 import { collectionNames } from '../common';
 import { LiveStreamSchema } from './models/live-stream.model';
-import { LiveKitController } from './controllers/livekit.controller';
 import {
   LiveStreamService,
   LiveKitService,
@@ -24,7 +27,7 @@ import { LiveStreamChatSchema } from './models/streaming-chat.model';
       },
     ]),
   ],
-  controllers: [LiveStreamController, LiveKitController],
+  controllers: [LiveStreamController, LiveKitController, StreamChatController],
   providers: [LiveStreamService, LiveKitService, StreamChatService],
 })
 export class LiveStreamModule {}
