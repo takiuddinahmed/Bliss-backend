@@ -24,12 +24,16 @@ export class StreamChatService {
   constructor(
     @InjectModel(collectionNames.streamingChat)
     private streamChatModel: Model<LiveStreamChatDocument>,
-  ) {}
+  ) { }
 
   async create(user, createLiveStreamDto: CreateStreamChatDto) {
     try {
       createLiveStreamDto.sender = user._id;
-      const comment = await this.streamChatModel.create(createLiveStreamDto);
+      const chat = await this.streamChatModel.create(createLiveStreamDto);
+      const comment = await this.streamChatModel.findOne({
+        _id: chat._id
+      }).populate('sender')
+        .populate('streamId').exec();
       this.server.emit(`room-message-${createLiveStreamDto.streamId}`, {
         comment,
       });
