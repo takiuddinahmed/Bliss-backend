@@ -14,13 +14,9 @@ import { collectionNames } from '../../common';
 import { Model } from 'mongoose';
 import { LiveStreamChatDocument } from '../models/streaming-chat.model';
 import { createSearchQuery } from '../../utils';
-import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { Server } from 'socket.io';
 
-@WebSocketGateway({ cors: true })
 @Injectable()
 export class StreamChatService {
-  @WebSocketServer() server: Server;
   constructor(
     @InjectModel(collectionNames.streamingChat)
     private streamChatModel: Model<LiveStreamChatDocument>,
@@ -28,10 +24,8 @@ export class StreamChatService {
 
   async create(user, createLiveStreamDto: CreateStreamChatDto) {
     try {
-      createLiveStreamDto.streamId = user._id;
-      const chat = await this.streamChatModel.create(createLiveStreamDto);
-      this.server.emit(`stream-message-${chat.streamId}`, { chat });
-      return chat;
+      createLiveStreamDto.sender = user._id;
+      return await this.streamChatModel.create(createLiveStreamDto);
     } catch (err) {
       console.log(err);
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
