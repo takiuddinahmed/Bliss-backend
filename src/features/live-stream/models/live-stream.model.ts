@@ -102,6 +102,15 @@ export class LiveStream {
   isPrivate?: boolean;
 
   @IsOptional()
+  @ApiProperty({ enum: ['true', 'false'] })
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value === 'true' : value,
+  )
+  @IsBoolean()
+  @Prop({ type: Boolean, default: false })
+  isEnd?: boolean;
+
+  @IsOptional()
   @Prop({
     type: [AudienceSchema],
     default: [],
