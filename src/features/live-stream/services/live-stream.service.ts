@@ -28,7 +28,7 @@ export class LiveStreamService {
     @InjectModel(collectionNames.livestream)
     private liveStreamModel: Model<LiveStreamDocument>,
     private readonly liveKitService: LiveKitService,
-  ) {}
+  ) { }
 
   async create(user, createLiveStreamDto: CreateLiveStreamDto) {
     try {
@@ -56,19 +56,38 @@ export class LiveStreamService {
     }
   }
 
-  findAll(query: SearchLiveStreamDTO) {
+  async findAll(query: SearchLiveStreamDTO) {
     try {
       const searchQuery = createSearchQuery(query);
       const limit: number = (query && query.limit) || 10;
       const skip: number = (query && query.skip) || 0;
+      console.log(searchQuery)
       const cursor = this.liveStreamModel
         .find(searchQuery)
+        .populate("userId")
+        .populate("categoryId")
         .limit(limit)
         .skip(skip);
       if (query.hasOwnProperty('sort') && query.sort) {
         cursor.sort(JSON.parse(query.sort));
       }
-      return cursor.exec();
+      const res = await cursor.exec();
+      if (searchQuery && searchQuery.isEnd === false) {
+        const runningLive = await this.liveKitService.listRoom();
+        if (runningLive && Array.isArray(runningLive) && runningLive.length === 0) {
+          return runningLive;
+        }
+        const currentLive = [];
+        runningLive.map(room => {
+          res && res.map((live) => {
+            if (live.roomName === room.name) {
+              currentLive.push(live)
+            }
+          })
+        })
+        return currentLive;
+      }
+      return res;
     } catch (err) {
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
     }
@@ -116,7 +135,6 @@ export class LiveStreamService {
         updateLiveStreamDto.audiences.map((audience) => {
           const roomDTO = new CreateTokenDto();
           roomDTO.roomName = livestream.roomName;
-          // roomDTO.participant = user.firstName + ' ' + user.lastName;
           roomDTO.participant = user.email;
           const accessToken = this.liveKitService.createToken(roomDTO);
           audience.accessToken = accessToken;

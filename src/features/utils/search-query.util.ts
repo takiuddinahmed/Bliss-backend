@@ -7,12 +7,14 @@ import { HttpException, HttpStatus } from '@nestjs/common';
  */
 export function createSearchQuery(query) {
   try {
-    return query.hasOwnProperty('filter') && query.filter
+    const sQuery: any = query.hasOwnProperty('filter') && query.filter
       ? {
           ...query,
           ...JSON.parse(query.filter),
         }
       : query;
+    delete sQuery.filter;
+    return sQuery;
   } catch (err) {
     throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
   }
