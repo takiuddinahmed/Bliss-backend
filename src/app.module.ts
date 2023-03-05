@@ -27,6 +27,7 @@ import { LiveStreamModule } from './features/live-stream/live-stream.module';
 import { NewsfeedCommentModule } from './features/newsfeed-comment/newsfeed-comment.module';
 import { ModelGalleryModule } from './features/model-gallery/model-gallery.module';
 import { LoggingInterceptor } from './features/common/interceptors/logging.interceptor';
+import { ModelProfileModule } from './features/model-profile';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { LoggingInterceptor } from './features/common/interceptors/logging.inter
     LiveStreamModule,
     NewsfeedCommentModule,
     ModelGalleryModule,
+    ModelProfileModule,
   ],
   providers: [
     {
