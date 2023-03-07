@@ -126,3 +126,8 @@ export class ModelProfile {
 
 export type ModelProfileDocument = HydratedDocument<ModelProfile>;
 export const ModelProfileSchema = SchemaFactory.createForClass(ModelGallery);
+
+export interface ModelProfileFiles {
+  image?: Express.Multer.File[];
+  video?: Express.Multer.File[];
+}

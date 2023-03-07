@@ -4,6 +4,7 @@ import { ModelProfileController } from './model-profile.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { collectionNames } from '../common';
 import { ModelProfileSchema } from './model-profile.model';
+import { SpaceModule } from '../space';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ModelProfileSchema } from './model-profile.model';
         schema: ModelProfileSchema,
       },
     ]),
+    SpaceModule,
   ],
   controllers: [ModelProfileController],
   providers: [ModelProfileService],
