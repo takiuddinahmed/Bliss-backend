@@ -30,6 +30,7 @@ import { LoggingInterceptor } from './features/common/interceptors/logging.inter
 import { ModelProfileModule } from './features/model-profile';
 import { ActivityLogModule } from './features/activity-log/activity-log.module';
 import { ModelPictureModule } from './features/model-picture/model-picture.module';
+import { ModelCategoryModule } from './features/model-category/model-category.module';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { ModelPictureModule } from './features/model-picture/model-picture.modul
     ModelProfileModule,
     ActivityLogModule,
     ModelPictureModule,
+    ModelCategoryModule,
   ],
   providers: [
     {
