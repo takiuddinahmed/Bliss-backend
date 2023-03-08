@@ -89,10 +89,33 @@ export class ActivityLogInterceptor<T>
               // need to do something
             }
             if (method === 'PATCH') {
-              // need to do something
+              logDTO.activityType = ActivityType.UPDATED;
+              logDTO.activityName = ActivityName.CATEGORY;
             }
             if (method === 'DELETE') {
+              logDTO.activityType = ActivityType.DELETED;
+              logDTO.activityName = ActivityName.CATEGORY;
+            }
+            break;
+
+          case '/content':
+            if (method === 'GET') {
               // need to do something
+            }
+            if (method === 'POST') {
+              logDTO.activityType = ActivityType.CREATED;
+              logDTO.activityName = ActivityName.CONTENT;
+            }
+            break;
+
+          case '/content/:permalink':
+            if (method === 'PATCH') {
+              logDTO.activityType = ActivityType.UPDATED;
+              logDTO.activityName = ActivityName.CONTENT;
+            }
+            if (method === 'DELETE') {
+              logDTO.activityType = ActivityType.DELETED;
+              logDTO.activityName = ActivityName.CONTENT;
             }
             break;
         }
