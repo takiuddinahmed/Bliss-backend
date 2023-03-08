@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ActivityLogService } from './activity-log.service';
 import { ActivityName, ActivityType } from '../../features/common/enum/log.enum';
-import { ActivityLogDTO } from './activity-log.dto';
+import { ActivityLogDTO } from './dto/activity-log.dto';
 
 export interface Response<T> {
     status: string;

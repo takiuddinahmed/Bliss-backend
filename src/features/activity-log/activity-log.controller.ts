@@ -1,6 +1,7 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard, Roles, RolesGuard } from '../security';
+import { JwtAuthGuard } from '../security';
+import { SearchActivityLogDto } from './dto';
 
 import { ActivityLogService } from './activity-log.service';
 
@@ -12,7 +13,7 @@ export class ActivityLogController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Query() query) {
+  findAll(@Query() query: SearchActivityLogDto) {
     return this.logService.findAll(query);
   }
 }

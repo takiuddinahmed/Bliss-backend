@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ActivityLogDTO } from './activity-log.dto';
+import { ActivityLogDTO } from './dto/activity-log.dto';
 import { ActivityLogDocument } from './activity-log.model';
 import { collectionNames } from '../common';
 import { createSearchQuery } from '../utils';
