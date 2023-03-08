@@ -20,4 +20,5 @@ export const collectionNames = {
   newsfeedComment: 'newsfeed-comments',
   modelGallery: 'model-galleries',
   modelProfile: 'model-profile',
+  activityLog: 'activity-logs',
 };
