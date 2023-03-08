@@ -18,6 +18,8 @@ import { EditUserDto } from './dto/editUser.dto';
 import { RegisterDto } from './dto/register.dto';
 import { User } from './user.model';
 import { UserService } from './user.service';
+import { ActivityLogInterceptor } from '../activity-log/activity-log.interceptor';
+
 
 @ApiTags('User')
 @ApiBearerAuth()
@@ -31,6 +33,7 @@ export class UserController {
     return await this.userService.getAll();
   }
 
+  @UseInterceptors(ActivityLogInterceptor)
   @Post('register')
   async register(@Body() registerDto: RegisterDto): Promise<User> {
     return await this.userService.register(registerDto);
