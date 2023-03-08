@@ -12,6 +12,7 @@ import {
 import { HydratedDocument, Types } from 'mongoose';
 import { collectionNames, FileData } from '../common';
 import { LifeStyleEnum } from '../common/enum';
+import { InterestedInEnum } from '../common/enum/interstedIn.enum';
 import { RelationshipEnum } from '../common/enum/relationship.enum';
 import { WeekDayEnum } from '../common/enum/week-day.enum';
 import { ModelGallery } from '../model-gallery/model-gallery.model';
@@ -47,43 +48,56 @@ export class ModelProfile {
   @Prop({ type: String, required: true })
   profileName: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsNumber()
   @IsPositive()
   @Prop({ type: Number })
-  age: number;
+  age?: number;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   @Prop({ type: String, default: '' })
-  aboutMe: string;
+  aboutMe?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsNumber()
   @IsPositive()
   @Prop({ type: Number })
-  height: number;
+  height?: number;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsNumber()
   @IsPositive()
   @Prop({ type: Number })
-  weight: number;
+  weight?: number;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   @Prop({ type: String, default: '' })
-  vitalStats: string;
+  vitalStats?: string;
 
-  @ApiProperty()
+  @ApiProperty({ enum: RelationshipEnum, required: false })
   @IsOptional()
   @IsEnum(RelationshipEnum)
   @Prop({ type: String, enum: RelationshipEnum })
-  relationshipStatus: RelationshipEnum;
+  relationshipStatus?: RelationshipEnum;
+
+  @ApiProperty({ enum: InterestedInEnum, isArray: true, required: false })
+  @IsOptional()
+  @IsEnum(InterestedInEnum, { each: true })
+  @Prop({ type: [String], required: true })
+  interestedIn?: InterestedInEnum[];
+
+  @ApiProperty({ isArray: true, required: false })
+  @IsOptional()
+  @IsString({ each: true })
+  @Prop({ type: [String], required: true })
+  hobbies?: string[];
 
   @ApiProperty({ enum: LifeStyleEnum, isArray: true })
   @IsEnum(LifeStyleEnum, { each: true })
@@ -96,17 +110,18 @@ export class ModelProfile {
   categoryId: Types.ObjectId[];
 
   @ApiProperty({ type: [AvailableTime] })
+  @IsOptional()
   @IsArray()
   @Prop({ type: Array<AvailableTime>, default: [] })
   availableTimes: AvailableTime[];
 
   @ApiProperty({ type: 'File' })
   @Prop({ type: FileData, default: {} })
-  video: FileData;
+  video?: FileData;
 
   @ApiProperty({ type: 'File' })
   @Prop({ type: FileData, default: {} })
-  image: FileData;
+  image?: FileData;
 
   @ApiProperty({ required: false, type: String })
   @IsOptional()

@@ -46,6 +46,12 @@ export class ModelProfileController {
     return this.modelProfileService.findAll();
   }
 
+  @Get('user')
+  @UseGuards(JwtAuthGuard)
+  async findByUser(@AuthUser() user: IAuthUser) {
+    return await this.modelProfileService.findByUser(user?._id?.toString());
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.modelProfileService.findById(id);

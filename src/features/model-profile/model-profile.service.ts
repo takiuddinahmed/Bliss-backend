@@ -1,4 +1,9 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { collectionNames, FileData } from '../common';
@@ -21,21 +26,32 @@ export class ModelProfileService {
     user: IAuthUser,
     files?: ModelProfileFiles,
   ) {
+    const existModel = await this.findByUser(user?._id?.toString(), true);
+    if (existModel)
+      throw new BadRequestException('Model profile already exists');
     dto.userId = user?._id?.toString();
     dto.image = (await this.singleUpload(files.image)) as FileData;
     dto.video = (await this.singleUpload(files.video)) as FileData;
-    const newsfeed = await this.modelProfileModel.create(dto);
-    return await this.findById(newsfeed?._id?.toString());
+    const modelProfile = await this.modelProfileModel.create(dto);
+    return await this.findById(modelProfile?._id?.toString());
   }
 
   async findAll() {
     return await this.modelProfileModel.find();
   }
 
-  async findById(id: string) {
-    const modelGallery = await this.modelProfileModel.findById(id);
-    if (!modelGallery) throw new NotFoundException('Model gallery not found');
-    return modelGallery;
+  async findById(id: string, allowNull = false) {
+    const modelProfile = await this.modelProfileModel.findById(id);
+    if (!modelProfile && !allowNull)
+      throw new NotFoundException('Model profile not found');
+    return modelProfile;
+  }
+
+  async findByUser(userId: string, allowNull = false) {
+    const modelProfile = await this.modelProfileModel.findOne({ userId });
+    if (!modelProfile && !allowNull)
+      throw new NotFoundException('Model profile not found');
+    return modelProfile;
   }
 
   async singleUpload(files: Express.Multer.File[]) {

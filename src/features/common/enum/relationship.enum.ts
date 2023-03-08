@@ -1,8 +1,8 @@
 export enum RelationshipEnum {
-  SINGLE = 'single',
-  MARRIED = 'married',
-  IN_A_RELATIONSHIP = 'in a relationship',
-  DIVORCED = 'divorced',
-  SEPARETED = 'separated',
-  WIDOWED = 'widwoed',
+  SINGLE = 'Single',
+  MARRIED = 'Married',
+  IN_A_RELATIONSHIP = 'In a relationship',
+  DIVORCED = 'Divorced',
+  SEPARETED = 'Separated',
+  WIDOWED = 'Widwoed',
 }
