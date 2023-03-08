@@ -106,7 +106,7 @@ export class ModelProfile {
 
   @ApiProperty()
   @IsMongoId({ each: true })
-  @Prop([{ type: Types.ObjectId, ref: collectionNames.category }])
+  @Prop([{ type: Types.ObjectId, ref: collectionNames.modelCategory }])
   categoryId: Types.ObjectId[];
 
   @ApiProperty({ type: [AvailableTime] })
