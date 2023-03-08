@@ -1,7 +1,7 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../security';
 import { SearchActivityLogDto } from './dto';
+import { JwtAuthGuard, Roles, RolesGuard } from '../security';
 
 import { ActivityLogService } from './activity-log.service';
 
