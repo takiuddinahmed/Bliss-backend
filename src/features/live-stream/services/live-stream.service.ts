@@ -28,7 +28,7 @@ export class LiveStreamService {
     @InjectModel(collectionNames.livestream)
     private liveStreamModel: Model<LiveStreamDocument>,
     private readonly liveKitService: LiveKitService,
-  ) { }
+  ) {}
 
   async create(user, createLiveStreamDto: CreateLiveStreamDto) {
     try {
@@ -62,39 +62,46 @@ export class LiveStreamService {
       const limit: number = (query && query.limit) || 100;
       const skip: number = (query && query.skip) || 0;
       const userPopulate: any = {
-        path: 'userId'
+        path: 'userId',
       };
-      if (searchQuery.hasOwnProperty('country') && searchQuery.country ) {
+      if (searchQuery.hasOwnProperty('country') && searchQuery.country) {
         userPopulate.match = {
-          country: searchQuery.country
-        }
+          country: searchQuery.country,
+        };
       }
       const cursor = this.liveStreamModel
         .find(searchQuery)
         .populate(userPopulate)
-        .populate("categoryId")
+        .populate('categoryId')
         .limit(limit)
         .skip(skip);
       if (query.hasOwnProperty('sort') && query.sort) {
         cursor.sort(JSON.parse(query.sort));
       }
       let res = await cursor.exec();
-      res = res.filter(stream=> {
-        return stream.userId != null
-      })
+      res = res.filter((stream: any) => {
+        const totalNumberOfAudience = stream.audiences.length;
+        stream._doc.totalNumberOfAudience = totalNumberOfAudience;
+        return stream.userId != null;
+      });
       if (searchQuery && searchQuery.isEnd === false) {
         const runningLive = await this.liveKitService.listRoom();
-        if (runningLive && Array.isArray(runningLive) && runningLive.length === 0) {
+        if (
+          runningLive &&
+          Array.isArray(runningLive) &&
+          runningLive.length === 0
+        ) {
           return runningLive;
         }
         const currentLive = [];
-        runningLive.map(room => {
-          res && res.map((live) => {
-            if (live.roomName === room.name) {
-              currentLive.push(live)
-            }
-          })
-        })
+        runningLive.map((room) => {
+          res &&
+            res.map((live) => {
+              if (live.roomName === room.name) {
+                currentLive.push(live);
+              }
+            });
+        });
         return currentLive;
       }
       return res;

@@ -28,6 +28,7 @@ import { NewsfeedCommentModule } from './features/newsfeed-comment/newsfeed-comm
 import { ModelGalleryModule } from './features/model-gallery/model-gallery.module';
 import { LoggingInterceptor } from './features/common/interceptors/logging.interceptor';
 import { ModelProfileModule } from './features/model-profile';
+import { ActivityLogModule } from './features/activity-log/activity-log.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { ModelProfileModule } from './features/model-profile';
     NewsfeedCommentModule,
     ModelGalleryModule,
     ModelProfileModule,
+    ActivityLogModule,
   ],
   providers: [
     {
