@@ -59,7 +59,7 @@ export class LiveStreamService {
   async findAll(query: SearchLiveStreamDTO) {
     try {
       const searchQuery = createSearchQuery(query);
-      const limit: number = (query && query.limit) || 10;
+      const limit: number = (query && query.limit) || 100;
       const skip: number = (query && query.skip) || 0;
       const userPopulate: any = {
         path: 'userId'
