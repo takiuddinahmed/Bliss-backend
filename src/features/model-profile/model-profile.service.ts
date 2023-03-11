@@ -3,12 +3,14 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { collectionNames, FileData } from '../common';
 import { IAuthUser } from '../security';
 import { SpaceService } from '../space/space.service';
+import { ROLE } from '../user/user.model';
 import {
   CreateModelProfileDto,
   UpdateModelProfileDto,
@@ -77,11 +79,40 @@ export class ModelProfileService {
     return fileData;
   }
 
-  update(id: number, updateModelProfileDto: UpdateModelProfileDto) {
-    return `This action updates a #${id} modelProfile`;
+  async update(
+    id: string,
+    dto: UpdateModelProfileDto,
+    user: IAuthUser,
+    files: ModelProfileFiles,
+  ) {
+    const modelProfile = await this.findById(id);
+    if (
+      !(
+        user?.role === ROLE.ADMIN ||
+        user?.id?.toString() === modelProfile?.userId?.toString()
+      )
+    )
+      throw new UnauthorizedException('unauthorise');
+
+    if (files.image)
+      dto.image = (await this.singleUpload(files.image)) as FileData;
+
+    if (files.video)
+      dto.video = (await this.singleUpload(files.video)) as FileData;
+    await modelProfile.updateOne(dto);
+    return await this.findById(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} modelProfile`;
+  async remove(id: string, user: IAuthUser) {
+    const modelProfile = await this.findById(id);
+    if (
+      !(
+        user?.role === ROLE.ADMIN ||
+        user?.id?.toString() === modelProfile?.userId?.toString()
+      )
+    )
+      throw new UnauthorizedException('unauthorise');
+    await modelProfile.remove();
+    return modelProfile;
   }
 }

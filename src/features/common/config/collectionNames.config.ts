@@ -21,4 +21,5 @@ export const collectionNames = {
   modelGallery: 'model-galleries',
   modelProfile: 'model-profile',
   activityLog: 'activity-logs',
+  modelCategory: 'model-category',
 };
