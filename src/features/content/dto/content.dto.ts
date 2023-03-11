@@ -1,7 +1,7 @@
 import { Transform } from 'class-transformer';
 import { IsEnum, IsMongoId, IsOptional } from 'class-validator';
 import { Types } from 'mongoose';
-import { ContentTypeEnum } from '../common';
+import { ContentTypeEnum } from '../../common';
 
 export class ContentQueryDto {
   @IsOptional()

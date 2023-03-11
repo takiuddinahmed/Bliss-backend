@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsEnum, IsMongoId, IsNumber, IsOptional } from 'class-validator';
-import { ContentTypeEnum, SexualityEnum } from '../common';
+import { ContentTypeEnum, SexualityEnum } from '../../common';
 
 export class ContentVideoQueryDto {
   @IsOptional()

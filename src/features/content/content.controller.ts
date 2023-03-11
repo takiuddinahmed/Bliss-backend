@@ -21,12 +21,13 @@ import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ContentTypeEnum, SexualityEnum } from '../common';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { AuthUser, IAuthUser, JwtAuthGuard } from '../security';
-import { ContentVideoQueryDto } from './content-video-query.dto';
-import { ContentQueryDto } from './content.dto';
+import { ContentVideoQueryDto } from './dto/content-video-query.dto';
+import { ContentQueryDto } from './dto/content.dto';
 import { ContentFiles } from './content.model';
 import { ContentService } from './content.service';
-import { CreateContentDto } from './create-content.dto';
-import { UpdateContentDto } from './update-content.dto';
+import { CreateContentDto } from './dto/create-content.dto';
+import { UpdateContentDto } from './dto/update-content.dto';
+import { SearchContentDTO } from './dto/search-content.dto';
 
 @ApiTags('Content')
 @ApiBearerAuth()
@@ -37,6 +38,11 @@ export class ContentController {
   @Get()
   async getAll() {
     return await this.contentService.getContents();
+  }
+
+  @Get('search')
+  findAll(@Query() query: SearchContentDTO) {
+    return this.contentService.findAll(query);
   }
 
   @ApiQuery({

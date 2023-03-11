@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -14,17 +16,18 @@ import {
 } from '../common';
 import { LikeDislikeEnum } from '../common/enum/likeDislike.enum';
 import { SpaceService } from '../space/space.service';
-import { generatePermalink } from '../utils';
+import { createSearchQuery, generatePermalink } from '../utils';
 import {
   DAY_THRESHOLD_FOR_NEW,
   FAVORITE_THRESHOLD_FOR_POPULAR,
   TOTAL_VIEW_THRESHOLD_FOR_TRENDING,
 } from './contants';
 import { Content, ContentFiles } from './content.model';
-import { CreateContentDto } from './create-content.dto';
-import { UpdateContentDto } from './update-content.dto';
+import { CreateContentDto } from './dto/create-content.dto';
+import { UpdateContentDto } from './dto/update-content.dto';
 import * as moment from 'moment';
-import { ContentQueryDto } from './content.dto';
+import { ContentQueryDto } from './dto/content.dto';
+import { SearchContentDTO } from './dto/search-content.dto';
 
 @Injectable()
 export class ContentService {
@@ -55,6 +58,29 @@ export class ContentService {
 
   async getContents() {
     return await this.contentModel.find().sort({ updatedAt: -1 });
+  }
+
+  async findAll(query: SearchContentDTO) {
+    try {
+      const searchQuery = createSearchQuery(query);
+      const limit: number = (query && query.limit) || 100;
+      const skip: number = (query && query.skip) || 0;
+
+      const cursor = this.contentModel
+        .find(searchQuery)
+        .populate('userId')
+        .populate('categoryId')
+        .populate('subCategoryId')
+        .populate('channelId')
+        .limit(limit)
+        .skip(skip);
+      if (query.hasOwnProperty('sort') && query.sort) {
+        cursor.sort(JSON.parse(query.sort));
+      }
+      return cursor.exec();
+    } catch (err) {
+      throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
+    }
   }
 
   async getVideos(
