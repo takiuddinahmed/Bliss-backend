@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateModelPictureDto } from './create-model-picture.dto';
-import { UpdateModelPictureDto } from './dto/update-model-picture.dto';
+import {
+  CreateModelPictureDto,
+  UpdateModelPictureDto,
+} from './model-picture.dto';
 
 @Injectable()
 export class ModelPictureService {

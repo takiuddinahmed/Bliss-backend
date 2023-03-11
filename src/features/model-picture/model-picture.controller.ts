@@ -8,8 +8,10 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ModelPictureService } from './model-picture.service';
-import { CreateModelPictureDto } from './create-model-picture.dto';
-import { UpdateModelPictureDto } from './dto/update-model-picture.dto';
+import {
+  CreateModelPictureDto,
+  UpdateModelPictureDto,
+} from './model-picture.dto';
 
 @Controller('model-picture')
 export class ModelPictureController {

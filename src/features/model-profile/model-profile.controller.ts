@@ -58,15 +58,31 @@ export class ModelProfileController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'image', maxCount: 1 },
+      { name: 'video', maxCount: 1 },
+    ]),
+  )
   update(
     @Param('id') id: string,
     @Body() updateModelProfileDto: UpdateModelProfileDto,
+    @AuthUser() user: IAuthUser,
+
+    @UploadedFiles() files: ModelProfileFiles,
   ) {
-    return this.modelProfileService.update(+id, updateModelProfileDto);
+    return this.modelProfileService.update(
+      id,
+      updateModelProfileDto,
+      user,
+      files,
+    );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.modelProfileService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  remove(@Param('id') id: string, @AuthUser() user: IAuthUser) {
+    return this.modelProfileService.remove(id, user);
   }
 }
