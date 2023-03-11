@@ -14,6 +14,7 @@ import { Types } from 'mongoose';
 import { LifeStyleEnum } from '../../../common/enum';
 import { Audience, Status } from '../../models/live-stream.model';
 import { Prop } from '@nestjs/mongoose';
+import { FileData } from '../../../common';
 
 export class AudienceDto implements Readonly<AudienceDto> {
   @ApiProperty()
@@ -77,4 +78,10 @@ export class CreateLiveStreamDto implements Readonly<CreateLiveStreamDto> {
   @ValidateNested({ each: true })
   @Type(() => AudienceDto)
   audiences: [Audience];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => FileData)
+  thumbnails?: [FileData];
 }

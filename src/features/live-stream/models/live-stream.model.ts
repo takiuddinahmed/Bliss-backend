@@ -8,7 +8,7 @@ import {
   ValidateIf,
 } from 'class-validator';
 import { Types } from 'mongoose';
-import { collectionNames } from '../../common';
+import { collectionNames, FileData, FileDataSchema } from '../../common';
 import { ApiProperty } from '@nestjs/swagger';
 import { LifeStyleEnum } from '../../common/enum';
 import { Transform } from 'class-transformer';
@@ -116,6 +116,10 @@ export class LiveStream {
     default: [],
   })
   audiences: AudienceDocument[];
+
+  @IsOptional()
+  @Prop({ type: [FileDataSchema], default: [] })
+  thumbnails: FileData[];
 }
 
 export const LiveStreamSchema = SchemaFactory.createForClass(LiveStream);
