@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { collectionNames, FileData } from '../common';
@@ -55,14 +59,27 @@ export class ModelVideosService {
   }
 
   async findById(id: string) {
-    return await this.modelVideoModel.findById(id);
+    const modelVideo = await this.modelVideoModel.findById(id);
+    if (!modelVideo) throw new NotFoundException('Video not found');
+    return modelVideo;
   }
 
-  // update(id: number, updateModelVideoDto: UpdateModelVideoDto) {
-  //   return `This action updates a #${id} modelVideo`;
-  // }
+  async update(
+    id: string,
+    dto: UpdateModelVideoDto,
+    user: IAuthUser,
+    files?: ModelVideoFiles,
+  ) {
+    const modelVideo = await this.findById(id);
+    dto.thumbnails = await this.multiUpload(files.thumbnails);
+    dto.video = (await this.singleUpload(files.video)) as FileData;
+    await modelVideo.updateOne(dto);
+    return await this.findById(id);
+  }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} modelVideo`;
-  // }
+  async remove(id: string, user: IAuthUser) {
+    const modelVideo = await this.findById(id);
+    await modelVideo.remove();
+    return modelVideo;
+  }
 }

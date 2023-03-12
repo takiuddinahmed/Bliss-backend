@@ -49,16 +49,26 @@ export class ModelVideosController {
     return this.modelVideosService.findById(id);
   }
 
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateModelVideoDto: UpdateModelVideoDto,
-  // ) {
-  //   return this.modelVideosService.update(+id, updateModelVideoDto);
-  // }
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'thumbnails[]', maxCount: 10 },
+      { name: 'video', maxCount: 1 },
+    ]),
+  )
+  update(
+    @Param('id') id: string,
+    @Body() updateModelVideoDto: UpdateModelVideoDto,
+    @UploadedFiles() files: ModelVideoFiles,
+    @AuthUser() user: IAuthUser,
+  ) {
+    return this.modelVideosService.update(id, updateModelVideoDto, user, files);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.modelVideosService.remove(+id);
-  // }
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  remove(@Param('id') id: string, @AuthUser() user: IAuthUser) {
+    return this.modelVideosService.remove(id, user);
+  }
 }
