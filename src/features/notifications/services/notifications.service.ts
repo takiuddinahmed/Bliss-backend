@@ -2,10 +2,15 @@ import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateNotificationDTO, UpdateNotificationDTO } from '../dto';
+import {
+  CreateNotificationDTO,
+  UpdateNotificationDTO,
+  SearchNotificationDto,
+} from '../dto';
 import { Server } from 'socket.io';
 import { INotification, INotificationWithCount } from '../interfaces';
 import { collectionNames } from '../../common';
+import { createSearchQuery } from '../../utils';
 
 @WebSocketGateway({ cors: true })
 @Injectable()
@@ -78,9 +83,39 @@ export class NotificationsService {
    * find all notifications
    * @returns {Promise<INotificationWithCount>}
    */
-  async findAll(user, query): Promise<INotificationWithCount> {
+  async findAll(
+    user,
+    query: SearchNotificationDto,
+  ): Promise<INotificationWithCount> {
     try {
-      return;
+      console.log(user);
+      const searchQuery = createSearchQuery(query);
+      searchQuery['receivers.userId'] = String(user._id);
+      const limit: number = (query && query.limit) || 100;
+      const skip: number = (query && query.skip) || 0;
+
+      const cursor = this.notificationModel
+        .find(searchQuery)
+        .populate('sender')
+        .populate('receivers.userId')
+        .limit(limit)
+        .skip(skip);
+      if (query.hasOwnProperty('sort') && query.sort) {
+        cursor.sort(JSON.parse(query.sort));
+      }
+
+      const notifications = await cursor.exec();
+
+      searchQuery['receivers.isRead'] = false;
+
+      const unreadCount = await this.notificationModel.countDocuments(
+        searchQuery,
+      );
+
+      return {
+        notifications: notifications,
+        unreadCount: unreadCount,
+      };
     } catch (err) {
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
     }
