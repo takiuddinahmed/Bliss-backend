@@ -31,6 +31,7 @@ import { ModelProfileModule } from './features/model-profile';
 import { ActivityLogModule } from './features/activity-log/activity-log.module';
 import { ModelPictureModule } from './features/model-picture/model-picture.module';
 import { ModelCategoryModule } from './features/model-category/model-category.module';
+import { NotificationsModule } from './features/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { ModelCategoryModule } from './features/model-category/model-category.mo
     ActivityLogModule,
     ModelPictureModule,
     ModelCategoryModule,
+    NotificationsModule,
   ],
   providers: [
     {
