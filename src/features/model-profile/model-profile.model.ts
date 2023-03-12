@@ -10,7 +10,7 @@ import {
   IsString,
 } from 'class-validator';
 import { HydratedDocument, Types } from 'mongoose';
-import { collectionNames, FileData } from '../common';
+import { collectionNames, FileData, userPopulateSelect } from '../common';
 import { LifeStyleEnum } from '../common/enum';
 import { InterestedInEnum } from '../common/enum/interstedIn.enum';
 import { RelationshipEnum } from '../common/enum/relationship.enum';
@@ -40,6 +40,7 @@ export class ModelProfile {
     required: true,
     unique: true,
     ref: collectionNames.user,
+    autopopulate: { select: userPopulateSelect },
   })
   userId: Types.ObjectId | string;
 
