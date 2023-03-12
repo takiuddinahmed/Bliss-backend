@@ -40,9 +40,6 @@ export class Notification {
   actionInfo: Record<string, unknown>;
 
   @Prop({ default: false })
-  isRead: boolean;
-
-  @Prop({ default: false })
   isDeleted: boolean;
 }
 

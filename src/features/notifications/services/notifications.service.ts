@@ -88,7 +88,6 @@ export class NotificationsService {
     query: SearchNotificationDto,
   ): Promise<INotificationWithCount> {
     try {
-      console.log(user);
       const searchQuery = createSearchQuery(query);
       searchQuery['receivers.userId'] = String(user._id);
       const limit: number = (query && query.limit) || 100;
