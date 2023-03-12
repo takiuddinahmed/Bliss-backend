@@ -5,18 +5,20 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   UseGuards,
   HttpException,
   HttpStatus,
   Query,
 } from '@nestjs/common';
 import { NotificationsService } from '../services/notifications.service';
-import { CreateNotificationDTO, UpdateNotificationDTO } from '../dto';
-import { JwtAuthGuard, Roles, RolesGuard } from '../../security';
+import {
+  CreateNotificationDTO,
+  SearchNotificationDto,
+  UpdateNotificationDTO,
+} from '../dto';
+import { JwtAuthGuard } from '../../security';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthUser } from '../../security/get-user.decorator';
-import {SearchLiveStreamDTO} from "../../live-stream/dto";
 
 @ApiTags('Notification')
 @ApiBearerAuth()
@@ -36,7 +38,7 @@ export class NotificationController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@AuthUser() user, @Query() query: SearchLiveStreamDTO) {
+  findAll(@AuthUser() user, @Query() query: SearchNotificationDto) {
     try {
       return this.notificationService.findAll(user, query);
     } catch (err) {
