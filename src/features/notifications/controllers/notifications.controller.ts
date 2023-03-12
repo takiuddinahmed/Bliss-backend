@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   Patch,
+  Put,
   Param,
   UseGuards,
   HttpException,
@@ -31,6 +32,26 @@ export class NotificationController {
   create(@AuthUser() user, @Body() createDto: CreateNotificationDTO) {
     try {
       return this.notificationService.create(createDto);
+    } catch (err) {
+      throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateNotificationDTO: UpdateNotificationDTO,
+    @AuthUser() user,
+  ) {
+    return this.notificationService.update(id, updateNotificationDTO);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put()
+  updateReadBulk(@AuthUser() user) {
+    try {
+      return this.notificationService.updateReadBulk(user);
     } catch (err) {
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
     }

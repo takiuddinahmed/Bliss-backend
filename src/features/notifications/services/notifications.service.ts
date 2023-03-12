@@ -79,6 +79,26 @@ export class NotificationsService {
     }
   }
 
+  async updateReadBulk(user) {
+    try {
+      const notifications = await this.notificationModel.find({
+        'receivers.userId': String(user._id),
+      });
+      notifications.map(async (notification) => {
+        const receivers = notification.receivers.map((receiver) => {
+          if (receiver.userId === String(user._id)) {
+            receiver.isRead = true;
+          }
+          return receiver;
+        });
+        notification.set(receivers).save();
+      });
+      return notifications;
+    } catch (err) {
+      throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
+    }
+  }
+
   /**
    * find all notifications
    * @returns {Promise<INotificationWithCount>}
