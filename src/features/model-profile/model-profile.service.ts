@@ -28,6 +28,7 @@ export class ModelProfileService {
     user: IAuthUser,
     files?: ModelProfileFiles,
   ) {
+    console.log(files);
     const existModel = await this.findByUser(user?._id?.toString(), true);
     if (existModel)
       throw new BadRequestException('Model profile already exists');
