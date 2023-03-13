@@ -101,9 +101,8 @@ export class NotificationsService {
     query: SearchNotificationDto,
   ): Promise<INotificationWithCount> {
     try {
-      const searchQuery = createSearchQuery(query);
+      const searchQuery = createSearchQuery(query); 
       searchQuery.receiver = String(user._id);
-      console.log(searchQuery)
       const limit: number = (query && query.limit) || 100;
       const skip: number = (query && query.skip) || 0;
 
