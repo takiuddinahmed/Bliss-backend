@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsArray,
   IsEnum,
@@ -51,6 +52,7 @@ export class ModelProfile {
 
   @ApiProperty({ required: false })
   @IsOptional()
+  @Transform(({ value }) => (typeof value === 'string' ? +value : value))
   @IsNumber()
   @IsPositive()
   @Prop({ type: Number })
@@ -64,6 +66,7 @@ export class ModelProfile {
 
   @ApiProperty({ required: false })
   @IsOptional()
+  @Transform(({ value }) => (typeof value === 'string' ? +value : value))
   @IsNumber()
   @IsPositive()
   @Prop({ type: Number })
@@ -71,6 +74,7 @@ export class ModelProfile {
 
   @ApiProperty({ required: false })
   @IsOptional()
+  @Transform(({ value }) => (typeof value === 'string' ? +value : value))
   @IsNumber()
   @IsPositive()
   @Prop({ type: Number })
