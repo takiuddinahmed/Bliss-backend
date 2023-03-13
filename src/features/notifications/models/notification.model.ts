@@ -15,12 +15,11 @@ export class Notification {
   })
   sender: UserDocument;
 
-  @IsOptional()
   @Prop({
-    type: [ReceiverSchema],
-    required: true
+    type: SchemaTypes.ObjectId,
+    ref: collectionNames.user,
   })
-  receivers: ReceiverDocument[];
+  receiver: UserDocument;
 
   @Prop()
   subject: string;
@@ -38,6 +37,9 @@ export class Notification {
     type: SchemaTypes.Mixed,
   })
   actionInfo: Record<string, unknown>;
+
+  @Prop({ default: false })
+  isRead: boolean;
 
   @Prop({ default: false })
   isDeleted: boolean;

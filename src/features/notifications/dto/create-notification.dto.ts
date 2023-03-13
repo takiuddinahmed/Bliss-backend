@@ -1,8 +1,5 @@
 import { IsString, IsMongoId, IsArray, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { ReceiverDto } from './receiver.dto';
-import { Type } from 'class-transformer';
-import { Receiver } from '../models/receiver.model';
 
 export class CreateNotificationDTO implements Readonly<CreateNotificationDTO> {
   @ApiProperty()
@@ -10,13 +7,10 @@ export class CreateNotificationDTO implements Readonly<CreateNotificationDTO> {
   @IsMongoId()
   sender: string;
 
-  @ApiProperty({
-    type: [ReceiverDto],
-  })
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ReceiverDto)
-  receivers: [Receiver];
+  @ApiProperty()
+  @IsString()
+  @IsMongoId()
+  receiver: string;
 
   @ApiProperty()
   @IsString()

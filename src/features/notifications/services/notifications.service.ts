@@ -23,7 +23,7 @@ export class NotificationsService {
   constructor(
     @InjectModel(collectionNames.notification)
     private readonly notificationModel: Model<INotification>,
-  ) {}
+  ) { }
 
   /**
    * Create Notification
@@ -43,19 +43,17 @@ export class NotificationsService {
           _id: result._id,
         })
         .populate('sender')
-        .populate('receivers.userId')
+        .populate('receiver')
         .exec();
 
-      createNotificationDto?.receivers?.map(async (receiver) => {
-        const unreadCount = await this.notificationModel.countDocuments({
-          'receivers.userId': receiver.userId,
-          'isRead': false,
-        });
+      const unreadCount = await this.notificationModel.countDocuments({
+        receiver: createNotificationDto.receiver,
+        isRead: false,
+      });
 
-        this.server.emit(`notification-${receiver.userId}`, {
-          notification: notification,
-          unreadCount: unreadCount,
-        });
+      this.server.emit(`notification-${createNotificationDto.receiver}`, {
+        notification: notification,
+        unreadCount: unreadCount,
       });
 
       return notification;
@@ -81,19 +79,14 @@ export class NotificationsService {
 
   async updateReadBulk(user) {
     try {
-      const notifications = await this.notificationModel.find({
-        'receivers.userId': String(user._id),
-      });
-      notifications.map(async (notification) => {
-        const receivers = notification.receivers.map((receiver) => {
-          if (receiver.userId === String(user._id)) {
-            receiver.isRead = true;
-          }
-          return receiver;
-        });
-        notification.set(receivers).save();
-      });
-      return notifications;
+      return await this.notificationModel.updateMany(
+        {
+          receiver: user._id,
+          isRead: false,
+        },
+        { $set: { isRead: true } },
+      );
+
     } catch (err) {
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
     }
@@ -109,14 +102,15 @@ export class NotificationsService {
   ): Promise<INotificationWithCount> {
     try {
       const searchQuery = createSearchQuery(query);
-      searchQuery['receivers.userId'] = String(user._id);
+      searchQuery.receiver = String(user._id);
+      console.log(searchQuery)
       const limit: number = (query && query.limit) || 100;
       const skip: number = (query && query.skip) || 0;
 
       const cursor = this.notificationModel
         .find(searchQuery)
         .populate('sender')
-        .populate('receivers.userId')
+        .populate('receiver')
         .limit(limit)
         .skip(skip);
       if (query.hasOwnProperty('sort') && query.sort) {
@@ -125,7 +119,7 @@ export class NotificationsService {
 
       const notifications = await cursor.exec();
 
-      searchQuery['receivers.isRead'] = false;
+      searchQuery.isRead = false;
 
       const unreadCount = await this.notificationModel.countDocuments(
         searchQuery,
