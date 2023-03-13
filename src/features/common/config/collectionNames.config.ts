@@ -22,5 +22,6 @@ export const collectionNames = {
   modelProfile: 'model-profile',
   activityLog: 'activity-logs',
   modelCategory: 'model-category',
-  notification: 'notifications'
+  notification: 'notifications',
+  modelVideos: 'model-videos',
 };
