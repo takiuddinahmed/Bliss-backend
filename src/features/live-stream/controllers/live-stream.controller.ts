@@ -10,10 +10,17 @@ import {
   HttpException,
   HttpStatus,
   Query,
+  UploadedFiles,
+  UseInterceptors
 } from '@nestjs/common';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+  FilesInterceptor,
+} from '@nestjs/platform-express';
 import { LiveStreamService } from '../services/live-stream.service';
-import { CreateLiveStreamDto, UpdateLiveStreamDto } from '../dto';
-import { JwtAuthGuard, Roles, RolesGuard } from '../../security';
+import { CreateLiveStreamDto, UpdateLiveStreamDto, ThumbnailsUploadDTO } from '../dto';
+import { JwtAuthGuard } from '../../security';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SearchLiveStreamDTO } from '../dto/live-stream/search-live-stream.dto';
 import { AuthUser } from '../../security/get-user.decorator';
@@ -22,13 +29,23 @@ import { AuthUser } from '../../security/get-user.decorator';
 @ApiBearerAuth()
 @Controller('livestream')
 export class LiveStreamController {
-  constructor(private readonly liveStreamService: LiveStreamService) {}
+  constructor(private readonly liveStreamService: LiveStreamService) { }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'thumbnails', maxCount: 5 },
+    ]),
+  )
   @Post()
-  create(@AuthUser() user, @Body() createLiveStreamDto: CreateLiveStreamDto) {
+  create(
+    @AuthUser() user,
+    @Body() createLiveStreamDto: CreateLiveStreamDto,
+    @UploadedFiles()
+    files: ThumbnailsUploadDTO,
+  ) {
     try {
-      return this.liveStreamService.create(user, createLiveStreamDto);
+      return this.liveStreamService.create(user, createLiveStreamDto, files);
     } catch (err) {
       throw new HttpException(err, err.status || HttpStatus.BAD_REQUEST);
     }

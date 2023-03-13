@@ -83,5 +83,5 @@ export class CreateLiveStreamDto implements Readonly<CreateLiveStreamDto> {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => FileData)
-  thumbnails?: [FileData];
+  thumbnails?: FileData[];
 }

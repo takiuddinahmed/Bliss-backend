@@ -6,3 +6,4 @@ export * from './livekit/create-token.dto';
 export * from './stream-chat/create-stream-chat.dto';
 export * from './stream-chat/update-stream-chat.dto';
 export * from './stream-chat/search-stream-chat.dto';
+export * from './live-stream/thumbnail.dto';

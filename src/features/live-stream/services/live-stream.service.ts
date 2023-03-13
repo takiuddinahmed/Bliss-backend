@@ -10,9 +10,10 @@ import {
   SearchLiveStreamDTO,
   CreateTokenDto,
   CreateRoomDto,
+  ThumbnailsUploadDTO,
 } from '../dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { collectionNames } from '../../common';
+import { collectionNames, FileData } from '../../common';
 import { Model } from 'mongoose';
 import { LiveStreamDocument } from '../models/live-stream.model';
 import {
@@ -21,6 +22,8 @@ import {
   subDocUpdateWithArray,
 } from '../../utils';
 import { LiveKitService } from './livekit.services';
+import { SpaceService } from '../../space/space.service';
+
 
 @Injectable()
 export class LiveStreamService {
@@ -28,9 +31,10 @@ export class LiveStreamService {
     @InjectModel(collectionNames.livestream)
     private liveStreamModel: Model<LiveStreamDocument>,
     private readonly liveKitService: LiveKitService,
-  ) {}
+    private readonly spaceService: SpaceService,
+  ) { }
 
-  async create(user, createLiveStreamDto: CreateLiveStreamDto) {
+  async create(user, createLiveStreamDto: CreateLiveStreamDto, files: ThumbnailsUploadDTO) {
     try {
       const roomName = await generatePermalink(
         createLiveStreamDto.title,
@@ -41,9 +45,18 @@ export class LiveStreamService {
       await this.liveKitService.createRoom(roomDTO);
       const tokenDTO = new CreateTokenDto();
       tokenDTO.roomName = roomName;
-      // tokenDTO.participant = user.firstName + ' ' + user.lastName;
       tokenDTO.participant = user.email;
       const accessToken = this.liveKitService.createToken(tokenDTO);
+
+      if (files?.thumbnails?.length) {
+        const thumbnailsFileData: FileData[] = [];
+        for await (const file of files.thumbnails) {
+          const fileData = await this.spaceService.uploadFile(file);
+          if (fileData) thumbnailsFileData.push(fileData);
+        }
+        createLiveStreamDto.thumbnails = thumbnailsFileData;
+      }
+      
       return await this.liveStreamModel.create({
         ...createLiveStreamDto,
         userId: user._id,

@@ -13,6 +13,7 @@ import {
   StreamChatService,
 } from './services';
 import { LiveStreamChatSchema } from './models/streaming-chat.model';
+import { SpaceService } from '../space/space.service';
 
 @Module({
   imports: [
@@ -28,6 +29,6 @@ import { LiveStreamChatSchema } from './models/streaming-chat.model';
     ]),
   ],
   controllers: [LiveStreamController, LiveKitController, StreamChatController],
-  providers: [LiveStreamService, LiveKitService, StreamChatService],
+  providers: [LiveStreamService, LiveKitService, StreamChatService, SpaceService],
 })
-export class LiveStreamModule {}
+export class LiveStreamModule { }
