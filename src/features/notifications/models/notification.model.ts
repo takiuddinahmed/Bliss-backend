@@ -45,4 +45,4 @@ export class Notification {
   isDeleted: boolean;
 }
 
-export const NotificationModel = SchemaFactory.createForClass(Notification);
+export const NotificationSchema = SchemaFactory.createForClass(Notification);

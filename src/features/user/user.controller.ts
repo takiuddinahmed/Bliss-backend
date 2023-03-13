@@ -19,6 +19,7 @@ import { RegisterDto } from './dto/register.dto';
 import { User } from './user.model';
 import { UserService } from './user.service';
 import { ActivityLogInterceptor } from '../activity-log/activity-log.interceptor';
+import { NotificationInterceptor } from '../notifications/interceptors/notifications.interceptor';
 
 
 @ApiTags('User')
@@ -33,6 +34,7 @@ export class UserController {
     return await this.userService.getAll();
   }
 
+  @UseInterceptors(NotificationInterceptor)
   @UseInterceptors(ActivityLogInterceptor)
   @Post('register')
   async register(@Body() registerDto: RegisterDto): Promise<User> {
