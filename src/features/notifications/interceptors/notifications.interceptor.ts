@@ -35,6 +35,8 @@ export class NotificationInterceptor implements NestInterceptor {
                             cNotificationDTO.activityType = ActivityType.CREATED;
                             cNotificationDTO.activityName = ActivityName.USER;
                             cNotificationDTO.receiver = result._id;
+                            cNotificationDTO.subject = 'Congratulations'
+                            cNotificationDTO.text = 'You are all set.'
                         }
                         break;
                 }
