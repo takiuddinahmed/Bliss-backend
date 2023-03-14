@@ -28,6 +28,7 @@ import { ContentService } from './content.service';
 import { CreateContentDto } from './dto/create-content.dto';
 import { UpdateContentDto } from './dto/update-content.dto';
 import { SearchContentDTO } from './dto/search-content.dto';
+import { NotificationInterceptor } from '../notifications/interceptors/notifications.interceptor';
 
 @ApiTags('Content')
 @ApiBearerAuth()
@@ -287,6 +288,7 @@ export class ContentController {
     return this.contentService.addUserView(id, user._id.toString());
   }
 
+  @UseInterceptors(NotificationInterceptor)
   @Patch(':permalink')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FilesInterceptor('thumbnails[]'))
@@ -302,6 +304,7 @@ export class ContentController {
     );
   }
 
+  @UseInterceptors(NotificationInterceptor)
   @Delete(':permalink')
   @UseGuards(JwtAuthGuard)
   async remove(@Param('permalink') permalink: string) {

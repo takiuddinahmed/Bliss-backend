@@ -44,12 +44,29 @@ export class NotificationInterceptor implements NestInterceptor {
 
                     case '/content-comment':
                         if (method === 'POST') {
-                            // find all user of that content who make a comment on it
                             cNotificationDTO.activityType = ActivityType.CREATED;
                             cNotificationDTO.activityName = ActivityName.CONTENT_COMMENT;
                             receivers = await this.contentCommentService.findCommentedUserOfContent(result.contentId);
                             cNotificationDTO.subject = 'commented'
                             cNotificationDTO.text = 'someone is commented on a post your are following.'
+                        }
+                        break;
+
+                    case '/content/:permalink':
+                        if (method === 'PATCH') {
+                            cNotificationDTO.activityType = ActivityType.UPDATED;
+                            cNotificationDTO.activityName = ActivityName.CONTENT;
+                            receivers = await this.contentCommentService.findCommentedUserOfContent(result.contentId);
+                            cNotificationDTO.subject = 'Content Updated'
+                            cNotificationDTO.text = 'Content is updated.'
+                        }
+
+                        if (method === 'DELETE') {
+                            cNotificationDTO.activityType = ActivityType.DELETED;
+                            cNotificationDTO.activityName = ActivityName.CONTENT;
+                            receivers = await this.contentCommentService.findCommentedUserOfContent(result.contentId);
+                            cNotificationDTO.subject = 'Content Deleted'
+                            cNotificationDTO.text = 'Content is Deleted.'
                         }
                         break;
                 }

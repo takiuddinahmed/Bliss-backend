@@ -34,7 +34,7 @@ export class ContentService {
   constructor(
     @InjectModel(collectionNames.content) private contentModel: Model<Content>,
     private spaceService: SpaceService,
-  ) {}
+  ) { }
 
   async getContentByCategoryAndContentType(
     categoryId: string,
@@ -218,6 +218,7 @@ export class ContentService {
     }
     return await this.contentModel.create(createContentDto);
   }
+
   async updateContent(
     permalink: string,
     updateContentDto: UpdateContentDto,
@@ -318,6 +319,7 @@ export class ContentService {
       );
     }
   }
+
   async removeUserFromFavorite(id: string, userId: string) {
     const content = await this.getById(id);
     if (content?.favorites?.some((uId) => uId.toString() === userId)) {
