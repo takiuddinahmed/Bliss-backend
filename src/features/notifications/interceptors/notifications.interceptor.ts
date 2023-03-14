@@ -10,11 +10,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { NotificationsService } from '../../notifications/services/notifications.service';
 import { CreateNotificationDTO } from '../../notifications/dto';
 import { ActivityName, ActivityType } from '../../common/enum/log.enum';
+import { ContentCommentService } from '../../content-comment/content-comment.service';
 
 @Injectable()
 export class NotificationInterceptor implements NestInterceptor {
     constructor(
         private readonly notificationService: NotificationsService,
+        private readonly contentCommentService: ContentCommentService,
     ) { }
     async intercept(
         context: ExecutionContext,
@@ -25,7 +27,7 @@ export class NotificationInterceptor implements NestInterceptor {
         const route = req.route.path;
         const cNotificationDTO = new CreateNotificationDTO();
         let actionInfo: any = {};
-
+        let receivers = []
         return next.handle().pipe(
             tap(async (res) => {
                 const result = res.hasOwnProperty('data') ? res.data : res;
@@ -43,6 +45,11 @@ export class NotificationInterceptor implements NestInterceptor {
                     case '/content-comment':
                         if (method === 'POST') {
                             // find all user of that content who make a comment on it
+                            cNotificationDTO.activityType = ActivityType.CREATED;
+                            cNotificationDTO.activityName = ActivityName.CONTENT_COMMENT;
+                            receivers = await this.contentCommentService.findCommentedUserOfContent(result.contentId);
+                            cNotificationDTO.subject = 'commented'
+                            cNotificationDTO.text = 'someone is commented on a post your are following.'
                         }
                         break;
                 }
@@ -55,7 +62,18 @@ export class NotificationInterceptor implements NestInterceptor {
 
                 cNotificationDTO.actionInfo = actionInfo;
 
-                await this.notificationService.create(cNotificationDTO);
+                if (receivers && Array.isArray(receivers) && receivers.length > 0) {
+                    receivers.map(async (receiver) => {
+                        if (receiver != result.userId) {
+                            cNotificationDTO.receiver = receiver;
+                            await this.notificationService.create(cNotificationDTO);
+                        }
+                    })
+                }
+                else {
+                    await this.notificationService.create(cNotificationDTO);
+                }
+
             }),
         );
     }

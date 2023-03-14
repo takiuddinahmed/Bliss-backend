@@ -5,6 +5,8 @@ import { NotificationSchema } from './models/notification.model';
 import { NotificationController } from './controllers/notifications.controller';
 import { collectionNames } from '../common';
 import { ContentCommnetSchema } from '../content-comment/content-comment.model';
+import { ContentCommentService } from '../content-comment/content-comment.service';
+import { SpaceService } from '../space/space.service';
 
 
 @Module({
@@ -15,6 +17,6 @@ import { ContentCommnetSchema } from '../content-comment/content-comment.model';
     ]),
   ],
   controllers: [NotificationController],
-  providers: [NotificationsService],
+  providers: [NotificationsService, ContentCommentService, SpaceService],
 })
 export class NotificationsModule {}

@@ -19,6 +19,7 @@ import {
   UpdateContnetCommentDto,
 } from './content-comment.dto';
 import { ContentCommentService } from './content-comment.service';
+import { NotificationInterceptor } from '../notifications/interceptors/notifications.interceptor';
 
 @ApiTags('Content Comment')
 @ApiBearerAuth()
@@ -26,6 +27,7 @@ import { ContentCommentService } from './content-comment.service';
 export class ContentCommentController {
   constructor(private readonly contentCommentService: ContentCommentService) {}
 
+  @UseInterceptors(NotificationInterceptor)
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(JwtAuthGuard)
   @Post()

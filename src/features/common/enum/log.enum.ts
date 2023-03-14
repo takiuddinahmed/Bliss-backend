@@ -3,6 +3,7 @@ export enum ActivityName {
   CONTENT = 'CONTENT',
   ROLE = 'ROLE',
   USER = 'USER',
+  CONTENT_COMMENT = 'CONTENT_COMMENT',
 }
 
 export enum ActivityType {
