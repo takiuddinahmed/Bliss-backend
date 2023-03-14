@@ -39,6 +39,12 @@ export class NotificationInterceptor implements NestInterceptor {
                             cNotificationDTO.text = 'You are all set.'
                         }
                         break;
+
+                    case '/content-comment':
+                        if (method === 'POST') {
+                            // find all user of that content who make a comment on it
+                        }
+                        break;
                 }
 
                 actionInfo = {

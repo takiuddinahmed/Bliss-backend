@@ -43,6 +43,11 @@ export class ContentCommentController {
     return this.contentCommentService.findAll();
   }
 
+  @Get(':contentId/users')
+  findAllUser(@Param('contentId') contentId: string) {
+    return this.contentCommentService.findCommentedUserOfContent(contentId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.contentCommentService.findOne(id);

@@ -152,4 +152,10 @@ export class ContentCommentService {
       }
     }
   }
+
+  async findCommentedUserOfContent(contentId) {
+    return this.contentCommentModel.distinct('userId', {
+      contentId: contentId
+    })
+  }
 }
