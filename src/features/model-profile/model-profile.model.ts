@@ -94,19 +94,20 @@ export class ModelProfile {
 
   @ApiProperty({ enum: InterestedInEnum, isArray: true, required: false })
   @IsOptional()
-  @IsEnum(InterestedInEnum, { each: true })
-  @Prop({ type: [String], required: true })
+  @IsArray()
+  // @IsEnum(InterestedInEnum, { each: true })
+  @Prop({ type: [String], default: [] })
   interestedIn?: InterestedInEnum[];
 
   @ApiProperty({ isArray: true, required: false })
   @IsOptional()
   @IsString({ each: true })
-  @Prop({ type: [String], required: true })
+  @Prop({ type: [String], default: [] })
   hobbies?: string[];
 
   @ApiProperty({ enum: LifeStyleEnum, isArray: true })
   @IsEnum(LifeStyleEnum, { each: true })
-  @Prop({ type: [String], required: true })
+  @Prop({ type: [String], default: [] })
   lifeStyle: LifeStyleEnum[];
 
   @ApiProperty()
