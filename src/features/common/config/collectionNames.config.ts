@@ -24,4 +24,6 @@ export const collectionNames = {
   modelCategory: 'model-category',
   notification: 'notifications',
   modelVideos: 'model-videos',
+  thread: 'threads',
+  chat: 'chats',
 };
