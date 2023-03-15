@@ -8,11 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: [
-      'http://localhost:3000',
-      'https://jellyfish-app-dxc3k.ondigitalocean.app',
-      'https://honestelite.com',
-      'https://honest-elite.vercel.app',
-      'https://honest-elite-eq9w37oiv-kmasalam.vercel.app',
+      'http://localhost:3000'
     ],
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
